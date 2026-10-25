@@ -1,0 +1,120 @@
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
+
+/*
+ * Andreaskruisen design tokens — three layers:
+ *   primitive  -> raw values, never used directly in components
+ *   semantic   -> purpose aliases, exposed to Tailwind via @theme
+ *   component  -> added per-component once the UI library is chosen
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Primitive — brand (Amsterdam flag red / ink) */
+  --p-red-700: #c8102e;
+  --p-red-800: #9c0c24;
+  --p-red-500: #ff4a63;
+  --p-red-600: #e5283f;
+  --p-red-050: #fbe7ea;
+
+  --p-ink-950: #14121a;
+  --p-ink-700: #433f49;
+
+  /* Primitive — neutrals */
+  --p-paper-000: #ffffff;
+  --p-paper-050: #f7f4f0;
+  --p-sand-200: #e7e0d6;
+  --p-sand-300: #d6cbbb;
+
+  /* Primitive — market value accent */
+  --p-gold-600: #a9821e;
+  --p-gold-300: #d8b454;
+
+  /* Primitive — status hues */
+  --p-green-600: #1c7a46;
+  --p-green-400: #4cc484;
+  --p-amber-700: #8a6512;
+  --p-amber-300: #e8be58;
+  --p-blue-700: #2f5e7d;
+  --p-blue-300: #8fb8ce;
+  --p-orange-700: #b14b26;
+  --p-orange-300: #e8a17c;
+
+  /* Primitive — dark surfaces */
+  --p-night-950: #0b0a0f;
+  --p-night-900: #17141d;
+  --p-night-800: #221e29;
+  --p-night-700: #2c2834;
+  --p-mist-100: #eeebf1;
+  --p-mist-300: #a9a4b4;
+}
+
+@theme {
+  /* Semantic — surfaces */
+  --color-background: var(--p-paper-050);
+  --color-surface: var(--p-paper-000);
+  --color-surface-raised: var(--p-paper-000);
+  --color-border: var(--p-sand-200);
+  --color-border-strong: var(--p-sand-300);
+
+  /* Semantic — text */
+  --color-foreground: var(--p-ink-950);
+  --color-muted-foreground: var(--p-ink-700);
+
+  /* Semantic — brand accent */
+  --color-accent: var(--p-red-700);
+  --color-accent-hover: var(--p-red-800);
+  --color-accent-foreground: #ffffff;
+  --color-accent-surface: var(--p-red-050);
+
+  /* Semantic — market value (decorative, not a status) */
+  --color-value: var(--p-gold-600);
+
+  /* Semantic — status (independent of the brand accent) */
+  --color-success: var(--p-green-600);
+  --color-success-surface: #e3f3ea;
+  --color-warning: var(--p-amber-700);
+  --color-warning-surface: #f6ecd6;
+  --color-info: var(--p-blue-700);
+  --color-info-surface: #e6eef2;
+  --color-critical: var(--p-orange-700);
+  --color-critical-surface: #f7e6dd;
+
+  /* Fonts */
+  --font-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --font-sans: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --color-background: var(--p-night-950);
+    --color-surface: var(--p-night-900);
+    --color-surface-raised: var(--p-night-800);
+    --color-border: var(--p-night-700);
+    --color-border-strong: #3a3542;
+
+    --color-foreground: var(--p-mist-100);
+    --color-muted-foreground: var(--p-mist-300);
+
+    --color-accent: var(--p-red-500);
+    --color-accent-hover: var(--p-red-600);
+    --color-accent-foreground: var(--p-ink-950);
+    --color-accent-surface: rgb(255 74 99 / 16%);
+
+    --color-value: var(--p-gold-300);
+
+    --color-success: var(--p-green-400);
+    --color-success-surface: rgb(76 196 132 / 14%);
+    --color-warning: var(--p-amber-300);
+    --color-warning-surface: rgb(232 190 88 / 14%);
+    --color-info: var(--p-blue-300);
+    --color-info-surface: rgb(143 184 206 / 14%);
+    --color-critical: var(--p-orange-300);
+    --color-critical-surface: rgb(232 161 124 / 14%);
+  }
+}

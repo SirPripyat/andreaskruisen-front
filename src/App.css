@@ -1,10 +1,10 @@
-@import 'tailwindcss';
+@import "./styles/tokens.css";
 
 body {
   margin: 0;
-  color: #fff;
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  background-image: linear-gradient(to bottom, #020917, #101725);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
 }
 
 .content {
@@ -17,12 +17,14 @@ body {
 }
 
 .content h1 {
+  font-family: var(--font-display);
   font-size: 3.6rem;
-  font-weight: 700;
+  font-weight: 800;
+  color: var(--color-foreground);
 }
 
 .content p {
   font-size: 1.2rem;
   font-weight: 400;
-  opacity: 0.5;
+  color: var(--color-muted-foreground);
 }
