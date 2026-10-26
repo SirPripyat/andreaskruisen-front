@@ -1,11 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 /*
  * Andreaskruisen design tokens — three layers:
  *   primitive  -> raw values, never used directly in components
  *   semantic   -> purpose aliases, exposed to Tailwind via @theme
- *   component  -> added per-component once the UI library is chosen
+ *   component  -> shadcn/ui tokens, mapped onto the semantic layer below
  */
 
 :root {
@@ -48,6 +52,9 @@
   --p-night-700: #2c2834;
   --p-mist-100: #eeebf1;
   --p-mist-300: #a9a4b4;
+
+  /* Primitive — component radius (shadcn/ui) */
+  --radius: 0.625rem;
 }
 
 @theme {
@@ -86,35 +93,81 @@
   --font-sans: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
   --font-mono:
     "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* Component — shadcn/ui tokens, mapped onto the semantic layer above */
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-foreground);
+  --color-popover: var(--color-surface-raised);
+  --color-popover-foreground: var(--color-foreground);
+  --color-primary: var(--color-accent);
+  --color-primary-foreground: var(--color-accent-foreground);
+  --color-secondary: var(--p-sand-200);
+  --color-secondary-foreground: var(--color-foreground);
+  --color-muted: var(--p-sand-200);
+  --color-destructive: var(--color-accent);
+  --color-destructive-foreground: var(--color-accent-foreground);
+  --color-input: var(--color-border);
+  --color-ring: var(--color-accent);
+  --color-chart-1: var(--color-accent);
+  --color-chart-2: var(--color-value);
+  --color-chart-3: var(--color-success);
+  --color-chart-4: var(--color-info);
+  --color-chart-5: var(--color-warning);
+  --color-sidebar: var(--color-surface-raised);
+  --color-sidebar-foreground: var(--color-foreground);
+  --color-sidebar-primary: var(--color-accent);
+  --color-sidebar-primary-foreground: var(--color-accent-foreground);
+  --color-sidebar-accent: var(--color-surface);
+  --color-sidebar-accent-foreground: var(--color-foreground);
+  --color-sidebar-border: var(--color-border);
+  --color-sidebar-ring: var(--color-accent);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
+.dark {
+  color-scheme: dark;
 
-    --color-background: var(--p-night-950);
-    --color-surface: var(--p-night-900);
-    --color-surface-raised: var(--p-night-800);
-    --color-border: var(--p-night-700);
-    --color-border-strong: #3a3542;
+  --color-background: var(--p-night-950);
+  --color-surface: var(--p-night-900);
+  --color-surface-raised: var(--p-night-800);
+  --color-border: var(--p-night-700);
+  --color-border-strong: #3a3542;
 
-    --color-foreground: var(--p-mist-100);
-    --color-muted-foreground: var(--p-mist-300);
+  --color-foreground: var(--p-mist-100);
+  --color-muted-foreground: var(--p-mist-300);
 
-    --color-accent: var(--p-red-500);
-    --color-accent-hover: var(--p-red-600);
-    --color-accent-foreground: var(--p-ink-950);
-    --color-accent-surface: rgb(255 74 99 / 16%);
+  --color-accent: var(--p-red-500);
+  --color-accent-hover: var(--p-red-600);
+  --color-accent-foreground: var(--p-ink-950);
+  --color-accent-surface: rgb(255 74 99 / 16%);
 
-    --color-value: var(--p-gold-300);
+  --color-value: var(--p-gold-300);
 
-    --color-success: var(--p-green-400);
-    --color-success-surface: rgb(76 196 132 / 14%);
-    --color-warning: var(--p-amber-300);
-    --color-warning-surface: rgb(232 190 88 / 14%);
-    --color-info: var(--p-blue-300);
-    --color-info-surface: rgb(143 184 206 / 14%);
-    --color-critical: var(--p-orange-300);
-    --color-critical-surface: rgb(232 161 124 / 14%);
+  --color-success: var(--p-green-400);
+  --color-success-surface: rgb(76 196 132 / 14%);
+  --color-warning: var(--p-amber-300);
+  --color-warning-surface: rgb(232 190 88 / 14%);
+  --color-info: var(--p-blue-300);
+  --color-info-surface: rgb(143 184 206 / 14%);
+  --color-critical: var(--p-orange-300);
+  --color-critical-surface: rgb(232 161 124 / 14%);
+
+  --color-secondary: var(--p-night-800);
+  --color-muted: var(--p-night-800);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
