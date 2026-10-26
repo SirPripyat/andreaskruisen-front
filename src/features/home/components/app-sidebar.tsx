@@ -10,6 +10,7 @@ import {
   SidebarRail,
 } from '@/components/ui';
 import type { Me } from '@/features/auth';
+import { NavAdmin } from './nav-admin';
 import { NavMain } from './nav-main';
 import { NavUser } from './nav-user';
 
@@ -35,6 +36,7 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <NavMain />
+        {user.role === 'ADMIN' && <NavAdmin />}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />

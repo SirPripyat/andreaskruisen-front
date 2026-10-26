@@ -1,15 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
+import { ArrowRightIcon, UserIcon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import {
   Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
   Field,
   FieldError,
   FieldGroup,
@@ -17,6 +13,7 @@ import {
   Input,
   InputOTP,
   InputOTPGroup,
+  InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui';
 import { getErrorMessage } from '@/lib';
@@ -50,34 +47,46 @@ export function LoginScreen() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background px-4">
-      <div className={'flex gap-1 items-end'}>
+    <div className="flex min-h-screen w-full flex-col md:flex-row">
+      <aside className="flex items-center justify-start gap-3 bg-[var(--p-ink-950)] px-5 py-6 md:w-[40%] md:min-w-[280px] md:flex-col md:justify-center md:gap-4 md:px-10 md:py-10">
         <img
           src="/logo-flagband-square.svg"
           alt="Andreaskruisen"
-          className="h-12 w-12"
+          className="h-10 w-10 md:h-16 md:w-16"
         />
-        <h1 className={'font-display text-4xl'}>Andreaskruisen</h1>
-      </div>
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="font-display text-2xl">Entrar</CardTitle>
-          <CardDescription>
+        <h1 className="text-balance font-display text-xl leading-none font-extrabold text-[var(--p-mist-100)] md:text-center md:text-4xl">
+          Andreaskruisen
+        </h1>
+      </aside>
+
+      <div className="flex flex-1 items-center justify-center bg-background px-5 py-10">
+        <div className="w-full max-w-sm">
+          <p className="font-mono text-xs font-semibold tracking-wider text-accent uppercase">
+            Bem-vindo de volta
+          </p>
+          <h2 className="mt-2 font-display text-3xl leading-none font-extrabold">
+            Entrar
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
             Informe seu usuário e PIN para acessar a aplicação.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          </p>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
             <FieldGroup>
               <Field data-invalid={!!errors.name}>
                 <FieldLabel htmlFor="username">Usuário</FieldLabel>
-                <Input
-                  id="username"
-                  type="text"
-                  autoComplete="username"
-                  aria-invalid={!!errors.name}
-                  {...register('name')}
-                />
+                <div className="relative flex items-center">
+                  <UserIcon className="pointer-events-none absolute left-2.5 size-4 text-muted-foreground" />
+                  <Input
+                    id="username"
+                    type="text"
+                    autoComplete="username"
+                    placeholder="ex.: j.silva"
+                    aria-invalid={!!errors.name}
+                    className="pl-8"
+                    {...register('name')}
+                  />
+                </div>
                 <FieldError errors={errors.name ? [errors.name] : undefined} />
               </Field>
 
@@ -94,13 +103,29 @@ export function LoginScreen() {
                       value={field.value}
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      containerClassName="w-full"
+                      containerClassName="w-full justify-center"
+                      aria-invalid={!!errors.pin}
                     >
-                      <InputOTPGroup className="w-full">
-                        <InputOTPSlot index={0} className="h-10 flex-1" />
-                        <InputOTPSlot index={1} className="h-10 flex-1" />
-                        <InputOTPSlot index={2} className="h-10 flex-1" />
-                        <InputOTPSlot index={3} className="h-10 flex-1" />
+                      <InputOTPGroup>
+                        <InputOTPSlot
+                          index={0}
+                          className="size-13 font-mono text-lg"
+                        />
+                        <InputOTPSlot
+                          index={1}
+                          className="size-13 font-mono text-lg"
+                        />
+                      </InputOTPGroup>
+                      <InputOTPSeparator />
+                      <InputOTPGroup>
+                        <InputOTPSlot
+                          index={2}
+                          className="size-13 font-mono text-lg"
+                        />
+                        <InputOTPSlot
+                          index={3}
+                          className="size-13 font-mono text-lg"
+                        />
                       </InputOTPGroup>
                     </InputOTP>
                   )}
@@ -112,14 +137,21 @@ export function LoginScreen() {
                 type="submit"
                 className="w-full"
                 disabled={isPending}
-                size={'lg'}
+                size="lg"
               >
-                {isPending ? 'Entrando...' : 'Entrar'}
+                {isPending ? (
+                  'Entrando...'
+                ) : (
+                  <>
+                    Entrar
+                    <ArrowRightIcon />
+                  </>
+                )}
               </Button>
             </FieldGroup>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

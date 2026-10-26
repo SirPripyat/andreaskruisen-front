@@ -1,5 +1,12 @@
 import { createBrowserRouter } from 'react-router';
-import { HomeScreen, LoginScreen } from '@/features';
+import {
+  HomeScreen,
+  LoginScreen,
+  PlayersScreen,
+  TeamsScreen,
+  UsersScreen,
+} from '@/features';
+import { AppLayout } from './app-layout';
 import { ProtectedRoute } from './protected-route';
 import { RootLayout } from './root-layout';
 
@@ -10,7 +17,33 @@ export const router = createBrowserRouter([
       { path: 'login', element: <LoginScreen /> },
       {
         element: <ProtectedRoute />,
-        children: [{ index: true, element: <HomeScreen /> }],
+        children: [
+          {
+            element: <AppLayout />,
+            children: [
+              {
+                index: true,
+                element: <HomeScreen />,
+                handle: { breadcrumb: 'Dashboard' },
+              },
+              {
+                path: 'users',
+                element: <UsersScreen />,
+                handle: { breadcrumb: 'Usuários' },
+              },
+              {
+                path: 'players',
+                element: <PlayersScreen />,
+                handle: { breadcrumb: 'Dados de jogadores' },
+              },
+              {
+                path: 'teams',
+                element: <TeamsScreen />,
+                handle: { breadcrumb: 'Dados de times' },
+              },
+            ],
+          },
+        ],
       },
     ],
   },
