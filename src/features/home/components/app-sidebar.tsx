@@ -17,15 +17,19 @@ import { NavUser } from './nav-user';
 export function AppSidebar({
   user,
   ...props
-}: React.ComponentProps<typeof Sidebar> & { user: Me }) {
+}: React.ComponentProps<typeof Sidebar> & { user: Omit<Me, 'id'> }) {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" className="pointer-events-none">
-              <img src="/logo-flagband-square.svg" alt="" className="size-8" />
-              <div className="grid flex-1 text-left text-sm leading-tight">
+              <img
+                src="/logo-flagband-square.svg"
+                alt=""
+                className="size-8 rounded-md"
+              />
+              <div className="grid flex-1 text-left text-lg leading-tight">
                 <span className="truncate font-display font-semibold">
                   Andreaskruisen
                 </span>

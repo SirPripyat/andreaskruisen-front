@@ -1,4 +1,10 @@
-import { ShieldIcon, UserRoundIcon, UsersIcon } from 'lucide-react';
+import {
+  CalendarRangeIcon,
+  ShieldIcon,
+  UploadIcon,
+  UserRoundIcon,
+  UsersIcon,
+} from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import {
   SidebarGroup,
@@ -12,6 +18,8 @@ const items = [
   { title: 'Usuários', url: '/users', icon: UsersIcon },
   { title: 'Dados de jogadores', url: '/players', icon: UserRoundIcon },
   { title: 'Dados de times', url: '/teams', icon: ShieldIcon },
+  { title: 'Temporadas', url: '/seasons', icon: CalendarRangeIcon },
+  { title: 'Importar jogadores', url: '/players/import', icon: UploadIcon },
 ];
 
 export function NavAdmin() {

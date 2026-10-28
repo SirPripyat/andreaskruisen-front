@@ -1,9 +1,10 @@
 import { api } from '@/lib';
+import type { UserRole } from '../../users';
 
 export type Me = {
   id: string;
   name: string;
-  role: string;
+  role: UserRole;
 };
 
 export async function getMe() {

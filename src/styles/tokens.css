@@ -113,7 +113,7 @@
   --color-chart-3: var(--color-success);
   --color-chart-4: var(--color-info);
   --color-chart-5: var(--color-warning);
-  --color-sidebar: var(--color-surface-raised);
+  --color-sidebar: var(--color-background);
   --color-sidebar-foreground: var(--color-foreground);
   --color-sidebar-primary: var(--color-accent);
   --color-sidebar-primary-foreground: var(--color-accent-foreground);

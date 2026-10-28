@@ -1,5 +1,4 @@
 import { ChevronsUpDownIcon, LogOutIcon } from 'lucide-react';
-import { toast } from 'sonner';
 import {
   Avatar,
   AvatarFallback,
@@ -16,7 +15,6 @@ import {
   useSidebar,
 } from '@/components/ui';
 import { useLogout } from '@/features/auth';
-import { getErrorMessage } from '@/lib';
 
 function getInitials(name: string) {
   return name
@@ -32,13 +30,7 @@ export function NavUser({ user }: { user: { name: string; role: string } }) {
   const { mutate: logout, isPending } = useLogout();
 
   const handleLogout = () => {
-    logout(undefined, {
-      onError: (err) => {
-        toast.error(
-          getErrorMessage(err, 'Não foi possível sair. Tente novamente.'),
-        );
-      },
-    });
+    logout();
   };
 
   return (

@@ -8,6 +8,7 @@ export function useLogout() {
 
   return useMutation({
     mutationFn: logout,
+    meta: { errorMessage: 'Não foi possível sair. Tente novamente.' },
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: ['me'] });
       navigate('/login', { replace: true });

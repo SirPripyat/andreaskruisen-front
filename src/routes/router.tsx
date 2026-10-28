@@ -1,9 +1,14 @@
 import { createBrowserRouter } from 'react-router';
 import {
   HomeScreen,
+  ImportPlayersScreen,
   LoginScreen,
   PlayersScreen,
+  SeasonsScreen,
+  TeamDetailScreen,
   TeamsScreen,
+  TournamentDetailScreen,
+  TournamentsScreen,
   UsersScreen,
 } from '@/features';
 import { AppLayout } from './app-layout';
@@ -37,9 +42,34 @@ export const router = createBrowserRouter([
                 handle: { breadcrumb: 'Dados de jogadores' },
               },
               {
+                path: 'players/import',
+                element: <ImportPlayersScreen />,
+                handle: { breadcrumb: 'Importar jogadores' },
+              },
+              {
                 path: 'teams',
                 element: <TeamsScreen />,
                 handle: { breadcrumb: 'Dados de times' },
+              },
+              {
+                path: 'teams/:id',
+                element: <TeamDetailScreen />,
+                handle: { breadcrumb: 'Time' },
+              },
+              {
+                path: 'seasons',
+                element: <SeasonsScreen />,
+                handle: { breadcrumb: 'Temporadas' },
+              },
+              {
+                path: 'tournaments',
+                element: <TournamentsScreen />,
+                handle: { breadcrumb: 'Torneios' },
+              },
+              {
+                path: 'tournaments/:id',
+                element: <TournamentDetailScreen />,
+                handle: { breadcrumb: 'Torneio' },
               },
             ],
           },

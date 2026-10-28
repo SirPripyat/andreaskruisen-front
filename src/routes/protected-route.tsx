@@ -7,8 +7,12 @@ export function ProtectedRoute() {
 
   if (isPending) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <Loader2Icon className="h-6 w-6 animate-spin text-muted-foreground" />
+      <div
+        className={
+          'flex min-h-screen items-center justify-center bg-background'
+        }
+      >
+        <Loader2Icon className={'size-6 animate-spin text-muted-foreground'} />
       </div>
     );
   }

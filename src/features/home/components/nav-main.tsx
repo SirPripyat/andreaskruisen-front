@@ -1,4 +1,4 @@
-import { LayoutDashboardIcon } from 'lucide-react';
+import { LayoutDashboardIcon, TrophyIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import {
   SidebarGroup,
@@ -8,7 +8,10 @@ import {
   SidebarMenuItem,
 } from '@/components/ui';
 
-const items = [{ title: 'Dashboard', url: '/', icon: LayoutDashboardIcon }];
+const items = [
+  { title: 'Dashboard', url: '/', icon: LayoutDashboardIcon },
+  { title: 'Torneios', url: '/tournaments', icon: TrophyIcon },
+];
 
 export function NavMain() {
   const location = useLocation();
