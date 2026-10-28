@@ -17,10 +17,10 @@ export function useSeasonSelection() {
   );
   const { mutate: selectSeason } = useSelectSeason();
 
-  function selectSeasonId(seasonId: string) {
+  const selectSeasonId = (seasonId: string) => {
     setSelectedSeasonId(seasonId);
     selectSeason(seasonId);
-  }
+  };
 
   return {
     seasons: seasons ?? [],

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { importPlayers } from '../api';
+import { importPlayers } from '../../players/api';
 
 export function useImportPlayers() {
   const queryClient = useQueryClient();

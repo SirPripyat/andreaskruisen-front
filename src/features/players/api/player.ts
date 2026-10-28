@@ -3,6 +3,11 @@ export type PlayerPosition = {
   isPrimary: boolean;
 };
 
+export type LatestRating = {
+  overallRating: number;
+  capturedAt: string;
+};
+
 export type PlayerListItem = {
   id: string;
   eaId: number;
@@ -13,7 +18,7 @@ export type PlayerListItem = {
   team: { id: string; name: string; crestUrl: string };
   nationality: { id: string; name: string; flagUrl: string };
   positions: PlayerPosition[];
-  latestRating: { overallRating: number; capturedAt: string } | null;
+  latestRating: LatestRating | null;
 };
 
 export type ImportPlayersResult = {

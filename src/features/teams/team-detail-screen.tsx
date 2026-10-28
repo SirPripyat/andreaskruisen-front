@@ -91,7 +91,7 @@ export function TeamDetailScreen() {
   }, [team, setBreadcrumbItems, clearBreadcrumbItems]);
 
   return (
-    <div className="flex flex-1 flex-col gap-4">
+    <>
       {isPending && (
         <div className="flex flex-col gap-4">
           <Skeleton className="h-8 w-64" />
@@ -247,6 +247,6 @@ export function TeamDetailScreen() {
           </Tabs>
         </>
       )}
-    </div>
+    </>
   );
 }

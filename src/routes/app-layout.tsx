@@ -17,7 +17,7 @@ export function AppLayout() {
         <div className="shrink-0 border-b px-8 pt-3 pb-2">
           <Header />
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto px-8 py-4">
+        <div className="min-h-0 flex-1 overflow-y-auto px-8 pb-4">
           <div className="flex flex-1 flex-col gap-6">
             <Outlet />
           </div>

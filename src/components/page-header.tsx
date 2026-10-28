@@ -6,18 +6,23 @@ type PageHeaderProps = {
   actions?: ReactNode;
 };
 
-export function PageHeader({ title, description, actions }: PageHeaderProps) {
+export const PageHeader = ({
+  title,
+  description,
+  actions,
+}: PageHeaderProps) => {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4">
-      <div>
-        <h1 className="font-display font-semibold text-2xl">{title}</h1>
+    <div className={'flex flex-wrap items-center justify-between gap-4'}>
+      <div className={'flex flex-col gap-1'}>
+        <h1 className={'font-display font-semibold text-2xl'}>{title}</h1>
         {description && (
-          <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+          <p className={'max-w-2xl text-sm text-muted-foreground'}>
             {description}
           </p>
         )}
       </div>
+
       {actions}
     </div>
   );
-}
+};

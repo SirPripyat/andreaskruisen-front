@@ -166,7 +166,10 @@ export function DataTableColumnHeader<TData, TValue>({
     <button
       type="button"
       onClick={column.getToggleSortingHandler()}
-      className="inline-flex items-center gap-1 hover:text-foreground"
+      className={cn(
+        'inline-flex items-center gap-1 hover:text-foreground',
+        sorted && 'text-accent',
+      )}
     >
       {children}
       {sorted === 'asc' && <ArrowUpIcon className="size-3.5" />}

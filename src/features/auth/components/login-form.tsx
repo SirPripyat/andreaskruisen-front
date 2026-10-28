@@ -11,9 +11,9 @@ import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
+  InputOTPSlot,
 } from '@/components/ui';
 import { useLoginForm } from '../hooks';
-import { LoginInputOtpSlot } from './login-input-otp-slot';
 
 export const LoginForm = () => {
   const { handleSubmit, onSubmit, errors, register, control, isPending } =
@@ -61,15 +61,13 @@ export const LoginForm = () => {
                 className={'w-full'}
               >
                 <InputOTPGroup className={'w-full'}>
-                  <LoginInputOtpSlot index={0} />
-                  <LoginInputOtpSlot index={1} />
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
                 </InputOTPGroup>
-                <InputOTPSeparator
-                  className={'ml-1 mr-1 text-muted-foreground'}
-                />
+                <InputOTPSeparator />
                 <InputOTPGroup className={'w-full'}>
-                  <LoginInputOtpSlot index={2} />
-                  <LoginInputOtpSlot index={3} />
+                  <InputOTPSlot index={2} />
+                  <InputOTPSlot index={3} />
                 </InputOTPGroup>
               </InputOTP>
             )}

@@ -72,7 +72,7 @@ export function TournamentsScreen() {
   });
 
   return (
-    <div className="flex flex-1 flex-col gap-4">
+    <>
       <PageHeader
         title="Torneios"
         description={
@@ -96,6 +96,6 @@ export function TournamentsScreen() {
         }
         skeletonRowCount={3}
       />
-    </div>
+    </>
   );
 }

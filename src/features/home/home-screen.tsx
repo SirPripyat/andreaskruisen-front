@@ -11,7 +11,8 @@ import { usePlayers } from '@/features/players';
 import { useSelectedSeason } from '@/features/seasons';
 import { useTeams } from '@/features/teams';
 import { useTournaments } from '@/features/tournaments';
-import { useUserStore } from '../../stores';
+import { useUserStore } from '@/stores';
+import { Greeting } from './components';
 
 const numberFormatter = new Intl.NumberFormat('pt-BR');
 const dateFormatter = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'medium' });
@@ -54,23 +55,9 @@ export function HomeScreen() {
   });
   const { data: tournaments } = useTournaments(selectedSeason?.id);
 
-  const firstName = user?.name.trim().split(/\s+/)[0];
-
   return (
     <div className="flex flex-1 flex-col gap-6">
-      <div>
-        <p className="font-mono text-xs font-semibold tracking-wider text-accent uppercase">
-          Painel
-        </p>
-        <h1 className="mt-1 font-display text-3xl font-extrabold leading-none text-balance">
-          {firstName ? `Olá, ${firstName}` : 'Olá'}
-        </h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          {selectedSeason
-            ? `Resumo da temporada "${selectedSeason.name}".`
-            : 'Nenhuma temporada selecionada ainda.'}
-        </p>
-      </div>
+      <Greeting />
 
       <div className="grid grid-cols-2 divide-x divide-y divide-border rounded-xl border sm:grid-cols-4 sm:divide-y-0">
         <StatTile

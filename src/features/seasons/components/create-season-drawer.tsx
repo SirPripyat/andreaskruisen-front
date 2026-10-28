@@ -1,8 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from 'lucide-react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import {
   Button,
   Field,
@@ -18,70 +14,38 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui';
-import type { TeamWithRatings } from '@/features/teams';
-import { useUsers } from '@/features/users';
-import { type CreateSeasonFormValues, createSeasonSchema } from '../api';
-import { useCreateSeason } from '../hooks';
+import { cn } from '@/lib';
+import { useCreateSeasonDrawer } from '../hooks';
+import { SeasonCount } from './season-count';
+import { SeasonSquadSelectProgress } from './season-squad-select-progress';
 import { SelectSeasonSquads } from './select-season-squads';
 
 export function CreateSeasonDrawer() {
-  const [open, setOpen] = useState(false);
-  const [squads, setSquads] = useState<Map<string, TeamWithRatings>>(new Map());
-  const { data: users } = useUsers({ enabled: open });
-  const { mutate, isPending } = useCreateSeason();
   const {
-    register,
+    open,
+    toggleOpen,
     handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<CreateSeasonFormValues>({
-    resolver: zodResolver(createSeasonSchema),
-    defaultValues: { name: '' },
-  });
+    onSubmit,
+    errors,
+    register,
+    name,
+    users,
+    squads,
+    assignTeam,
+    unassignTeam,
+    isPending,
+  } = useCreateSeasonDrawer();
 
-  function assignTeam(userId: string, team: TeamWithRatings) {
-    setSquads((current) => new Map(current).set(userId, team));
-  }
-
-  function unassignTeam(userId: string) {
-    setSquads((current) => {
-      const next = new Map(current);
-      next.delete(userId);
-      return next;
-    });
-  }
-
-  const onSubmit = (values: CreateSeasonFormValues) => {
-    mutate(
-      {
-        name: values.name,
-        squads: Array.from(squads.entries()).map(([userId, team]) => ({
-          userId,
-          teamId: team.id,
-        })),
-      },
-      {
-        onSuccess: (season) => {
-          toast.success(`Temporada "${season.name}" criada com sucesso.`);
-          reset();
-          setSquads(new Map());
-          setOpen(false);
-        },
-      },
-    );
-  };
+  const usersCount = users?.length ?? 0;
+  const squadsCount = squads.size;
+  const progress = usersCount
+    ? Math.round((squadsCount / usersCount) * 100)
+    : 0;
+  const hasName = name.trim().length > 0;
+  const isComplete = usersCount > 0 && squadsCount === usersCount;
 
   return (
-    <Sheet
-      open={open}
-      onOpenChange={(nextOpen) => {
-        setOpen(nextOpen);
-        if (!nextOpen) {
-          reset();
-          setSquads(new Map());
-        }
-      }}
-    >
+    <Sheet open={open} onOpenChange={toggleOpen}>
       <SheetTrigger
         render={
           <Button>
@@ -94,23 +58,23 @@ export function CreateSeasonDrawer() {
         <SheetHeader>
           <SheetTitle>Nova temporada</SheetTitle>
           <SheetDescription>
-            Uma temporada isola as negociações entre clubes sem afetar a base
-            original de times e jogadores.
+            Isola as negociações da liga em um recorte próprio — times e
+            jogadores da base seguem intactos.
           </SheetDescription>
         </SheetHeader>
 
         <form
-          id="create-season-form"
+          id={'create-season-form'}
           onSubmit={handleSubmit(onSubmit)}
-          className="flex-1 overflow-y-auto px-4"
+          className={'flex-1 overflow-y-auto px-4'}
         >
           <FieldGroup>
             <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor="season-name">Nome</FieldLabel>
+              <FieldLabel htmlFor={'season-name'}>Nome</FieldLabel>
               <Input
-                id="season-name"
-                type="text"
-                placeholder="ex.: Temporada 2026"
+                id={'season-name'}
+                type={'text'}
+                placeholder={'ex.: Temporada 2026'}
                 aria-invalid={!!errors.name}
                 {...register('name')}
               />
@@ -118,7 +82,20 @@ export function CreateSeasonDrawer() {
             </Field>
 
             <Field>
-              <FieldLabel>Times dos usuários</FieldLabel>
+              <div className={'flex items-baseline justify-between gap-2'}>
+                <FieldLabel>Elenco da liga</FieldLabel>
+
+                <SeasonCount
+                  squadsCount={squadsCount}
+                  usersCount={usersCount}
+                />
+              </div>
+
+              <SeasonSquadSelectProgress
+                progress={progress}
+                isComplete={isComplete}
+              />
+
               <SelectSeasonSquads
                 users={users ?? []}
                 squads={squads}
@@ -129,7 +106,21 @@ export function CreateSeasonDrawer() {
           </FieldGroup>
         </form>
 
-        <SheetFooter className="items-end">
+        <SheetFooter className="flex-row items-center justify-between">
+          <p
+            className={cn(
+              'text-muted-foreground text-xs',
+              !hasName && 'text-destructive',
+              hasName && isComplete && 'text-success',
+            )}
+          >
+            {!hasName
+              ? 'Adicione um nome para continuar'
+              : isComplete
+                ? 'Elenco completo — pronto para criar'
+                : `${squadsCount} de ${usersCount} participantes com time`}
+          </p>
+
           <Button
             type="submit"
             form="create-season-form"
