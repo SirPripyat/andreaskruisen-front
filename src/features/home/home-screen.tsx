@@ -7,10 +7,10 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router';
 import { StatTile } from '@/components';
-import { usePlayers } from '@/features/players';
-import { useSelectedSeason } from '@/features/seasons';
-import { useTeams } from '@/features/teams';
-import { useTournaments } from '@/features/tournaments';
+import { usePlayers } from '@/features/admin/players';
+import { useSelectedSeason } from '@/features/admin/seasons';
+import { useTeams } from '@/features/admin/teams';
+import { useTournaments } from '@/features/season/tournaments';
 import { useUserStore } from '@/stores';
 import { Greeting } from './components';
 

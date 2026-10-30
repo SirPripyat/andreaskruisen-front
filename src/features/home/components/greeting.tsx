@@ -1,5 +1,5 @@
+import { useSelectedSeason } from '@/features/admin/seasons';
 import { useUserStore } from '@/stores';
-import { useSelectedSeason } from '../../seasons';
 
 export const Greeting = () => {
   const { user } = useUserStore();

@@ -1,5 +1,5 @@
+import type { UserRole } from '@/features/admin/users';
 import { api } from '@/lib';
-import type { UserRole } from '../../users';
 
 export type Me = {
   id: string;
