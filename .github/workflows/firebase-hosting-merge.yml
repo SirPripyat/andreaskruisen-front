@@ -18,6 +18,8 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+        env:
+          PUBLIC_BACKEND_ENDPOINT: ${{ secrets.PUBLIC_BACKEND_ENDPOINT }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
