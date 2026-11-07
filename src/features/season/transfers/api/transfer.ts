@@ -1,13 +1,13 @@
+import type { PlayerListItem, TeamWithRatings } from '@/features/admin';
+
 // Troca de dois jogadores entre dois times, na mesma temporada — sem custo
 // (ver CLAUDE.md do backend): outgoing*/incoming* guardam o time de cada
 // jogador ANTES da troca, não depois.
 export type Transfer = {
-  id: string;
-  seasonId: string;
-  createdAt: string;
+  transferId: string;
+  player: Pick<PlayerListItem, 'id' | 'name' | 'photoUrl'>;
+  date: string;
   requestedBy: { id: string; name: string };
-  outgoingPlayer: { id: string; name: string; photoUrl: string };
-  outgoingTeam: { id: string; name: string; crestUrl: string };
-  incomingPlayer: { id: string; name: string; photoUrl: string };
-  incomingTeam: { id: string; name: string; crestUrl: string };
+  fromTeam: Pick<TeamWithRatings, 'id' | 'name' | 'crestUrl'>;
+  toTeam: Pick<TeamWithRatings, 'id' | 'name' | 'crestUrl'>;
 };

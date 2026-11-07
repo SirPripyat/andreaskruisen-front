@@ -16,36 +16,7 @@ const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
   timeStyle: 'short',
 });
 
-type TransferRow = {
-  id: string;
-  player: Transfer['outgoingPlayer'];
-  fromTeam: Transfer['outgoingTeam'];
-  toTeam: Transfer['outgoingTeam'];
-  requestedBy: Transfer['requestedBy'];
-  createdAt: string;
-};
-
-const toRows = (transfers: Transfer[]): TransferRow[] =>
-  transfers.flatMap((transfer) => [
-    {
-      id: `${transfer.id}-outgoing`,
-      player: transfer.outgoingPlayer,
-      fromTeam: transfer.outgoingTeam,
-      toTeam: transfer.incomingTeam,
-      requestedBy: transfer.requestedBy,
-      createdAt: transfer.createdAt,
-    },
-    {
-      id: `${transfer.id}-incoming`,
-      player: transfer.incomingPlayer,
-      fromTeam: transfer.incomingTeam,
-      toTeam: transfer.outgoingTeam,
-      requestedBy: transfer.requestedBy,
-      createdAt: transfer.createdAt,
-    },
-  ]);
-
-const columns: ColumnDef<TransferRow>[] = [
+const columns: ColumnDef<Transfer>[] = [
   {
     id: 'player',
     header: 'Jogador',
@@ -74,7 +45,7 @@ const columns: ColumnDef<TransferRow>[] = [
   {
     accessorKey: 'createdAt',
     header: 'Data',
-    cell: ({ row }) => dateFormatter.format(new Date(row.original.createdAt)),
+    cell: ({ row }) => dateFormatter.format(new Date(row.original.date)),
   },
 ];
 
@@ -90,7 +61,7 @@ export const TransfersScreen = () => {
   const isLoading = isSeasonPending || isPending;
 
   const table = useReactTable({
-    data: transfers ? toRows(transfers) : [],
+    data: transfers ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
