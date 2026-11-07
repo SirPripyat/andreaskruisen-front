@@ -1,0 +1,28 @@
+import { api } from '@/lib';
+
+export type ImportTeamImagesPayload = {
+  file: File;
+  capturedAt?: string;
+};
+
+export type ImportTeamImagesResult = {
+  processed: number;
+  imagesUpdated: number;
+};
+
+export async function importTeamImages({
+  file,
+  capturedAt,
+}: ImportTeamImagesPayload) {
+  const formData = new FormData();
+  formData.append('file', file);
+  if (capturedAt) {
+    formData.append('capturedAt', capturedAt);
+  }
+
+  const { data } = await api.post<ImportTeamImagesResult>(
+    '/teams/import-crests',
+    formData,
+  );
+  return data;
+}

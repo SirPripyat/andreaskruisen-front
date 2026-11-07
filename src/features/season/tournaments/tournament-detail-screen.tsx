@@ -41,7 +41,9 @@ export function TournamentDetailScreen() {
     useAdvancePhase(id);
 
   const { tab, setTab } = useTournamentDetailTabs(
-    data?.format === 'GROUP_STAGE_KNOCKOUT' ? 'groups' : 'knockout',
+    data?.format === 'GROUP_STAGE_KNOCKOUT' || data?.format === 'LEAGUE'
+      ? 'groups'
+      : 'knockout',
   );
 
   const handleAdvancePhase = (phaseId: string) =>
@@ -57,17 +59,20 @@ export function TournamentDetailScreen() {
   ]);
 
   const tournamentFormat = data?.format;
+  const isLeague = tournamentFormat === 'LEAGUE';
 
   const tabItems: TabItem[] = [
     {
       value: 'groups',
-      label: 'Fase de grupos',
-      visible: tournamentFormat === 'GROUP_STAGE_KNOCKOUT',
+      label: isLeague ? 'Tabela' : 'Fase de grupos',
+      visible: tournamentFormat === 'GROUP_STAGE_KNOCKOUT' || isLeague,
       content: <TournamentGroupStandings />,
     },
     {
       value: 'knockout',
       label: 'Mata-mata',
+      // Liga não tem fase eliminatória — não há o que mostrar aqui.
+      visible: !isLeague,
       content: <TournamentBracket />,
     },
     {

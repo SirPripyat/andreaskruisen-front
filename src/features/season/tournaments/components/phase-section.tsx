@@ -8,6 +8,9 @@ type PhaseSectionProps = {
   phase: PhaseSummary;
   matches: MatchListItem[];
   isLatestPhase: boolean;
+  // Liga não tem fase seguinte pra avançar — o endpoint de avanço nem
+  // existe pra esse formato, então o botão não aparece.
+  isLeague?: boolean;
   onRegisterGoals?: (matchId: string) => void;
   onAdvancePhase: (phaseId: string) => void;
   isAdvancingPhase?: boolean;
@@ -34,6 +37,7 @@ export const PhaseSection = ({
   phase,
   matches,
   isLatestPhase,
+  isLeague,
   onRegisterGoals,
   onAdvancePhase,
   isAdvancingPhase,
@@ -62,7 +66,7 @@ export const PhaseSection = ({
 
         <Separator className={'shrink'} />
 
-        {isLatestPhase && !isFinalPhase && (
+        {isLatestPhase && !isFinalPhase && !isLeague && (
           <Button
             type="button"
             variant="outline"

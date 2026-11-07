@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMemo } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import {
@@ -15,9 +16,14 @@ import {
   useReplaceMatchGoals,
   useSimulateMatch,
 } from '../../hooks';
-import { FormSchema, type FormValues, toFormValues } from './goals-form-schema';
+import {
+  createFormSchema,
+  type FormValues,
+  toFormValues,
+} from './goals-form-schema';
 import { MatchScoreStrip } from './match-score-strip';
 import { MatchStatusBar } from './match-status-bar';
+import { PenaltiesField } from './penalties-field';
 import { TeamGoalGroup } from './team-goal-group';
 
 type RegisterMatchGoalsDrawerProps = {
@@ -46,12 +52,18 @@ export const RegisterMatchGoalsDrawer = ({
     matchId ?? undefined,
   );
 
+  const formSchema = useMemo(
+    () => createFormSchema(match?.phaseType ?? 'GROUP'),
+    [match?.phaseType],
+  );
+
   const {
     control,
+    register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: { homeGoals: [], awayGoals: [] },
     values: match ? toFormValues(match) : undefined,
   });
@@ -64,6 +76,11 @@ export const RegisterMatchGoalsDrawer = ({
   const homeGoalsWatch = useWatch({ control, name: 'homeGoals' }) ?? [];
   const awayGoalsWatch = useWatch({ control, name: 'awayGoals' }) ?? [];
   const readOnly = match?.locked ?? false;
+  // Pênaltis só existem pra desempatar uma eliminatória — a API rejeita o
+  // campo fora desse caso, então ele só aparece (e só é enviado) aqui.
+  const isTiedKnockout =
+    match?.phaseType === 'KNOCKOUT' &&
+    homeArray.fields.length === awayArray.fields.length;
 
   const onSubmit = (values: FormValues) => {
     const goals = [...values.homeGoals, ...values.awayGoals].map((goal) => ({
@@ -72,7 +89,16 @@ export const RegisterMatchGoalsDrawer = ({
     }));
 
     mutate(
-      { goals },
+      {
+        goals,
+        penalties:
+          isTiedKnockout && values.penalties
+            ? {
+                homeScore: Number(values.penalties.homeScore),
+                awayScore: Number(values.penalties.awayScore),
+              }
+            : undefined,
+      },
       {
         onSuccess: () => {
           toast.success('Placar registrado com sucesso.');
@@ -124,7 +150,18 @@ export const RegisterMatchGoalsDrawer = ({
               match={match}
               homeGoals={homeArray.fields.length}
               awayGoals={awayArray.fields.length}
+              readOnly={readOnly}
             />
+
+            {!readOnly && isTiedKnockout && (
+              <div className="pt-4">
+                <PenaltiesField
+                  match={match}
+                  register={register}
+                  errors={errors}
+                />
+              </div>
+            )}
 
             <div className="flex flex-col gap-4 pt-4 pb-2">
               <TeamGoalGroup

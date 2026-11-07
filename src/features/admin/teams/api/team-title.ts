@@ -4,7 +4,7 @@
 export type TeamTitle = {
   tournamentId: string;
   tournamentName: string;
-  format: 'GROUP_STAGE' | 'KNOCKOUT' | 'GROUP_STAGE_KNOCKOUT';
+  format: 'LEAGUE' | 'KNOCKOUT' | 'GROUP_STAGE_KNOCKOUT';
   seasonId: string;
   seasonName: string;
 };

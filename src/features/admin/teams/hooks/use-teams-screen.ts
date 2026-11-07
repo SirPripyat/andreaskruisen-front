@@ -13,22 +13,25 @@ import { useTeams } from './use-teams';
 const PAGE_SIZE = 10;
 
 export const useTeamsScreen = () => {
-  const [{ name, withoutFormation, page, sortBy, sortOrder }, setFilters] =
-    useQueryStates({
-      name: parseAsString.withDefault(''),
-      withoutFormation: parseAsBoolean.withDefault(false),
-      page: parseAsInteger.withDefault(1),
-      sortBy: parseAsStringEnum<TeamSortField>([
-        'name',
-        'averageOverallRating',
-        'averageDefenseRating',
-        'averageMidfieldRating',
-        'averageAttackRating',
-      ]).withDefault('averageOverallRating'),
-      sortOrder: parseAsStringEnum<SortOrder>(['asc', 'desc']).withDefault(
-        'desc',
-      ),
-    });
+  const [
+    { name, withoutFormation, leagueId, page, sortBy, sortOrder },
+    setFilters,
+  ] = useQueryStates({
+    name: parseAsString.withDefault(''),
+    withoutFormation: parseAsBoolean.withDefault(false),
+    leagueId: parseAsString.withDefault(''),
+    page: parseAsInteger.withDefault(1),
+    sortBy: parseAsStringEnum<TeamSortField>([
+      'name',
+      'averageOverallRating',
+      'averageDefenseRating',
+      'averageMidfieldRating',
+      'averageAttackRating',
+    ]).withDefault('averageOverallRating'),
+    sortOrder: parseAsStringEnum<SortOrder>(['asc', 'desc']).withDefault(
+      'desc',
+    ),
+  });
 
   const [draftName, setDraftName] = useDebouncedSearch(name, (value) => {
     setFilters({ name: value || null, page: 1 });
@@ -37,6 +40,7 @@ export const useTeamsScreen = () => {
   const { data, isPending, isError, error } = useTeams({
     name: name || undefined,
     withoutFormation: withoutFormation || undefined,
+    leagueId: leagueId || undefined,
     page,
     pageSize: PAGE_SIZE,
     sortBy,
@@ -55,6 +59,9 @@ export const useTeamsScreen = () => {
   const toggleWithoutFormation = () =>
     setFilters({ withoutFormation: withoutFormation ? null : true, page: 1 });
 
+  const setLeagueId = (nextLeagueId: string) =>
+    setFilters({ leagueId: nextLeagueId || null, page: 1 });
+
   return {
     teams,
     sorting,
@@ -64,6 +71,8 @@ export const useTeamsScreen = () => {
     setDraftName,
     withoutFormation,
     toggleWithoutFormation,
+    leagueId,
+    setLeagueId,
     isPending,
     isError,
     error,

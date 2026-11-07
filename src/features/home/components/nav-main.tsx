@@ -1,4 +1,8 @@
-import { LayoutDashboardIcon, TrophyIcon } from 'lucide-react';
+import {
+  ArrowLeftRightIcon,
+  LayoutDashboardIcon,
+  TrophyIcon,
+} from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import {
   SidebarGroup,
@@ -11,6 +15,7 @@ import {
 const items = [
   { title: 'Dashboard', url: '/', icon: LayoutDashboardIcon },
   { title: 'Torneios', url: '/tournaments', icon: TrophyIcon },
+  { title: 'Transferências', url: '/transfers', icon: ArrowLeftRightIcon },
 ];
 
 export function NavMain() {

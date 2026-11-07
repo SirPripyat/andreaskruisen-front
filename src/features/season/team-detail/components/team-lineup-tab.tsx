@@ -4,10 +4,10 @@ import { Badge, Tabs, TabsList, TabsTab } from 'src/components/ui';
 import { useSelectedSeason } from 'src/features/admin';
 import { getFormationLabel, useLineup } from 'src/features/season/squads';
 import { cn, getOverallRatingClassName } from 'src/lib';
-import { TeamLineupBench } from '../team-lineup-bench';
-import { TeamLineupList } from '../team-lineup-list';
-import { TeamLineupPitch } from '../team-lineup-pitch';
-import { TeamLineupStrength } from '../team-lineup-strength';
+import { TeamLineupBench } from './team-lineup-bench';
+import { TeamLineupList } from './team-lineup-list';
+import { TeamLineupPitch } from './team-lineup-pitch';
+import { TeamLineupStrength } from './team-lineup-strength';
 
 type LineupView = 'pitch' | 'list';
 
@@ -77,14 +77,6 @@ export const TeamLineupTab = () => {
           </TabsList>
         </Tabs>
       </div>
-
-      {/*{selectedPlayer && (*/}
-      {/*  <TeamLineupPlayerDetail*/}
-      {/*    player={selectedPlayer}*/}
-      {/*    starters={starters}*/}
-      {/*    onClose={() => setSelectedId(null)}*/}
-      {/*  />*/}
-      {/*)}*/}
 
       <div className={'grid grid-cols-1 items-start gap-4 lg:grid-cols-2'}>
         {view === 'pitch' ? (

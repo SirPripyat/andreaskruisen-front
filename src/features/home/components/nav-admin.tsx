@@ -19,7 +19,7 @@ const items = [
   { title: 'Dados de jogadores', url: '/players', icon: UserRoundIcon },
   { title: 'Dados de times', url: '/teams', icon: ShieldIcon },
   { title: 'Temporadas', url: '/seasons', icon: CalendarRangeIcon },
-  { title: 'Importar jogadores', url: '/players/import', icon: UploadIcon },
+  { title: 'Importações', url: '/import', icon: UploadIcon },
 ];
 
 export function NavAdmin() {

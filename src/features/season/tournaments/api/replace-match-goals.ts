@@ -3,6 +3,10 @@ import type { MatchDetail } from './tournament';
 
 export type ReplaceMatchGoalsPayload = {
   goals: { scorerId: string; assistId?: string }[];
+  // Obrigatório quando a partida é KNOCKOUT e termina empatada no tempo
+  // normal; não deve ser enviado fora desse caso (a API rejeita os dois
+  // jeitos errados).
+  penalties?: { homeScore: number; awayScore: number };
 };
 
 export async function replaceMatchGoals(

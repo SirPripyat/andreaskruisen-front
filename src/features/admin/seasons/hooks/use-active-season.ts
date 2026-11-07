@@ -6,5 +6,6 @@ export function useActiveSeason() {
     queryKey: ['seasons', 'active'],
     queryFn: getActiveSeason,
     retry: false,
+    retryOnMount: false,
   });
 }

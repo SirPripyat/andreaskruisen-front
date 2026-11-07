@@ -1,19 +1,6 @@
-import { cn } from 'cn';
 import { Badge } from '@/components/ui';
+import { cn, getPositionGroupClassName } from '@/lib';
 import type { PlayerPosition } from '../api';
-
-const getPositionGroupClassName = (position: string) => {
-  if (/GOALKEEPER|^GOL$/.test(position))
-    return 'bg-warning-surface text-warning';
-  if (/BACK|DEFENDER|^(ZAG|LE|LD|ADE|ADD)$/.test(position))
-    return 'bg-info-surface text-info';
-  if (/MID|^(VOL|MC|MEI|ME|MD|MAE|MAD)$/.test(position))
-    return 'bg-success-surface text-success';
-  if (/WING|STRIKER|FORWARD|^(PE|PD|ATA)$/.test(position))
-    return 'bg-accent-surface text-accent';
-
-  return '';
-};
 
 type PlayerPositionCellProps = {
   positions: PlayerPosition[];

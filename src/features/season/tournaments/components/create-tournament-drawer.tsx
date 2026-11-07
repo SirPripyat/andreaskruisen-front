@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { PlusIcon } from 'lucide-react';
+import { CheckIcon, CircleAlertIcon, PlusIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -11,11 +11,6 @@ import {
   FieldGroup,
   FieldLabel,
   Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Sheet,
   SheetContent,
   SheetDescription,
@@ -26,24 +21,33 @@ import {
 } from '@/components/ui';
 import type { TeamWithRatings } from '@/features/admin/teams';
 import { assignSquad, useSeasonSquads } from '@/features/season/squads';
+import { cn } from '@/lib';
 import {
   type CreateTournamentFormValues,
   createTournamentSchema,
-  TEAM_COUNT_RULES,
-  TOURNAMENT_FORMAT_LABELS,
-  TOURNAMENT_FORMATS,
 } from '../api';
 import { useCreateTournament } from '../hooks';
 import {
   type SelectedTeamEntry,
   SelectTournamentTeams,
 } from './select-tournament-teams';
+import { TournamentFormatPicker } from './tournament-format-picker';
 
-export function CreateTournamentDrawer({
+const STEPS = [
+  { id: 'info', label: 'Informações' },
+  { id: 'format', label: 'Formato & vagas' },
+  { id: 'roster', label: 'Elenco' },
+] as const;
+
+type StepId = (typeof STEPS)[number]['id'];
+
+export const CreateTournamentDrawer = ({
   seasonId,
+  seasonName,
 }: {
   seasonId: string | undefined;
-}) {
+  seasonName?: string;
+}) => {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
@@ -55,6 +59,7 @@ export function CreateTournamentDrawer({
   const hasSeededSquadsRef = useRef(false);
   const preexistingSquadsRef = useRef<Set<string>>(new Set());
   const { mutateAsync, isPending: isCreating } = useCreateTournament(seasonId);
+  const sectionRefs = useRef<Partial<Record<StepId, HTMLDivElement>>>({});
   const {
     register,
     control,
@@ -64,10 +69,9 @@ export function CreateTournamentDrawer({
     formState: { errors },
   } = useForm<CreateTournamentFormValues>({
     resolver: zodResolver(createTournamentSchema),
-    defaultValues: { name: '', format: 'GROUP_STAGE', maxTeams: '' },
+    defaultValues: { name: '', format: 'LEAGUE', maxTeams: '' },
   });
-  const format = useWatch({ control, name: 'format' });
-  const formatRule = TEAM_COUNT_RULES[format];
+  const name = useWatch({ control, name: 'name' });
 
   // Ao abrir o drawer, já traz os times que os usuários escolheram/foram
   // atribuídos na temporada, pra não ter que selecionar tudo de novo.
@@ -136,6 +140,22 @@ export function CreateTournamentDrawer({
   const teamsCountMismatch =
     maxTeamsNumber !== undefined && selectedTeams.size !== maxTeamsNumber;
 
+  const hasName = name.trim().length > 0;
+  const rosterComplete =
+    maxTeamsNumber !== undefined && selectedTeams.size === maxTeamsNumber;
+  const activeStep: StepId = !hasName
+    ? 'info'
+    : maxTeamsNumber === undefined
+      ? 'format'
+      : 'roster';
+
+  function scrollToStep(step: StepId) {
+    sectionRefs.current[step]?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }
+
   const onSubmit = async (values: CreateTournamentFormValues) => {
     if (teamsCountMismatch) {
       toast.error(
@@ -201,6 +221,30 @@ export function CreateTournamentDrawer({
 
   const isSubmitting = isCreating || isLinkingTeams;
 
+  let footStatus: { tone: 'ok' | 'warn'; text: string };
+  if (!hasName) {
+    footStatus = {
+      tone: 'warn',
+      text: 'Dê um nome ao torneio para continuar.',
+    };
+  } else if (maxTeamsNumber === undefined) {
+    footStatus = { tone: 'warn', text: 'Escolha a quantidade de times.' };
+  } else if (teamsCountMismatch) {
+    const diff = maxTeamsNumber - selectedTeams.size;
+    footStatus = {
+      tone: 'warn',
+      text:
+        diff > 0
+          ? `Faltam ${diff} time${diff === 1 ? '' : 's'} para completar o elenco.`
+          : `Remova ${-diff} time${-diff === 1 ? '' : 's'} para encaixar no formato.`,
+    };
+  } else {
+    footStatus = {
+      tone: 'ok',
+      text: 'Elenco completo — pronto para criar o torneio.',
+    };
+  }
+
   return (
     <Sheet
       open={open}
@@ -221,144 +265,167 @@ export function CreateTournamentDrawer({
           </Button>
         }
       />
-      <SheetContent className="data-[side=right]:sm:max-w-2xl">
-        <SheetHeader>
-          <SheetTitle>Novo torneio</SheetTitle>
+      <SheetContent className={'data-[side=right]:sm:max-w-3xl'}>
+        <SheetHeader className={'gap-2'}>
+          {seasonName && (
+            <span
+              className={
+                'font-semibold text-accent text-xs uppercase tracking-wide'
+              }
+            >
+              {seasonName}
+            </span>
+          )}
+          <SheetTitle className={'font-display text-2xl'}>
+            {'Novo torneio'}
+          </SheetTitle>
           <SheetDescription>
-            O torneio fica vinculado à temporada selecionada no momento.
+            {'O torneio fica vinculado à temporada selecionada no momento.'}
           </SheetDescription>
+
+          <nav
+            className={'mt-1 flex gap-1 rounded-full border bg-background p-1'}
+          >
+            {STEPS.map((step, index) => {
+              const isActive = step.id === activeStep;
+              const isDone =
+                (step.id === 'info' && hasName) ||
+                (step.id === 'format' && maxTeamsNumber !== undefined) ||
+                (step.id === 'roster' && rosterComplete);
+              return (
+                <button
+                  key={step.id}
+                  type={'button'}
+                  onClick={() => scrollToStep(step.id)}
+                  className={cn(
+                    'flex flex-1 items-center justify-center gap-1.5 rounded-full px-2 py-1.5 font-medium text-xs transition-colors',
+                    isActive
+                      ? 'bg-surface text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  <span
+                    className={cn(
+                      'flex size-4 shrink-0 items-center justify-center rounded-full font-mono text-[10px]',
+                      isDone && !isActive
+                        ? 'bg-success text-white'
+                        : isActive
+                          ? 'bg-accent text-accent-foreground'
+                          : 'bg-border-strong text-surface',
+                    )}
+                  >
+                    {isDone && !isActive ? (
+                      <CheckIcon className={'size-2.5'} />
+                    ) : (
+                      index + 1
+                    )}
+                  </span>
+                  <span className={'hidden sm:inline'}>{step.label}</span>
+                </button>
+              );
+            })}
+          </nav>
         </SheetHeader>
 
         <form
-          id="create-tournament-form"
+          id={'create-tournament-form'}
           onSubmit={handleSubmit(onSubmit)}
-          className="flex-1 overflow-y-auto px-4"
+          className={'flex-1 overflow-y-auto px-4'}
         >
           <FieldGroup>
-            <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor="tournament-name">Nome</FieldLabel>
-              <Input
-                id="tournament-name"
-                type="text"
-                placeholder="ex.: Copa Andreaskruisen 2026"
-                aria-invalid={!!errors.name}
-                {...register('name')}
-              />
-              <FieldError errors={errors.name ? [errors.name] : undefined} />
-            </Field>
+            <div
+              ref={(el) => {
+                if (el) sectionRefs.current.info = el;
+              }}
+            >
+              <Field data-invalid={!!errors.name}>
+                <FieldLabel htmlFor={'tournament-name'}>
+                  {'Nome do torneio'}
+                </FieldLabel>
+                <Input
+                  id={'tournament-name'}
+                  type={'text'}
+                  placeholder={'ex.: Copa Andreaskruisen 2026'}
+                  aria-invalid={!!errors.name}
+                  {...register('name')}
+                />
+                <FieldError errors={errors.name ? [errors.name] : undefined} />
+              </Field>
+            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <Field data-invalid={!!errors.format}>
-                <FieldLabel htmlFor="tournament-format">Formato</FieldLabel>
+            <div
+              ref={(el) => {
+                if (el) sectionRefs.current.format = el;
+              }}
+            >
+              <Field data-invalid={!!errors.format || !!errors.maxTeams}>
+                <FieldLabel>{'Formato & vagas'}</FieldLabel>
                 <Controller
-                  name="format"
+                  name={'format'}
                   control={control}
                   render={({ field }) => (
-                    <Select
-                      value={field.value}
-                      onValueChange={(value) => {
+                    <TournamentFormatPicker
+                      format={field.value}
+                      onFormatChange={(value) => {
                         field.onChange(value);
                         setValue('maxTeams', '');
                       }}
-                      items={TOURNAMENT_FORMATS.map((item) => ({
-                        value: item,
-                        label: TOURNAMENT_FORMAT_LABELS[item],
-                      }))}
-                    >
-                      <SelectTrigger
-                        id="tournament-format"
-                        onBlur={field.onBlur}
-                      >
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {TOURNAMENT_FORMATS.map((item) => (
-                          <SelectItem key={item} value={item}>
-                            {TOURNAMENT_FORMAT_LABELS[item]}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      maxTeams={maxTeamsValue}
+                      onMaxTeamsChange={(value) => setValue('maxTeams', value)}
+                      error={errors.maxTeams?.message}
+                    />
                   )}
-                />
-                <FieldError
-                  errors={errors.format ? [errors.format] : undefined}
-                />
-              </Field>
-
-              <Field data-invalid={!!errors.maxTeams}>
-                <FieldLabel htmlFor="tournament-max-teams">
-                  Qtd máx de times
-                </FieldLabel>
-                {formatRule.allowed ? (
-                  <Controller
-                    name="maxTeams"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger
-                          id="tournament-max-teams"
-                          onBlur={field.onBlur}
-                          aria-invalid={!!errors.maxTeams}
-                        >
-                          <SelectValue placeholder="Selecione" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {formatRule.allowed?.map((count) => (
-                            <SelectItem key={count} value={String(count)}>
-                              {count}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                ) : (
-                  <Input
-                    id="tournament-max-teams"
-                    type="number"
-                    min={formatRule.min}
-                    max={formatRule.max}
-                    placeholder={`${formatRule.min} a ${formatRule.max}`}
-                    aria-invalid={!!errors.maxTeams}
-                    {...register('maxTeams')}
-                  />
-                )}
-                <FieldError
-                  errors={errors.maxTeams ? [errors.maxTeams] : undefined}
                 />
               </Field>
             </div>
 
-            <Field data-invalid={teamsCountMismatch}>
-              <FieldLabel>Times</FieldLabel>
-              <SelectTournamentTeams
-                selectedTeams={selectedTeams}
-                onSelect={selectTeam}
-                onRemove={removeTeam}
-                onOwnerChange={changeOwner}
-                maxTeams={maxTeamsNumber}
-                canAssignOwners={true}
-              />
-              {teamsCountMismatch && (
-                <FieldError>
-                  Selecione exatamente {maxTeamsNumber} time
-                  {maxTeamsNumber === 1 ? '' : 's'} (atualmente{' '}
-                  {selectedTeams.size}).
-                </FieldError>
-              )}
-            </Field>
+            <div
+              ref={(el) => {
+                if (el) sectionRefs.current.roster = el;
+              }}
+            >
+              <Field data-invalid={teamsCountMismatch}>
+                <FieldLabel>{'Elenco'}</FieldLabel>
+                <SelectTournamentTeams
+                  selectedTeams={selectedTeams}
+                  onSelect={selectTeam}
+                  onRemove={removeTeam}
+                  onOwnerChange={changeOwner}
+                  maxTeams={maxTeamsNumber}
+                  canAssignOwners={true}
+                />
+                {teamsCountMismatch && (
+                  <FieldError>
+                    Selecione exatamente {maxTeamsNumber} time
+                    {maxTeamsNumber === 1 ? '' : 's'} (atualmente{' '}
+                    {selectedTeams.size}).
+                  </FieldError>
+                )}
+              </Field>
+            </div>
           </FieldGroup>
         </form>
 
-        <SheetFooter className="items-end">
+        <SheetFooter className={'flex-row items-center justify-between gap-3'}>
+          <div
+            className={cn(
+              'flex min-w-0 items-center gap-1.5 text-xs',
+              footStatus.tone === 'ok'
+                ? 'text-success'
+                : 'text-muted-foreground',
+            )}
+          >
+            {footStatus.tone === 'ok' ? (
+              <CheckIcon className={'size-3.5 shrink-0'} />
+            ) : (
+              <CircleAlertIcon className={'size-3.5 shrink-0'} />
+            )}
+            <span className={'truncate'}>{footStatus.text}</span>
+          </div>
           <Button
-            type="submit"
-            form="create-tournament-form"
-            className="w-fit"
+            type={'submit'}
+            form={'create-tournament-form'}
+            className={'w-fit shrink-0'}
             disabled={
               isSubmitting || maxTeamsNumber === undefined || teamsCountMismatch
             }
@@ -369,4 +436,4 @@ export function CreateTournamentDrawer({
       </SheetContent>
     </Sheet>
   );
-}
+};

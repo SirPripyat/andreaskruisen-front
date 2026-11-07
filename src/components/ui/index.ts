@@ -14,6 +14,7 @@ export * from './input';
 export * from './input-otp';
 export * from './label';
 export * from './pagination';
+export * from './progress';
 export * from './select';
 export * from './separator';
 export * from './sheet';

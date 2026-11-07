@@ -8,6 +8,9 @@ type MatchCardTeamProps = {
   crestUrl: string;
   owner: TeamOwner | null;
   score: number | null;
+  // Placar da disputa de pênaltis dessa equipe — só existe quando a partida
+  // é de mata-mata e empata no tempo normal.
+  penaltyScore?: number | null;
   muted: boolean;
   winner: boolean;
 };
@@ -18,6 +21,7 @@ export const MatchCardTeam = ({
   crestUrl,
   owner,
   score,
+  penaltyScore,
   muted,
   winner,
 }: MatchCardTeamProps) => {
@@ -35,6 +39,17 @@ export const MatchCardTeam = ({
         crestUrl={crestUrl}
         owner={owner}
       />
+
+      {penaltyScore != null && (
+        <span
+          className={cn(
+            'shrink-0 font-mono text-muted-foreground text-xs tabular-nums',
+            winner && 'font-semibold text-success',
+          )}
+        >
+          ({penaltyScore})
+        </span>
+      )}
 
       <div
         className={cn(

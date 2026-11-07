@@ -16,4 +16,5 @@ export * from './tournament-actions-menu';
 export * from './tournament-bracket';
 export * from './tournament-detail-dashboard';
 export * from './tournament-fixtures';
+export * from './tournament-format-picker';
 export * from './tournament-group-standings';

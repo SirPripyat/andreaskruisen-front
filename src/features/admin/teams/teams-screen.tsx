@@ -15,11 +15,19 @@ import {
   DataTable,
   DataTableColumnHeader,
   DataTablePagination,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui';
 import type { TeamWithRatings } from './api';
-import { useTeamsScreen } from './hooks';
+import { TeamRowActions } from './components';
+import { useLeagues, useTeamsScreen } from './hooks';
 
 const PAGE_SIZE = 10;
+
+const ALL_LEAGUES = 'all';
 
 const numberFormatter = new Intl.NumberFormat('pt-BR');
 
@@ -99,6 +107,12 @@ const columns: ColumnDef<TeamWithRatings>[] = [
       <OverallRatingBadge rating={row.original.averageDefenseRating} />
     ),
   },
+  {
+    id: 'actions',
+    header: '',
+    meta: { className: 'text-right' },
+    cell: ({ row }) => <TeamRowActions team={row.original} />,
+  },
 ];
 
 export const TeamsScreen = () => {
@@ -111,11 +125,15 @@ export const TeamsScreen = () => {
     setDraftName,
     withoutFormation,
     toggleWithoutFormation,
+    leagueId,
+    setLeagueId,
     isPending,
     isError,
     error,
     data,
   } = useTeamsScreen();
+
+  const { data: leagues } = useLeagues();
 
   const table = useReactTable({
     data: teams,
@@ -141,6 +159,32 @@ export const TeamsScreen = () => {
           onChange={setDraftName}
           placeholder={'Buscar time...'}
         />
+        <Select
+          value={leagueId || ALL_LEAGUES}
+          onValueChange={(value) =>
+            setLeagueId(value === ALL_LEAGUES ? '' : (value as string))
+          }
+          items={{
+            [ALL_LEAGUES]: 'Todas as ligas',
+            ...Object.fromEntries(
+              (leagues ?? []).map((league) => [league.id, league.name]),
+            ),
+          }}
+        >
+          <SelectTrigger className={'w-auto min-w-44 shrink-0'}>
+            <SelectValue className={'whitespace-nowrap'} />
+          </SelectTrigger>
+
+          <SelectContent className={'max-h-64'} alignItemWithTrigger={false}>
+            <SelectItem value={ALL_LEAGUES}>Todas as ligas</SelectItem>
+
+            {leagues?.map((league) => (
+              <SelectItem key={league.id} value={league.id}>
+                {league.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Button
           variant={withoutFormation ? 'default' : 'outline'}
           onClick={toggleWithoutFormation}

@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import { useParams } from 'react-router';
 import {
   Avatar,
   AvatarFallback,
@@ -12,17 +13,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui';
-import type { RosterPlayer } from '@/features/season/squads';
-import { getOverallRatingClassName } from '@/lib';
+import { type RosterPlayer, useRoster } from '@/features/season/squads';
+import {
+  calculateAge,
+  getOverallRatingClassName,
+  getPositionGroupClassName,
+} from '@/lib';
 
-// Mesmo agrupamento/ordem usado no seletor de artilheiro do torneio (ver
-// PlayerCombobox): ataque -> meio-campo -> defesa -> goleiro.
-const POSITION_GROUPS: { label: string; positions: string[] }[] = [
-  { label: 'Atacantes', positions: ['ATA', 'PD', 'PE'] },
-  { label: 'Meio-campistas', positions: ['VOL', 'MC', 'MD', 'ME', 'MEI'] },
-  { label: 'Defensores', positions: ['ZAG', 'LD', 'LE'] },
-  { label: 'Goleiros', positions: ['GOL'] },
-];
+const SECTOR_GROUPS: Record<string, string> = {
+  attackers: 'Atacantes',
+  midfielders: 'Meio-campistas',
+  defenders: 'Defensores',
+  goalkeepers: 'Goleiros',
+};
 
 const FOOT_LABELS: Record<RosterPlayer['preferredFoot'], string> = {
   LEFT: 'Esquerdo',
@@ -34,15 +37,12 @@ const SKELETON_ROW_KEYS = Array.from(
   (_, index) => `roster-skeleton-${index}`,
 );
 
-export function TeamRosterTable({
-  roster,
-  xiPlayerIds,
-  isPending,
-}: {
-  roster: RosterPlayer[];
-  xiPlayerIds: Set<string>;
-  isPending: boolean;
-}) {
+export const TeamRosterTable = () => {
+  const { id } = useParams<{ id: string }>();
+  const { data: roster, isPending } = useRoster(id);
+
+  if (!roster) return null;
+
   if (isPending) {
     return (
       <div className="flex flex-col gap-2">
@@ -53,7 +53,9 @@ export function TeamRosterTable({
     );
   }
 
-  if (roster.length === 0) {
+  const playersRoster = Object.entries(roster);
+
+  if (playersRoster.length === 0) {
     return (
       <p className="p-4 text-center text-muted-foreground text-sm">
         Nenhum jogador vinculado a este time nesta temporada.
@@ -61,83 +63,91 @@ export function TeamRosterTable({
     );
   }
 
-  const groups = POSITION_GROUPS.map((group) => ({
-    label: group.label,
-    players: roster
-      .filter((player) => group.positions.includes(player.position))
-      .sort((a, b) => b.overallRating - a.overallRating),
-  })).filter((group) => group.players.length > 0);
-
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Jogador</TableHead>
-          <TableHead>Posição</TableHead>
-          <TableHead>Nação</TableHead>
-          <TableHead>Pé</TableHead>
-          <TableHead className="text-right">Overall</TableHead>
-          <TableHead>Titular</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {groups.map((group) => (
-          <Fragment key={group.label}>
-            <TableRow className="hover:bg-transparent">
-              <TableCell
-                colSpan={6}
-                className="bg-muted/40 py-1.5 font-mono text-[11px] text-muted-foreground uppercase tracking-wide"
-              >
-                {group.label}
-              </TableCell>
-            </TableRow>
-            {group.players.map((player) => (
-              <TableRow key={player.id}>
-                <TableCell className="font-medium">
-                  <div className="flex items-center gap-2">
-                    <Avatar size="sm">
-                      <AvatarImage src={player.photoUrl} alt="" />
-                      <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    {player.name}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className="rounded border px-1.5 py-0.5 font-mono text-muted-foreground text-xs">
-                    {player.position}
-                  </span>
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {player.nationality.name}
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {FOOT_LABELS[player.preferredFoot]}
-                </TableCell>
-                <TableCell className="text-right">
-                  <Badge
-                    variant="outline"
-                    className={getOverallRatingClassName(
-                      Math.round(player.overallRating),
-                    )}
-                  >
-                    {Math.round(player.overallRating)}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  {xiPlayerIds.has(player.id) ? (
-                    <span className="inline-flex items-center gap-1.5 text-success text-xs">
-                      <span className="size-1.5 rounded-full bg-success" />
-                      Titular
-                    </span>
-                  ) : (
-                    <span className="text-muted-foreground text-xs">—</span>
-                  )}
+    <div className="rounded-xl border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className={'w-8 pl-4'}>#</TableHead>
+            <TableHead>Jogador</TableHead>
+            <TableHead className="text-right">Overall</TableHead>
+            <TableHead>Posição</TableHead>
+            <TableHead>Pé</TableHead>
+            <TableHead>Nação</TableHead>
+            <TableHead>Idade</TableHead>
+            <TableHead>Titular</TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          {playersRoster.map(([group, players]) => (
+            <Fragment key={group}>
+              <TableRow className="hover:bg-transparent">
+                <TableCell
+                  colSpan={8}
+                  className="bg-muted/40 py-1.5 font-mono text-[11px] text-muted-foreground uppercase tracking-wide"
+                >
+                  {SECTOR_GROUPS[group]}
                 </TableCell>
               </TableRow>
-            ))}
-          </Fragment>
-        ))}
-      </TableBody>
-    </Table>
+
+              {players.map((player, index) => (
+                <TableRow key={player.id}>
+                  <TableCell className="font-medium text-xs text-muted-foreground w-8 pl-4">
+                    {index + 1}
+                  </TableCell>
+
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-2">
+                      <Avatar>
+                        <AvatarImage src={player.photoUrl} alt="" />
+                        <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      {player.name}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Badge
+                      variant="outline"
+                      className={getOverallRatingClassName(
+                        Math.round(player.overallRating),
+                      )}
+                    >
+                      {Math.round(player.overallRating)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <span
+                      className={`rounded-full px-1.5 py-0.5 font-mono text-xs ${getPositionGroupClassName(player.position)}`}
+                    >
+                      {player.position}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {FOOT_LABELS[player.preferredFoot]}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {player.nationality.name}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {calculateAge(player.birthdate)}
+                  </TableCell>
+                  <TableCell>
+                    {player.isStarter ? (
+                      <span className="inline-flex items-center gap-1.5 text-success text-xs">
+                        <span className="size-1.5 rounded-full bg-success" />
+                        Titular
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground text-xs">—</span>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </Fragment>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
-}
+};

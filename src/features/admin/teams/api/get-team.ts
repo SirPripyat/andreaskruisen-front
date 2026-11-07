@@ -1,7 +1,7 @@
 import { api } from '@/lib';
-import type { TeamWithRatings } from './team';
+import type { TeamDetails } from './team';
 
 export async function getTeam(id: string) {
-  const { data } = await api.get<TeamWithRatings>(`/teams/${id}`);
+  const { data } = await api.get<TeamDetails>(`/teams/${id}`);
   return data;
 }

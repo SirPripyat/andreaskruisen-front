@@ -54,7 +54,7 @@ const columns: ColumnDef<Tournament>[] = [
   },
 ];
 
-export function TournamentsScreen() {
+export const TournamentsScreen = () => {
   const { selectedSeason, isPending: isSeasonPending } = useSelectedSeason();
   const {
     data: tournaments,
@@ -75,12 +75,13 @@ export function TournamentsScreen() {
     <>
       <PageHeader
         title="Torneios"
-        description={
-          selectedSeason
-            ? `Torneios disputados na temporada "${selectedSeason.name}".`
-            : 'Selecione uma temporada para ver os torneios.'
+        description={`Torneios disputados na temporada "${selectedSeason?.name}".`}
+        actions={
+          <CreateTournamentDrawer
+            seasonId={selectedSeason?.id}
+            seasonName={selectedSeason?.name}
+          />
         }
-        actions={<CreateTournamentDrawer seasonId={selectedSeason?.id} />}
       />
 
       <DataTable
@@ -89,13 +90,9 @@ export function TournamentsScreen() {
         isError={isError}
         error={error}
         errorMessage="Não foi possível carregar os torneios."
-        emptyMessage={
-          selectedSeason
-            ? 'Nenhum torneio criado ainda.'
-            : 'Nenhuma temporada selecionada.'
-        }
+        emptyMessage="Nenhum torneio criado ainda."
         skeletonRowCount={3}
       />
     </>
   );
-}
+};

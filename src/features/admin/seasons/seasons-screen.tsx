@@ -17,38 +17,38 @@ const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
   dateStyle: 'medium',
 });
 
-export function SeasonsScreen() {
-  const { seasons, isPending } = useSeasonSelection();
+const columns: ColumnDef<Season>[] = [
+  {
+    accessorKey: 'name',
+    header: 'Nome',
+    cell: ({ row }) => row.original.name,
+  },
+  {
+    accessorKey: 'startedAt',
+    header: 'Iniciada em',
+    cell: ({ row }) => dateFormatter.format(new Date(row.original.startedAt)),
+  },
+  {
+    id: 'selected',
+    header: 'Selecionada',
+    meta: { className: 'text-right' },
+    cell: ({ row }) => (
+      <SeasonSelectCell
+        season={row.original}
+        isSelected={row.original.isActive}
+      />
+    ),
+  },
+  {
+    id: 'actions',
+    header: '',
+    meta: { className: 'text-right' },
+    cell: ({ row }) => <SeasonActionsMenu season={row.original} />,
+  },
+];
 
-  const columns: ColumnDef<Season>[] = [
-    {
-      accessorKey: 'name',
-      header: 'Nome',
-      cell: ({ row }) => row.original.name,
-    },
-    {
-      accessorKey: 'startedAt',
-      header: 'Iniciada em',
-      cell: ({ row }) => dateFormatter.format(new Date(row.original.startedAt)),
-    },
-    {
-      id: 'selected',
-      header: 'Selecionada',
-      meta: { className: 'text-right' },
-      cell: ({ row }) => (
-        <SeasonSelectCell
-          season={row.original}
-          isSelected={row.original.isActive}
-        />
-      ),
-    },
-    {
-      id: 'actions',
-      header: '',
-      meta: { className: 'text-right' },
-      cell: ({ row }) => <SeasonActionsMenu season={row.original} />,
-    },
-  ];
+export const SeasonsScreen = () => {
+  const { seasons, isPending } = useSeasonSelection();
 
   const table = useReactTable({
     data: seasons,
@@ -74,4 +74,4 @@ export function SeasonsScreen() {
       />
     </>
   );
-}
+};

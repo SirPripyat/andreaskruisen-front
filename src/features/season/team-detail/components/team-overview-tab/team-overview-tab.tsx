@@ -1,32 +1,12 @@
-import type { ReactNode } from 'react';
 import { useParams } from 'react-router';
-import { Skeleton } from '@/components/ui';
-import { useTeam } from '@/features/admin/teams';
-import { RatingTile } from './rating-tile';
-import { TeamHeadToHead } from './team-head-to-head';
-import { TeamLeadersList } from './team-leaders-list';
-import { TeamRecentForm, TeamRecentFormChips } from './team-recent-form';
-import { TeamSeasonCampaign } from './team-season-campaign';
-
-const Section = ({
-  title,
-  meta,
-  children,
-}: {
-  title: string;
-  meta?: ReactNode;
-  children: ReactNode;
-}) => (
-  <div className={'flex flex-col gap-3 bg-card p-4 rounded-xl border'}>
-    <div className={'flex items-baseline justify-between gap-3'}>
-      <span className={'font-display font-bold text-md uppercase'}>
-        {title}
-      </span>
-      {meta}
-    </div>
-    {children}
-  </div>
-);
+import { Skeleton } from 'src/components/ui';
+import { useTeam } from 'src/features/admin/teams';
+import { RatingTile } from '../rating-tile';
+import { TeamHeadToHead } from '../team-head-to-head';
+import { TeamLeadersList } from '../team-leaders-list';
+import { TeamRecentForm, TeamRecentFormChips } from '../team-recent-form';
+import { TeamSeasonCampaign } from '../team-season-campaign';
+import { Section } from './section';
 
 export const TeamOverviewTab = () => {
   const { id } = useParams<{ id: string }>();
@@ -44,7 +24,7 @@ export const TeamOverviewTab = () => {
 
   return (
     <div className={'flex flex-col gap-6 lg:flex-row'}>
-      <div className={'flex flex-1 flex-col gap-6'}>
+      <div className={'flex flex-1 flex-col gap-6 lg:w-1/2'}>
         <Section
           title={'Campanha da Temporada'}
           meta={
@@ -83,7 +63,7 @@ export const TeamOverviewTab = () => {
         </Section>
       </div>
 
-      <div className={'flex w-full flex-col gap-6 lg:w-72'}>
+      <div className={'flex w-full flex-col gap-6 lg:w-1/2'}>
         <Section title={'Perfil de Atributos'}>
           <div className={'grid grid-cols-2 gap-3'}>
             <RatingTile label={'Geral'} value={team.averageOverallRating} />

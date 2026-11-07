@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import { useTournamentAllMatches } from '../hooks';
+import { useTournament, useTournamentAllMatches } from '../hooks';
 import { PhaseSection } from './phase-section';
 
 type TournamentFixturesProps = {
@@ -14,8 +14,11 @@ export const TournamentFixtures = ({
   isAdvancingPhase,
 }: TournamentFixturesProps) => {
   const { id } = useParams<{ id: string }>();
+  const { data: tournament } = useTournament(id);
   const { phases } = useTournamentAllMatches(id);
   const allMatches = phases.flatMap(({ matches }) => matches);
+  // Liga não tem uma fase seguinte pra "avançar" — o botão de ação some.
+  const isLeague = tournament?.format === 'LEAGUE';
 
   if (allMatches.length === 0)
     return (
@@ -32,6 +35,7 @@ export const TournamentFixtures = ({
           phase={phase}
           matches={matches}
           isLatestPhase={phaseIndex === phases.length - 1}
+          isLeague={isLeague}
           onRegisterGoals={onRegisterGoals}
           onAdvancePhase={onAdvancePhase}
           isAdvancingPhase={isAdvancingPhase}

@@ -36,6 +36,7 @@ export const MatchCardColumn = ({
         crestUrl={match.homeTeam.crestUrl}
         owner={match.homeTeam.owner}
         score={match.homeScore}
+        penaltyScore={match.penalties?.homeScore}
         muted={status.awayWinner}
         winner={status.homeWinner}
       />
@@ -46,6 +47,7 @@ export const MatchCardColumn = ({
         crestUrl={match.awayTeam.crestUrl}
         owner={match.awayTeam.owner}
         score={match.awayScore}
+        penaltyScore={match.penalties?.awayScore}
         muted={status.homeWinner}
         winner={status.awayWinner}
       />

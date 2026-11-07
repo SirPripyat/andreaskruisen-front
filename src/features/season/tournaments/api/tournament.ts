@@ -1,5 +1,5 @@
 export const TOURNAMENT_FORMATS = [
-  'GROUP_STAGE',
+  'LEAGUE',
   'KNOCKOUT',
   'GROUP_STAGE_KNOCKOUT',
 ] as const;
@@ -7,7 +7,7 @@ export const TOURNAMENT_FORMATS = [
 export type TournamentFormat = (typeof TOURNAMENT_FORMATS)[number];
 
 export const TOURNAMENT_FORMAT_LABELS: Record<TournamentFormat, string> = {
-  GROUP_STAGE: 'Fase de grupos',
+  LEAGUE: 'Liga',
   KNOCKOUT: 'Mata-mata',
   GROUP_STAGE_KNOCKOUT: 'Fase de grupos + mata-mata',
 };
@@ -83,6 +83,13 @@ export type TournamentSituation = {
   | { matches: Confronto[]; groups?: undefined }
 );
 
+// Só existe quando a partida é KNOCKOUT e termina empatada no tempo normal.
+export type MatchPenalties = {
+  homeScore: number;
+  awayScore: number;
+  winnerTeamId: string;
+};
+
 export type MatchListItem = {
   id: string;
   groupLabel: string | null;
@@ -91,6 +98,7 @@ export type MatchListItem = {
   // null = partida ainda não jogada.
   homeScore: number | null;
   awayScore: number | null;
+  penalties: MatchPenalties | null;
   homeTeam: ConfrontoTeam;
   awayTeam: ConfrontoTeam;
   // true = a fase seguinte já foi gerada a partir desta (ver POST
@@ -120,7 +128,9 @@ export type MatchDetail = {
   id: string;
   groupLabel: string | null;
   round: number | null;
+  phaseType: PhaseType;
   playedAt: string | null;
+  penalties: MatchPenalties | null;
   homeTeam: MatchTeamWithPlayers;
   awayTeam: MatchTeamWithPlayers;
   goals: MatchGoal[];

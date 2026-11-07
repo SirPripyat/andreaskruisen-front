@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import {
   HomeScreen,
-  ImportPlayersScreen,
+  ImportScreen,
   LoginScreen,
   PlayersScreen,
   SeasonsScreen,
@@ -9,10 +9,12 @@ import {
   TeamsScreen,
   TournamentDetailScreen,
   TournamentsScreen,
+  TransfersScreen,
   UsersScreen,
 } from '@/features';
 import { AppLayout } from './app-layout';
 import { ProtectedRoute } from './protected-route';
+import { RequireSeason } from './require-season';
 import { RootLayout } from './root-layout';
 
 export const router = createBrowserRouter([
@@ -42,9 +44,9 @@ export const router = createBrowserRouter([
                 handle: { breadcrumb: 'Dados de jogadores' },
               },
               {
-                path: 'players/import',
-                element: <ImportPlayersScreen />,
-                handle: { breadcrumb: 'Importar jogadores' },
+                path: 'import',
+                element: <ImportScreen />,
+                handle: { breadcrumb: 'Importações' },
               },
               {
                 path: 'teams',
@@ -52,24 +54,34 @@ export const router = createBrowserRouter([
                 handle: { breadcrumb: 'Dados de times' },
               },
               {
-                path: 'teams/:id',
-                element: <TeamDetailScreen />,
-                handle: { breadcrumb: 'Time' },
-              },
-              {
                 path: 'seasons',
                 element: <SeasonsScreen />,
                 handle: { breadcrumb: 'Temporadas' },
               },
               {
-                path: 'tournaments',
-                element: <TournamentsScreen />,
-                handle: { breadcrumb: 'Torneios' },
-              },
-              {
-                path: 'tournaments/:id',
-                element: <TournamentDetailScreen />,
-                handle: { breadcrumb: 'Torneio' },
+                element: <RequireSeason />,
+                children: [
+                  {
+                    path: 'teams/:id',
+                    element: <TeamDetailScreen />,
+                    handle: { breadcrumb: 'Time' },
+                  },
+                  {
+                    path: 'tournaments',
+                    element: <TournamentsScreen />,
+                    handle: { breadcrumb: 'Torneios' },
+                  },
+                  {
+                    path: 'tournaments/:id',
+                    element: <TournamentDetailScreen />,
+                    handle: { breadcrumb: 'Torneio' },
+                  },
+                  {
+                    path: 'transfers',
+                    element: <TransfersScreen />,
+                    handle: { breadcrumb: 'Transferências' },
+                  },
+                ],
               },
             ],
           },

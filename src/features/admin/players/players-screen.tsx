@@ -127,7 +127,7 @@ export const PlayersScreen = () => {
           'Base de jogadores extraída do scraper, com posições, nacionalidade e avaliações.'
         }
         actions={
-          <Button variant={'default'} render={<Link to={'/players/import'} />}>
+          <Button variant={'default'} render={<Link to={'/import'} />}>
             <UploadIcon />
             Importar
           </Button>
