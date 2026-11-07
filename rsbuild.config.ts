@@ -16,6 +16,6 @@ export default defineConfig({
   },
   html: {
     title: 'Andreaskruisen',
-    favicon: './public/logo.svg',
+    favicon: './public/logo-flagband-square.svg',
   },
 });
