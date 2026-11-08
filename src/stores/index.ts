@@ -1,3 +1,4 @@
+export * from './auth-store';
 export * from './breadcrumb-store';
 export * from './season-store';
 export * from './sidebar-store';
