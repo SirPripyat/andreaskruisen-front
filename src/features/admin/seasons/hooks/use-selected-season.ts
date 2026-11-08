@@ -2,12 +2,7 @@ import { useSeasonStore } from '@/stores';
 import { useActiveSeason } from './use-active-season';
 import { useSeasons } from './use-seasons';
 
-/**
- * Resolves which season the app should currently operate on: the browser's
- * own choice (zustand, persisted to localStorage) wins when set, otherwise
- * it falls back to the season the backend has marked as active.
- */
-export function useSelectedSeason() {
+export const useSelectedSeason = () => {
   const selectedSeasonId = useSeasonStore((state) => state.selectedSeasonId);
   const { data: seasons, isPending: isSeasonsPending } = useSeasons();
   const { data: activeSeason, isPending: isActivePending } = useActiveSeason();
@@ -21,4 +16,4 @@ export function useSelectedSeason() {
     selectedSeason,
     isPending: isSeasonsPending || isActivePending,
   };
-}
+};

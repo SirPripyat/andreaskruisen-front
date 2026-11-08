@@ -1,5 +1,5 @@
 import { api } from '@/lib';
 
-export async function logout() {
+export const logout = async () => {
   await api.post('/auth/logout');
-}
+};

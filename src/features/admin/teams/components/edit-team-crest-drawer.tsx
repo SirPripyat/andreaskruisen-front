@@ -28,11 +28,11 @@ type EditTeamCrestDrawerProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-export function EditTeamCrestDrawer({
+export const EditTeamCrestDrawer = ({
   team,
   open,
   onOpenChange,
-}: EditTeamCrestDrawerProps) {
+}: EditTeamCrestDrawerProps) => {
   const { mutate, isPending } = useUpdateTeam(team.id);
   const {
     register,
@@ -123,4 +123,4 @@ export function EditTeamCrestDrawer({
       </SheetContent>
     </Sheet>
   );
-}
+};

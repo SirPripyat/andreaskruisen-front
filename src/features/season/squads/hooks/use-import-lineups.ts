@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { importLineups } from '../api';
 
-export function useImportLineups() {
+export const useImportLineups = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -12,4 +12,4 @@ export function useImportLineups() {
       queryClient.invalidateQueries({ queryKey: ['team'] });
     },
   });
-}
+};

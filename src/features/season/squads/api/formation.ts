@@ -68,6 +68,6 @@ const FORMATION_LABEL: Record<Formation, string> = {
   FIVE_FOUR_ONE_LOSANGO: '5-4-1 (losango)',
 };
 
-export function getFormationLabel(formation: Formation | null): string {
+export const getFormationLabel = (formation: Formation | null): string => {
   return formation ? FORMATION_LABEL[formation] : 'Formação';
-}
+};

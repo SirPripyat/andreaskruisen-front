@@ -9,14 +9,14 @@ export type ReplaceMatchGoalsPayload = {
   penalties?: { homeScore: number; awayScore: number };
 };
 
-export async function replaceMatchGoals(
+export const replaceMatchGoals = async (
   tournamentId: string,
   matchId: string,
   payload: ReplaceMatchGoalsPayload,
-) {
+) => {
   const { data } = await api.put<MatchDetail>(
     `/tournaments/${tournamentId}/matches/${matchId}/goals`,
     payload,
   );
   return data;
-}
+};

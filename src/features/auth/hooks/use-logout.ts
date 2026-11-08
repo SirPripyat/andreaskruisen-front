@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { useAuthStore } from '@/stores';
 import { logout } from '../api';
 
-export function useLogout() {
+export const useLogout = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const setToken = useAuthStore((s) => s.setToken);
@@ -17,4 +17,4 @@ export function useLogout() {
       navigate('/login', { replace: true });
     },
   });
-}
+};

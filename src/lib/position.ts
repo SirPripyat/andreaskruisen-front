@@ -1,6 +1,6 @@
 export type PositionGroup = 'GOL' | 'DEF' | 'MID' | 'ATT';
 
-export function getPositionGroup(position: string): PositionGroup {
+export const getPositionGroup = (position: string): PositionGroup => {
   if (/GOALKEEPER|^GOL$/.test(position)) return 'GOL';
 
   if (/BACK|DEFENDER|^(ZAG|LE|LD|ADE|ADD)$/.test(position)) return 'DEF';
@@ -10,7 +10,7 @@ export function getPositionGroup(position: string): PositionGroup {
   if (/WING|STRIKER|FORWARD|^(PE|PD|ATA)$/.test(position)) return 'ATT';
 
   return 'MID';
-}
+};
 
 const POSITION_GROUP_LABEL: Record<PositionGroup, string> = {
   GOL: 'Goleiro',
@@ -19,9 +19,9 @@ const POSITION_GROUP_LABEL: Record<PositionGroup, string> = {
   ATT: 'Ataque',
 };
 
-export function getPositionGroupLabel(group: PositionGroup): string {
+export const getPositionGroupLabel = (group: PositionGroup): string => {
   return POSITION_GROUP_LABEL[group];
-}
+};
 
 const POSITION_GROUP_SURFACE_CLASS: Record<PositionGroup, string> = {
   GOL: 'bg-warning-surface text-warning',

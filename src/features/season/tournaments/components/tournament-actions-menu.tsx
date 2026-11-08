@@ -17,11 +17,11 @@ import type { Tournament } from '../api';
 import { DeleteTournamentDialog } from './delete-tournament-dialog';
 import { EditTournamentDrawer } from './edit-tournament-drawer';
 
-export function TournamentActionsMenu({
+export const TournamentActionsMenu = ({
   tournament,
 }: {
   tournament: Tournament;
-}) {
+}) => {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
@@ -76,4 +76,4 @@ export function TournamentActionsMenu({
       />
     </>
   );
-}
+};

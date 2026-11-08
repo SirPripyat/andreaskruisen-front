@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createSeason } from '../api';
 
-export function useCreateSeason() {
+export const useCreateSeason = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -11,4 +11,4 @@ export function useCreateSeason() {
       queryClient.invalidateQueries({ queryKey: ['seasons'] });
     },
   });
-}
+};

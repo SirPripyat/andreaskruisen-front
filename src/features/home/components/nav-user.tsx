@@ -16,16 +16,16 @@ import {
 } from '@/components/ui';
 import { useLogout } from '@/features/auth';
 
-function getInitials(name: string) {
+const getInitials = (name: string) => {
   return name
     .trim()
     .split(/\s+/)
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase())
     .join('');
-}
+};
 
-export function NavUser({ user }: { user: { name: string; role: string } }) {
+export const NavUser = ({ user }: { user: { name: string; role: string } }) => {
   const { isMobile } = useSidebar();
   const { mutate: logout, isPending } = useLogout();
 
@@ -82,4 +82,4 @@ export function NavUser({ user }: { user: { name: string; role: string } }) {
       </SidebarMenuItem>
     </SidebarMenu>
   );
-}
+};

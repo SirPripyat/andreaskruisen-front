@@ -5,10 +5,10 @@ export type UpdateSeasonPayload = {
   name: string;
 };
 
-export async function updateSeason(
+export const updateSeason = async (
   seasonId: string,
   payload: UpdateSeasonPayload,
-) {
+) => {
   const { data } = await api.patch<Season>(`/seasons/${seasonId}`, payload);
   return data;
-}
+};

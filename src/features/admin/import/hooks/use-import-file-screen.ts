@@ -19,11 +19,11 @@ type UseImportFileScreenOptions<TResult> = {
   errorMessage: string;
 };
 
-export function useImportFileScreen<TResult>({
+export const useImportFileScreen = <TResult>({
   mutate,
   getSuccessMessage,
   errorMessage,
-}: UseImportFileScreenOptions<TResult>) {
+}: UseImportFileScreenOptions<TResult>) => {
   const {
     register,
     handleSubmit,
@@ -68,7 +68,7 @@ export function useImportFileScreen<TResult>({
     register,
     fileRegister,
   };
-}
+};
 
 export type ImportFileScreenState = ReturnType<typeof useImportFileScreen> & {
   isPending: boolean;

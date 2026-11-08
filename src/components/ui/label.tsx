@@ -1,7 +1,7 @@
 import { cn } from 'cn';
 import type * as React from 'react';
 
-function Label({ className, ...props }: React.ComponentProps<'label'>) {
+const Label = ({ className, ...props }: React.ComponentProps<'label'>) => {
   return (
     // biome-ignore lint/a11y/noLabelWithoutControl: generic primitive, htmlFor/children are provided by consumers
     <label
@@ -13,6 +13,6 @@ function Label({ className, ...props }: React.ComponentProps<'label'>) {
       {...props}
     />
   );
-}
+};
 
 export { Label };

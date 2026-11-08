@@ -10,10 +10,10 @@ export type ImportTeamImagesResult = {
   imagesUpdated: number;
 };
 
-export async function importTeamImages({
+export const importTeamImages = async ({
   file,
   capturedAt,
-}: ImportTeamImagesPayload) {
+}: ImportTeamImagesPayload) => {
   const formData = new FormData();
   formData.append('file', file);
   if (capturedAt) {
@@ -25,4 +25,4 @@ export async function importTeamImages({
     formData,
   );
   return data;
-}
+};

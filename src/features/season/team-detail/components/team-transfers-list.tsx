@@ -14,10 +14,10 @@ type TeamTransferView = {
 // Cada Transfer é uma troca entre dois times; outgoing*/incoming* guardam o
 // estado de ANTES da troca (ver tipo Transfer), então o lado do time atual
 // depende de qual dos dois ele era.
-function toTeamPerspective(
+const toTeamPerspective = (
   transfer: Transfer,
   teamId: string,
-): TeamTransferView | null {
+): TeamTransferView | null => {
   if (transfer.outgoingTeam.id === teamId) {
     return {
       transfer,
@@ -35,9 +35,9 @@ function toTeamPerspective(
     };
   }
   return null;
-}
+};
 
-export function TeamTransfersList({
+export const TeamTransfersList = ({
   teamId,
   transfers,
   isPending,
@@ -45,7 +45,7 @@ export function TeamTransfersList({
   teamId: string;
   transfers: Transfer[];
   isPending: boolean;
-}) {
+}) => {
   if (isPending) {
     return (
       <div className="flex flex-col gap-2">
@@ -94,4 +94,4 @@ export function TeamTransfersList({
       ))}
     </div>
   );
-}
+};

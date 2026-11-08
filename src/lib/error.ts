@@ -6,7 +6,7 @@ export type ApiErrorResponse = {
   statusCode: number;
 };
 
-export function getErrorMessage(error: unknown, fallback: string) {
+export const getErrorMessage = (error: unknown, fallback: string) => {
   if (isAxiosError<ApiErrorResponse>(error)) {
     const message = error.response?.data?.message;
     if (Array.isArray(message)) {
@@ -20,4 +20,4 @@ export function getErrorMessage(error: unknown, fallback: string) {
   }
 
   return fallback;
-}
+};

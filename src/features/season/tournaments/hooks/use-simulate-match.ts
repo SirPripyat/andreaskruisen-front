@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { simulateMatch } from '../api';
 
-export function useSimulateMatch(
+export const useSimulateMatch = (
   tournamentId: string | undefined,
   matchId: string | undefined,
-) {
+) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -19,4 +19,4 @@ export function useSimulateMatch(
       });
     },
   });
-}
+};

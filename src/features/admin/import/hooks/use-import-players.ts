@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { importPlayers } from '../../players/api';
 
-export function useImportPlayers() {
+export const useImportPlayers = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -10,4 +10,4 @@ export function useImportPlayers() {
       queryClient.invalidateQueries({ queryKey: ['players'] });
     },
   });
-}
+};

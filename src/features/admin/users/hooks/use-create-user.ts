@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createUser } from '../api';
 
-export function useCreateUser() {
+export const useCreateUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -11,4 +11,4 @@ export function useCreateUser() {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
   });
-}
+};

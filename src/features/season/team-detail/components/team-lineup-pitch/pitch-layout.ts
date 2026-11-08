@@ -63,15 +63,15 @@ const PITCH_BOUNDS = {
 // FORMATION_LAYOUTS cai no agrupamento genérico por linha/coluna (buildGenericSlots).
 // ---------------------------------------------------------------------------
 
-function naturalSlot(player: RosterPlayer): FormationSlot {
+const naturalSlot = (player: RosterPlayer): FormationSlot => {
   const line = POSITION_LINE[player.position] ?? DEFAULT_LINE;
   return {
     line: line / (LINE_COUNT - 1),
     column: POSITION_COLUMN[player.position] ?? DEFAULT_COLUMN,
   };
-}
+};
 
-function toPixels(slot: FormationSlot): { x: number; y: number } {
+const toPixels = (slot: FormationSlot): { x: number; y: number } => {
   return {
     x:
       PITCH_BOUNDS.left +
@@ -80,21 +80,21 @@ function toPixels(slot: FormationSlot): { x: number; y: number } {
       PITCH_BOUNDS.bottom -
       slot.line * (PITCH_BOUNDS.bottom - PITCH_BOUNDS.top),
   };
-}
+};
 
-function centerOrSpread(
+const centerOrSpread = (
   count: number,
   index: number,
   from: number,
   to: number,
-): number {
+): number => {
   if (count === 1) return (from + to) / 2;
   return from + index * ((to - from) / (count - 1));
-}
+};
 
 // Agrupamento genérico por linha/coluna, usado quando a formação do time não
 // tem entrada em FORMATION_LAYOUTS (ex: dado ainda não migrado).
-function buildGenericSlots(outfield: RosterPlayer[]): PitchSlot[] {
+const buildGenericSlots = (outfield: RosterPlayer[]): PitchSlot[] => {
   const byLine = new Map<number, RosterPlayer[]>();
   for (const player of outfield) {
     const line = POSITION_LINE[player.position] ?? DEFAULT_LINE;
@@ -123,16 +123,16 @@ function buildGenericSlots(outfield: RosterPlayer[]): PitchSlot[] {
       ),
     }));
   });
-}
+};
 
 // Encaixa cada titular de linha no slot livre mais próximo da sua posição
 // natural dentro do layout da formação (busca gulosa: não é um casamento
 // ótimo, mas como o layout já segue o formato real da formação, o resultado
 // fica correto na prática).
-function matchToFormationLayout(
+const matchToFormationLayout = (
   outfield: RosterPlayer[],
   template: FormationSlot[],
-): PitchSlot[] {
+): PitchSlot[] => {
   const available = [...template];
 
   return outfield.map((player) => {
@@ -153,12 +153,12 @@ function matchToFormationLayout(
       available.length > 0 ? available.splice(closestIndex, 1)[0] : hint;
     return { player, ...toPixels(slot) };
   });
-}
+};
 
-export function buildPitchSlots(
+export const buildPitchSlots = (
   lineup: RosterPlayer[],
   formation: Formation | null,
-): PitchSlot[] {
+): PitchSlot[] => {
   const goalkeeper = lineup.filter((player) => player.position === 'GOL');
   const outfield = lineup.filter((player) => player.position !== 'GOL');
 
@@ -175,4 +175,4 @@ export function buildPitchSlots(
       : buildGenericSlots(outfield);
 
   return [...goalkeeperSlots, ...outfieldSlots];
-}
+};

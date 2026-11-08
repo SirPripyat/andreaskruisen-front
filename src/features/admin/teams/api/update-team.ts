@@ -5,10 +5,13 @@ export type UpdateTeamPayload = {
   crestUrl?: string;
 };
 
-export async function updateTeam(teamId: string, payload: UpdateTeamPayload) {
+export const updateTeam = async (
+  teamId: string,
+  payload: UpdateTeamPayload,
+) => {
   const { data } = await api.patch<TeamWithRatings>(
     `/teams/${teamId}`,
     payload,
   );
   return data;
-}
+};

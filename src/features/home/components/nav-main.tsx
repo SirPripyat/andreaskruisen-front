@@ -18,7 +18,7 @@ const items = [
   { title: 'Transferências', url: '/transfers', icon: ArrowLeftRightIcon },
 ];
 
-export function NavMain() {
+export const NavMain = () => {
   const location = useLocation();
 
   return (
@@ -40,4 +40,4 @@ export function NavMain() {
       </SidebarMenu>
     </SidebarGroup>
   );
-}
+};

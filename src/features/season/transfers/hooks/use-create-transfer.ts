@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { CreateTransferPayload } from '../api';
 import { createTransfer } from '../api';
 
-export function useCreateTransfer(seasonId: string | undefined) {
+export const useCreateTransfer = (seasonId: string | undefined) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -13,4 +13,4 @@ export function useCreateTransfer(seasonId: string | undefined) {
       queryClient.invalidateQueries({ queryKey: ['transfers', seasonId] });
     },
   });
-}
+};

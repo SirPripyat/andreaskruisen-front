@@ -20,7 +20,7 @@ import { SeasonCount } from './season-count';
 import { SeasonSquadSelectProgress } from './season-squad-select-progress';
 import { SelectSeasonSquads } from './select-season-squads';
 
-export function CreateSeasonDrawer() {
+export const CreateSeasonDrawer = () => {
   const {
     open,
     toggleOpen,
@@ -133,4 +133,4 @@ export function CreateSeasonDrawer() {
       </SheetContent>
     </Sheet>
   );
-}
+};

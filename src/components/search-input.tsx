@@ -9,12 +9,12 @@ type SearchInputProps = {
   className?: string;
 };
 
-export function SearchInput({
+export const SearchInput = ({
   value,
   onChange,
   placeholder,
   className,
-}: SearchInputProps) {
+}: SearchInputProps) => {
   return (
     <div className={cn('relative w-full max-w-xs', className)}>
       <SearchIcon className="-translate-y-1/2 absolute top-1/2 left-2.5 size-4 text-muted-foreground" />
@@ -36,4 +36,4 @@ export function SearchInput({
       )}
     </div>
   );
-}
+};

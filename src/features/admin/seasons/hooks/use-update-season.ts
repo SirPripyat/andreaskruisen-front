@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { UpdateSeasonPayload } from '../api';
 import { updateSeason } from '../api';
 
-export function useUpdateSeason(seasonId: string | undefined) {
+export const useUpdateSeason = (seasonId: string | undefined) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -13,4 +13,4 @@ export function useUpdateSeason(seasonId: string | undefined) {
       queryClient.invalidateQueries({ queryKey: ['seasons'] });
     },
   });
-}
+};

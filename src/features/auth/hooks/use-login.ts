@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useAuthStore, useUserStore } from '@/stores';
 import { login } from '../api';
 
-export function useLogin() {
+export const useLogin = () => {
   const setToken = useAuthStore((s) => s.setToken);
   const setUser = useUserStore((s) => s.setUser);
 
@@ -14,4 +14,4 @@ export function useLogin() {
       setUser({ name: data.user.name, role: data.user.role });
     },
   });
-}
+};

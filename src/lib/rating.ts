@@ -1,11 +1,11 @@
 export type OverallRatingTier = 'info' | 'success' | 'warning' | 'critical';
 
-export function getOverallRatingTier(rating: number): OverallRatingTier {
+export const getOverallRatingTier = (rating: number): OverallRatingTier => {
   if (rating >= 90) return 'info';
   if (rating >= 80) return 'success';
   if (rating >= 65) return 'warning';
   return 'critical';
-}
+};
 
 const RATING_TIER_SURFACE_CLASS: Record<OverallRatingTier, string> = {
   info: 'bg-info-surface text-info',

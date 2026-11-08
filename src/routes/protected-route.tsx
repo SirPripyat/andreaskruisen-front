@@ -2,7 +2,7 @@ import { Loader2Icon } from 'lucide-react';
 import { Navigate, Outlet } from 'react-router';
 import { useMe } from '@/features/auth';
 
-export function ProtectedRoute() {
+export const ProtectedRoute = () => {
   const { isPending, isError } = useMe();
 
   if (isPending) {
@@ -22,4 +22,4 @@ export function ProtectedRoute() {
   }
 
   return <Outlet />;
-}
+};

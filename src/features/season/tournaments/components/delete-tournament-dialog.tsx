@@ -11,7 +11,7 @@ import {
 } from '@/components/ui';
 import { useDeleteTournament } from '../hooks';
 
-export function DeleteTournamentDialog({
+export const DeleteTournamentDialog = ({
   tournamentId,
   tournamentName,
   seasonId,
@@ -25,17 +25,17 @@ export function DeleteTournamentDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onDeleted?: () => void;
-}) {
+}) => {
   const { mutate, isPending } = useDeleteTournament(seasonId);
 
-  function handleConfirm() {
+  const handleConfirm = () => {
     mutate(tournamentId, {
       onSuccess: () => {
         toast.success(`Torneio "${tournamentName}" excluído.`);
         onDeleted?.();
       },
     });
-  }
+  };
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -56,4 +56,4 @@ export function DeleteTournamentDialog({
       </AlertDialogContent>
     </AlertDialog>
   );
-}
+};

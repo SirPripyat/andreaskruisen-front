@@ -4,7 +4,7 @@ import { Tabs as TabsPrimitive } from '@base-ui/react/tabs';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from 'cn';
 
-function Tabs({ className, ...props }: TabsPrimitive.Root.Props) {
+const Tabs = ({ className, ...props }: TabsPrimitive.Root.Props) => {
   return (
     <TabsPrimitive.Root
       data-slot="tabs"
@@ -12,7 +12,7 @@ function Tabs({ className, ...props }: TabsPrimitive.Root.Props) {
       {...props}
     />
   );
-}
+};
 
 const tabsListVariants = cva(
   'group/tabs-list inline-flex w-fit items-center justify-center text-muted-foreground',
@@ -29,11 +29,11 @@ const tabsListVariants = cva(
   },
 );
 
-function TabsList({
+const TabsList = ({
   className,
   variant = 'default',
   ...props
-}: TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>) {
+}: TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>) => {
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
@@ -42,9 +42,9 @@ function TabsList({
       {...props}
     />
   );
-}
+};
 
-function TabsTab({ className, ...props }: TabsPrimitive.Tab.Props) {
+const TabsTab = ({ className, ...props }: TabsPrimitive.Tab.Props) => {
   return (
     <TabsPrimitive.Tab
       data-slot="tabs-tab"
@@ -56,9 +56,9 @@ function TabsTab({ className, ...props }: TabsPrimitive.Tab.Props) {
       {...props}
     />
   );
-}
+};
 
-function TabsPanel({ className, ...props }: TabsPrimitive.Panel.Props) {
+const TabsPanel = ({ className, ...props }: TabsPrimitive.Panel.Props) => {
   return (
     <TabsPrimitive.Panel
       data-slot="tabs-panel"
@@ -66,6 +66,6 @@ function TabsPanel({ className, ...props }: TabsPrimitive.Panel.Props) {
       {...props}
     />
   );
-}
+};
 
 export { Tabs, TabsList, TabsPanel, TabsTab, tabsListVariants };

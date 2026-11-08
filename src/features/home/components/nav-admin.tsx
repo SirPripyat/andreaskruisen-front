@@ -22,7 +22,7 @@ const items = [
   { title: 'Importações', url: '/import', icon: UploadIcon },
 ];
 
-export function NavAdmin() {
+export const NavAdmin = () => {
   const location = useLocation();
 
   return (
@@ -44,4 +44,4 @@ export function NavAdmin() {
       </SidebarMenu>
     </SidebarGroup>
   );
-}
+};

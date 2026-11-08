@@ -5,7 +5,7 @@ import { getMe } from '../api';
 
 const GC_TIME = 15 * 10 * 1000; // 15 min em ms
 
-export function useMe() {
+export const useMe = () => {
   const setUser = useUserStore((s) => s.setUser);
   const { isSuccess, data, ...rest } = useQuery({
     queryKey: ['me'],
@@ -28,4 +28,4 @@ export function useMe() {
     isSuccess,
     data,
   };
-}
+};

@@ -10,7 +10,7 @@ import {
 import { cn } from '@/lib';
 import { useSeasonSelection } from '../hooks';
 
-export function SeasonSwitcher({ className }: { className?: string }) {
+export const SeasonSwitcher = ({ className }: { className?: string }) => {
   const { seasons, selectedSeason, isPending, selectSeasonId } =
     useSeasonSelection();
 
@@ -48,4 +48,4 @@ export function SeasonSwitcher({ className }: { className?: string }) {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};

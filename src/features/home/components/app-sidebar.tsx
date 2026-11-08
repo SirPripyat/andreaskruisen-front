@@ -14,10 +14,10 @@ import { NavAdmin } from './nav-admin';
 import { NavMain } from './nav-main';
 import { NavUser } from './nav-user';
 
-export function AppSidebar({
+export const AppSidebar = ({
   user,
   ...props
-}: React.ComponentProps<typeof Sidebar> & { user: Omit<Me, 'id'> }) {
+}: React.ComponentProps<typeof Sidebar> & { user: Omit<Me, 'id'> }) => {
   return (
     <Sidebar collapsible="icon" variant="inset" {...props}>
       <SidebarHeader>
@@ -48,4 +48,4 @@ export function AppSidebar({
       <SidebarRail />
     </Sidebar>
   );
-}
+};

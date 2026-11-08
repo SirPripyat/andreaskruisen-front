@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { CreateTournamentPayload } from '../api';
 import { createTournament } from '../api';
 
-export function useCreateTournament(seasonId: string | undefined) {
+export const useCreateTournament = (seasonId: string | undefined) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -13,4 +13,4 @@ export function useCreateTournament(seasonId: string | undefined) {
       queryClient.invalidateQueries({ queryKey: ['tournaments', seasonId] });
     },
   });
-}
+};

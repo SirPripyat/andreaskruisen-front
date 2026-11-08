@@ -12,9 +12,9 @@ export const TEAM_COUNT_RULES: Record<TournamentFormat, TeamCountRule> = {
   GROUP_STAGE_KNOCKOUT: { allowed: [4, 8, 16, 32, 64] },
 };
 
-export function isValidMaxTeams(
+export const isValidMaxTeams = (
   format: TournamentFormat,
   maxTeams: number,
-): boolean {
+): boolean => {
   return TEAM_COUNT_RULES[format].allowed.includes(maxTeams);
-}
+};

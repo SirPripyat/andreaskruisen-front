@@ -5,19 +5,19 @@ import { cn } from 'cn';
 import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
 import type * as React from 'react';
 
-function Select({ ...props }: SelectPrimitive.Root.Props<unknown>) {
+const Select = ({ ...props }: SelectPrimitive.Root.Props<unknown>) => {
   return <SelectPrimitive.Root data-slot="select" {...props} />;
-}
+};
 
-function SelectValue({ ...props }: SelectPrimitive.Value.Props) {
+const SelectValue = ({ ...props }: SelectPrimitive.Value.Props) => {
   return <SelectPrimitive.Value data-slot="select-value" {...props} />;
-}
+};
 
-function SelectTrigger({
+const SelectTrigger = ({
   className,
   children,
   ...props
-}: SelectPrimitive.Trigger.Props) {
+}: SelectPrimitive.Trigger.Props) => {
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
@@ -33,16 +33,19 @@ function SelectTrigger({
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
-}
+};
 
-function SelectContent({
+const SelectContent = ({
   className,
   children,
   sideOffset = 4,
   alignItemWithTrigger,
   ...props
 }: SelectPrimitive.Popup.Props &
-  Pick<SelectPrimitive.Positioner.Props, 'sideOffset' | 'alignItemWithTrigger'>) {
+  Pick<
+    SelectPrimitive.Positioner.Props,
+    'sideOffset' | 'alignItemWithTrigger'
+  >) => {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Positioner
@@ -63,13 +66,13 @@ function SelectContent({
       </SelectPrimitive.Positioner>
     </SelectPrimitive.Portal>
   );
-}
+};
 
-function SelectItem({
+const SelectItem = ({
   className,
   children,
   ...props
-}: SelectPrimitive.Item.Props) {
+}: SelectPrimitive.Item.Props) => {
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
@@ -87,12 +90,12 @@ function SelectItem({
       </span>
     </SelectPrimitive.Item>
   );
-}
+};
 
-function SelectGroupLabel({
+const SelectGroupLabel = ({
   className,
   ...props
-}: React.ComponentProps<'div'>) {
+}: React.ComponentProps<'div'>) => {
   return (
     <div
       data-slot="select-group-label"
@@ -103,7 +106,7 @@ function SelectGroupLabel({
       {...props}
     />
   );
-}
+};
 
 export {
   Select,

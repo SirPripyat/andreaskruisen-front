@@ -21,7 +21,7 @@ import {
 } from '../api';
 import { useUpdateSeason } from '../hooks';
 
-export function EditSeasonDrawer({
+export const EditSeasonDrawer = ({
   season,
   open,
   onOpenChange,
@@ -29,7 +29,7 @@ export function EditSeasonDrawer({
   season: Season;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-}) {
+}) => {
   const { mutate, isPending } = useUpdateSeason(season.id);
   const {
     register,
@@ -88,4 +88,4 @@ export function EditSeasonDrawer({
       </SheetContent>
     </Sheet>
   );
-}
+};

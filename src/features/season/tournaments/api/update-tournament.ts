@@ -7,13 +7,13 @@ export type UpdateTournamentPayload = {
   maxTeams?: number;
 };
 
-export async function updateTournament(
+export const updateTournament = async (
   tournamentId: string,
   payload: UpdateTournamentPayload,
-) {
+) => {
   const { data } = await api.patch<Tournament>(
     `/tournaments/${tournamentId}`,
     payload,
   );
   return data;
-}
+};

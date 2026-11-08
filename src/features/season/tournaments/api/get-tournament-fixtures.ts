@@ -6,9 +6,9 @@ export type MatchesByPhase = {
   matches: MatchListItem[];
 };
 
-export async function getTournamentFixtures(tournamentId: string) {
+export const getTournamentFixtures = async (tournamentId: string) => {
   const { data } = await api.get<MatchesByPhase[]>(
     `/tournaments/${tournamentId}/fixtures`,
   );
   return data;
-}
+};

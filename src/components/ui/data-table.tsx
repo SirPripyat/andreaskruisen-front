@@ -47,7 +47,7 @@ type DataTableProps<TData> = {
   className?: string;
 };
 
-export function DataTable<TData>({
+export const DataTable = <TData,>({
   table,
   isPending,
   isError,
@@ -56,7 +56,7 @@ export function DataTable<TData>({
   emptyMessage = 'Nenhum dado encontrado.',
   skeletonRowCount = 5,
   className,
-}: DataTableProps<TData>) {
+}: DataTableProps<TData>) => {
   const columnCount = table.getAllLeafColumns().length;
   const rows = table.getRowModel().rows;
 
@@ -145,17 +145,17 @@ export function DataTable<TData>({
       </Table>
     </div>
   );
-}
+};
 
 type DataTableColumnHeaderProps<TData, TValue> = {
   column: Column<TData, TValue>;
   children: React.ReactNode;
 };
 
-export function DataTableColumnHeader<TData, TValue>({
+export const DataTableColumnHeader = <TData, TValue>({
   column,
   children,
-}: DataTableColumnHeaderProps<TData, TValue>) {
+}: DataTableColumnHeaderProps<TData, TValue>) => {
   if (!column.getCanSort()) {
     return <>{children}</>;
   }
@@ -179,7 +179,7 @@ export function DataTableColumnHeader<TData, TValue>({
       )}
     </button>
   );
-}
+};
 
 type DataTablePaginationProps = {
   page: number;
@@ -188,12 +188,12 @@ type DataTablePaginationProps = {
   className?: string;
 };
 
-export function DataTablePagination({
+export const DataTablePagination = ({
   page,
   totalPages,
   onPageChange,
   className,
-}: DataTablePaginationProps) {
+}: DataTablePaginationProps) => {
   if (totalPages <= 1) {
     return null;
   }
@@ -240,4 +240,4 @@ export function DataTablePagination({
       </Pagination>
     </div>
   );
-}
+};

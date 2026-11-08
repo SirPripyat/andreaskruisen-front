@@ -7,7 +7,7 @@ import { cn } from '@/lib';
 const getInitials = (team: string) =>
   team.replace(' ', '').slice(0, 3).toUpperCase();
 
-function TeamLink({
+const TeamLink = ({
   teamId,
   className,
   children,
@@ -15,7 +15,7 @@ function TeamLink({
   teamId?: string;
   className?: string;
   children: ReactNode;
-}) {
+}) => {
   if (!teamId) return <div className={className}>{children}</div>;
 
   return (
@@ -27,7 +27,7 @@ function TeamLink({
       {children}
     </Link>
   );
-}
+};
 
 type TeamChipProps = {
   teamId?: string;

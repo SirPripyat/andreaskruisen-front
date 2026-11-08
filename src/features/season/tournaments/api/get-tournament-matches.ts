@@ -11,13 +11,13 @@ export type TournamentMatchesPage = PaginatedResult<MatchListItem> & {
   phase: PhaseSummary;
 };
 
-export async function getTournamentMatches(
+export const getTournamentMatches = async (
   tournamentId: string,
   query: ListTournamentMatchesQuery,
-) {
+) => {
   const { data } = await api.get<TournamentMatchesPage>(
     `/tournaments/${tournamentId}/matches`,
     { params: query },
   );
   return data;
-}
+};

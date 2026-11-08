@@ -10,7 +10,7 @@ import {
 import type { Season } from '../api';
 import { DeleteSeasonDialog } from './delete-season-dialog';
 
-export function SeasonActionsMenu({ season }: { season: Season }) {
+export const SeasonActionsMenu = ({ season }: { season: Season }) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   return (
@@ -46,4 +46,4 @@ export function SeasonActionsMenu({ season }: { season: Season }) {
       />
     </>
   );
-}
+};

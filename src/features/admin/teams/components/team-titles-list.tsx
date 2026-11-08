@@ -3,13 +3,13 @@ import { Badge, Skeleton } from '@/components/ui';
 import { TOURNAMENT_FORMAT_LABELS } from '@/features/season/tournaments';
 import type { TeamTitle } from '../api';
 
-export function TeamTitlesList({
+export const TeamTitlesList = ({
   titles,
   isPending,
 }: {
   titles: TeamTitle[];
   isPending: boolean;
-}) {
+}) => {
   if (isPending) {
     return (
       <div className="flex flex-col gap-2">
@@ -50,4 +50,4 @@ export function TeamTitlesList({
       ))}
     </div>
   );
-}
+};

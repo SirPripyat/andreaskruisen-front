@@ -4,7 +4,7 @@ import { AppSidebar } from '@/features/home';
 import { useSidebarStore, useUserStore } from '@/stores';
 import { Header } from '../components';
 
-export function AppLayout() {
+export const AppLayout = () => {
   const { user } = useUserStore();
   const { open, setOpen } = useSidebarStore();
 
@@ -25,4 +25,4 @@ export function AppLayout() {
       </SidebarInset>
     </SidebarProvider>
   );
-}
+};

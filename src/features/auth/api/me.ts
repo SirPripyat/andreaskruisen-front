@@ -7,7 +7,7 @@ export type Me = {
   role: UserRole;
 };
 
-export async function getMe() {
+export const getMe = async () => {
   const { data } = await api.get<Me>('/auth/me');
   return data;
-}
+};

@@ -6,10 +6,10 @@ export type ImportPlayersPayload = {
   capturedAt?: string;
 };
 
-export async function importPlayers({
+export const importPlayers = async ({
   file,
   capturedAt,
-}: ImportPlayersPayload) {
+}: ImportPlayersPayload) => {
   const formData = new FormData();
   formData.append('file', file);
   if (capturedAt) {
@@ -21,4 +21,4 @@ export async function importPlayers({
     formData,
   );
   return data;
-}
+};

@@ -2,10 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { ReplaceMatchGoalsPayload } from '../api';
 import { replaceMatchGoals } from '../api';
 
-export function useReplaceMatchGoals(
+export const useReplaceMatchGoals = (
   tournamentId: string | undefined,
   matchId: string | undefined,
-) {
+) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -21,4 +21,4 @@ export function useReplaceMatchGoals(
       });
     },
   });
-}
+};

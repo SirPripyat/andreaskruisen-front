@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { advancePhase } from '../api';
 
-export function useAdvancePhase(tournamentId: string | undefined) {
+export const useAdvancePhase = (tournamentId: string | undefined) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -17,4 +17,4 @@ export function useAdvancePhase(tournamentId: string | undefined) {
       });
     },
   });
-}
+};

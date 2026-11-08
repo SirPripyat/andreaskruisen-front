@@ -113,19 +113,19 @@ export const CreateTournamentDrawer = ({
     );
   }, [open, seasonSquads]);
 
-  function selectTeam(team: TeamWithRatings) {
+  const selectTeam = (team: TeamWithRatings) => {
     setSelectedTeams((current) => new Map(current).set(team.id, { team }));
-  }
+  };
 
-  function removeTeam(teamId: string) {
+  const removeTeam = (teamId: string) => {
     setSelectedTeams((current) => {
       const next = new Map(current);
       next.delete(teamId);
       return next;
     });
-  }
+  };
 
-  function changeOwner(teamId: string, ownerId: string | undefined) {
+  const changeOwner = (teamId: string, ownerId: string | undefined) => {
     setSelectedTeams((current) => {
       const entry = current.get(teamId);
       if (!entry) {
@@ -133,7 +133,7 @@ export const CreateTournamentDrawer = ({
       }
       return new Map(current).set(teamId, { ...entry, ownerId });
     });
-  }
+  };
 
   const maxTeamsValue = useWatch({ control, name: 'maxTeams' });
   const maxTeamsNumber = maxTeamsValue ? Number(maxTeamsValue) : undefined;
@@ -149,12 +149,12 @@ export const CreateTournamentDrawer = ({
       ? 'format'
       : 'roster';
 
-  function scrollToStep(step: StepId) {
+  const scrollToStep = (step: StepId) => {
     sectionRefs.current[step]?.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
     });
-  }
+  };
 
   const onSubmit = async (values: CreateTournamentFormValues) => {
     if (teamsCountMismatch) {

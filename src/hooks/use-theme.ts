@@ -4,18 +4,18 @@ export type Theme = 'light' | 'dark';
 
 const STORAGE_KEY = 'theme';
 
-function getSystemTheme(): Theme {
+const getSystemTheme = (): Theme => {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
     ? 'dark'
     : 'light';
-}
+};
 
-function getStoredTheme(): Theme | null {
+const getStoredTheme = (): Theme | null => {
   const stored = localStorage.getItem(STORAGE_KEY);
   return stored === 'light' || stored === 'dark' ? stored : null;
-}
+};
 
-export function useTheme() {
+export const useTheme = () => {
   const [theme, setThemeState] = useState<Theme>(
     () => getStoredTheme() ?? getSystemTheme(),
   );
@@ -34,4 +34,4 @@ export function useTheme() {
   }, [theme, setTheme]);
 
   return { theme, setTheme, toggleTheme };
-}
+};

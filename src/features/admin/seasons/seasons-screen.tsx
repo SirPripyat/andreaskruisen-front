@@ -11,7 +11,7 @@ import {
   SeasonActionsMenu,
   SeasonSelectCell,
 } from './components';
-import { useSeasonSelection } from './hooks';
+import { useSeasons } from './hooks';
 
 const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
   dateStyle: 'medium',
@@ -48,10 +48,10 @@ const columns: ColumnDef<Season>[] = [
 ];
 
 export const SeasonsScreen = () => {
-  const { seasons, isPending } = useSeasonSelection();
+  const { data: seasons, isPending } = useSeasons();
 
   const table = useReactTable({
-    data: seasons,
+    data: seasons ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });

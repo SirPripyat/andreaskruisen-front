@@ -9,7 +9,7 @@ import { useSelectedSeason } from './use-selected-season';
  * screen use to change it (writes the local store and syncs the backend
  * default via `POST /seasons/:id/select`).
  */
-export function useSeasonSelection() {
+export const useSeasonSelection = () => {
   const { data: seasons, isPending: isSeasonsPending } = useSeasons();
   const { selectedSeason, isPending: isSelectedPending } = useSelectedSeason();
   const setSelectedSeasonId = useSeasonStore(
@@ -28,4 +28,4 @@ export function useSeasonSelection() {
     isPending: isSeasonsPending || isSelectedPending,
     selectSeasonId,
   };
-}
+};

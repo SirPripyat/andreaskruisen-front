@@ -80,7 +80,7 @@ export const SelectTournamentTeams = ({
   const ringRatio = maxTeams ? Math.min(1, selectedTeams.size / maxTeams) : 0;
   const ringComplete = !!maxTeams && selectedTeams.size === maxTeams;
 
-  async function handleFillRemaining() {
+  const handleFillRemaining = async () => {
     if (maxTeams === undefined || remaining <= 0) {
       return;
     }
@@ -103,7 +103,7 @@ export const SelectTournamentTeams = ({
     } finally {
       setIsFilling(false);
     }
-  }
+  };
 
   return (
     <div className={'grid gap-4 md:grid-cols-[1fr_17rem]'}>

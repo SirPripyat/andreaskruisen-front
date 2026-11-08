@@ -1,11 +1,11 @@
 import { Progress as ProgressPrimitive } from '@base-ui/react/progress';
 import { cn } from 'cn';
 
-function Progress({
+const Progress = ({
   className,
   indicatorClassName,
   ...props
-}: ProgressPrimitive.Root.Props & { indicatorClassName?: string }) {
+}: ProgressPrimitive.Root.Props & { indicatorClassName?: string }) => {
   return (
     <ProgressPrimitive.Root data-slot="progress" {...props}>
       <ProgressPrimitive.Track
@@ -25,6 +25,6 @@ function Progress({
       </ProgressPrimitive.Track>
     </ProgressPrimitive.Root>
   );
-}
+};
 
 export { Progress };

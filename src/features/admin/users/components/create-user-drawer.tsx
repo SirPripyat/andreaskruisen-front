@@ -15,7 +15,7 @@ import type { CreateUserFormValues } from '../api';
 import { useCreateUser } from '../hooks';
 import { CreateUserForm } from './create-user-form';
 
-export function CreateUserDrawer() {
+export const CreateUserDrawer = () => {
   const [open, setOpen] = useState(false);
   const { mutate, isPending } = useCreateUser();
 
@@ -63,4 +63,4 @@ export function CreateUserDrawer() {
       </SheetContent>
     </Sheet>
   );
-}
+};

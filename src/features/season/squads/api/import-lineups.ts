@@ -10,10 +10,10 @@ export type ImportLineupsResult = {
   lineupsInserted: number;
 };
 
-export async function importLineups({
+export const importLineups = async ({
   file,
   capturedAt,
-}: ImportLineupsPayload) {
+}: ImportLineupsPayload) => {
   const formData = new FormData();
   formData.append('file', file);
   if (capturedAt) {
@@ -25,4 +25,4 @@ export async function importLineups({
     formData,
   );
   return data;
-}
+};

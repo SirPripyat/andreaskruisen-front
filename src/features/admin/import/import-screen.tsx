@@ -7,7 +7,7 @@ import {
   useImportTeamImagesScreen,
 } from './hooks';
 
-export function ImportScreen() {
+export const ImportScreen = () => {
   const playersScreen = useImportPlayersScreen();
   const lineupsScreen = useImportLineupsScreen();
   const teamImagesScreen = useImportTeamImagesScreen();
@@ -69,4 +69,4 @@ export function ImportScreen() {
       </div>
     </>
   );
-}
+};

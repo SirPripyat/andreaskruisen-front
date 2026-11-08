@@ -4,7 +4,7 @@ type StatTileProps = {
   sub: string;
 };
 
-export function StatTile({ label, value, sub }: StatTileProps) {
+export const StatTile = ({ label, value, sub }: StatTileProps) => {
   return (
     <div className="flex min-w-0 flex-col gap-0.5 bg-muted/40 p-3">
       <span className="font-semibold text-[11px] text-muted-foreground uppercase tracking-wide">
@@ -14,4 +14,4 @@ export function StatTile({ label, value, sub }: StatTileProps) {
       <span className="truncate text-muted-foreground text-xs">{sub}</span>
     </div>
   );
-}
+};

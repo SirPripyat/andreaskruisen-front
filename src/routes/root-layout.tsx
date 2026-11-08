@@ -2,7 +2,7 @@ import { NuqsAdapter } from 'nuqs/adapters/react-router/v8';
 import { Outlet } from 'react-router';
 import { Toaster, TooltipProvider } from '@/components/ui';
 
-export function RootLayout() {
+export const RootLayout = () => {
   return (
     <NuqsAdapter>
       <TooltipProvider>
@@ -11,4 +11,4 @@ export function RootLayout() {
       </TooltipProvider>
     </NuqsAdapter>
   );
-}
+};

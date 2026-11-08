@@ -38,7 +38,7 @@ const quickLinks = [
   },
 ] as const;
 
-export function HomeScreen() {
+export const HomeScreen = () => {
   const { user } = useUserStore();
   const { selectedSeason } = useSelectedSeason();
   const { data: players } = usePlayers({
@@ -124,4 +124,4 @@ export function HomeScreen() {
       </div>
     </div>
   );
-}
+};

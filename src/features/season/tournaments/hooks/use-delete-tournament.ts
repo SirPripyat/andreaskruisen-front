@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteTournament } from '../api';
 
-export function useDeleteTournament(seasonId: string | undefined) {
+export const useDeleteTournament = (seasonId: string | undefined) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -11,4 +11,4 @@ export function useDeleteTournament(seasonId: string | undefined) {
       queryClient.invalidateQueries({ queryKey: ['tournaments', seasonId] });
     },
   });
-}
+};

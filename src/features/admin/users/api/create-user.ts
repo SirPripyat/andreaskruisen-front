@@ -1,6 +1,6 @@
 import { api } from '@/lib';
 import type { CreateUserPayload } from './schema';
 
-export async function createUser(payload: CreateUserPayload) {
+export const createUser = async (payload: CreateUserPayload) => {
   await api.post('/users', payload);
-}
+};

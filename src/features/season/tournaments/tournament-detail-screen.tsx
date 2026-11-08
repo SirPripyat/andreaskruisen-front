@@ -28,7 +28,7 @@ type TabItem = {
   content: ReactNode;
 };
 
-export function TournamentDetailScreen() {
+export const TournamentDetailScreen = () => {
   const { id } = useParams<{ id: string }>();
 
   const [registerGoalsMatchId, setRegisterGoalsMatchId] = useState<
@@ -154,4 +154,4 @@ export function TournamentDetailScreen() {
       )}
     </>
   );
-}
+};

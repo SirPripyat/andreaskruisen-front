@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { UpdateTeamPayload } from '../api';
 import { updateTeam } from '../api';
 
-export function useUpdateTeam(teamId: string | undefined) {
+export const useUpdateTeam = (teamId: string | undefined) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -14,4 +14,4 @@ export function useUpdateTeam(teamId: string | undefined) {
       queryClient.invalidateQueries({ queryKey: ['teams'] });
     },
   });
-}
+};

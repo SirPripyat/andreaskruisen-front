@@ -35,7 +35,7 @@ export type GoalsFieldName = 'homeGoals' | 'awayGoals';
 // Pênaltis só existem (e só são aceitos pela API) quando a partida é
 // eliminatória e termina empatada — por isso a exigência do campo depende da
 // fase, e o schema precisa ser construído por partida em vez de ser estático.
-export function createFormSchema(phaseType: PhaseType) {
+export const createFormSchema = (phaseType: PhaseType) => {
   return BaseFormSchema.superRefine((values, ctx) => {
     const isTiedKnockout =
       phaseType === 'KNOCKOUT' &&
@@ -49,9 +49,9 @@ export function createFormSchema(phaseType: PhaseType) {
       });
     }
   });
-}
+};
 
-export function toFormValues(match: MatchDetail | undefined): FormValues {
+export const toFormValues = (match: MatchDetail | undefined): FormValues => {
   if (!match) {
     return { homeGoals: [], awayGoals: [], penalties: undefined };
   }
@@ -79,4 +79,4 @@ export function toFormValues(match: MatchDetail | undefined): FormValues {
         }
       : undefined,
   };
-}
+};

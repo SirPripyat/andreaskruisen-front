@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { listSeasons } from '../api';
 
-export function useSeasons() {
+export const useSeasons = () => {
   return useQuery({
     queryKey: ['seasons'],
     queryFn: listSeasons,
   });
-}
+};
