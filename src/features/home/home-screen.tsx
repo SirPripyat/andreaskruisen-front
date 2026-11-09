@@ -53,7 +53,7 @@ export const HomeScreen = () => {
     sortBy: 'name',
     sortOrder: 'asc',
   });
-  const { data: tournaments } = useTournaments(selectedSeason?.id);
+  const { data: tournaments } = useTournaments();
 
   return (
     <div className="flex flex-1 flex-col gap-6">

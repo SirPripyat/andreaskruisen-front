@@ -1,6 +1,6 @@
 import { Switch } from '@/components/ui';
 import type { Season } from '../api';
-import { useSeasonSelection } from '../hooks';
+import { useSelectSeason } from '../hooks';
 
 type SeasonSelectCellProps = {
   season: Season;
@@ -11,7 +11,9 @@ export const SeasonSelectCell = ({
   season,
   isSelected,
 }: SeasonSelectCellProps) => {
-  const { selectSeasonId } = useSeasonSelection();
+  const { mutate: selectSeason } = useSelectSeason();
+
+  const selectSeasonId = (seasonId: string) => selectSeason(seasonId);
 
   return (
     <Switch

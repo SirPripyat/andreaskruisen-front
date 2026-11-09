@@ -8,19 +8,21 @@ import {
   Skeleton,
 } from '@/components/ui';
 import { cn } from '@/lib';
-import { useSeasonSelection } from '../hooks';
+import { useSeasons, useSelectedSeason, useSelectSeason } from '../hooks';
 
 export const SeasonSwitcher = ({ className }: { className?: string }) => {
-  const { seasons, selectedSeason, isPending, selectSeasonId } =
-    useSeasonSelection();
+  const { data, isPending: isSeasonsPending } = useSeasons();
+  const { selectedSeason, isPending: isSelectedPending } = useSelectedSeason();
+  const { mutate: selectSeason } = useSelectSeason();
 
-  if (isPending) {
-    return <Skeleton className={cn('h-8 w-40', className)} />;
-  }
+  const selectSeasonId = (seasonId: string) => selectSeason(seasonId);
 
-  if (!selectedSeason || seasons.length === 0) {
-    return null;
-  }
+  const isPending = isSeasonsPending || isSelectedPending;
+  const seasons = data ?? [];
+
+  if (isPending) return <Skeleton className={cn('h-8 w-40', className)} />;
+
+  if (!selectedSeason || seasons.length === 0) return null;
 
   return (
     <DropdownMenu>

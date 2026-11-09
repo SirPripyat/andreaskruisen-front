@@ -1,6 +1,5 @@
 import { useParams } from 'react-router';
 import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui';
-import { useSelectedSeason } from '@/features/admin/seasons';
 import { TeamTitlesList, useTeam, useTeamTitles } from '@/features/admin/teams';
 import { useSeasonSquads } from '@/features/season/squads';
 import { useTransfers } from '@/features/season/transfers';
@@ -18,17 +17,14 @@ export const TeamDetailScreen = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data: team, isPending } = useTeam(id);
-  const { selectedSeason } = useSelectedSeason();
-  const { data: seasonSquads } = useSeasonSquads(selectedSeason?.id);
+  const { data: seasonSquads } = useSeasonSquads();
   const { tab, setTab } = useTeamDetailTabs('overview');
 
   const needsTitles = tab === 'overview' || tab === 'titles';
   const needsTransfers = tab === 'transfers';
 
-  const { data: transfers, isPending: isTransfersPending } = useTransfers(
-    selectedSeason?.id,
-    needsTransfers,
-  );
+  const { data: transfers, isPending: isTransfersPending } =
+    useTransfers(needsTransfers);
   const { data: titles, isPending: isTitlesPending } = useTeamTitles(
     id,
     needsTitles,

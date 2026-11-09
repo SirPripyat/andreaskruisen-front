@@ -7,7 +7,8 @@ export const useSelectSeason = () => {
   return useMutation({
     mutationFn: selectSeason,
     meta: { errorMessage: 'Não foi possível trocar a temporada.' },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.setQueryData(['me'], data);
       queryClient.invalidateQueries({ queryKey: ['seasons'] });
     },
   });

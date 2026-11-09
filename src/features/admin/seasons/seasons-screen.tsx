@@ -11,13 +11,13 @@ import {
   SeasonActionsMenu,
   SeasonSelectCell,
 } from './components';
-import { useSeasons } from './hooks';
+import { useSeasons, useSelectedSeason } from './hooks';
 
 const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
   dateStyle: 'medium',
 });
 
-const columns: ColumnDef<Season>[] = [
+const getColumns = (selectedSeasonId: string | null): ColumnDef<Season>[] => [
   {
     accessorKey: 'name',
     header: 'Nome',
@@ -35,7 +35,7 @@ const columns: ColumnDef<Season>[] = [
     cell: ({ row }) => (
       <SeasonSelectCell
         season={row.original}
-        isSelected={row.original.isActive}
+        isSelected={row.original.id === selectedSeasonId}
       />
     ),
   },
@@ -49,6 +49,9 @@ const columns: ColumnDef<Season>[] = [
 
 export const SeasonsScreen = () => {
   const { data: seasons, isPending } = useSeasons();
+  const { selectedSeason } = useSelectedSeason();
+
+  const columns = getColumns(selectedSeason?.id ?? null);
 
   const table = useReactTable({
     data: seasons ?? [],

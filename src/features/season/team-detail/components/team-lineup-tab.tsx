@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { Badge, Tabs, TabsList, TabsTab } from 'src/components/ui';
-import { useSelectedSeason } from 'src/features/admin';
 import { getFormationLabel, useLineup } from 'src/features/season/squads';
 import { cn, getOverallRatingClassName } from 'src/lib';
 import { TeamLineupBench } from './team-lineup-bench';
@@ -13,8 +12,7 @@ type LineupView = 'pitch' | 'list';
 
 export const TeamLineupTab = () => {
   const { id } = useParams<{ id: string }>();
-  const { selectedSeason } = useSelectedSeason();
-  const { data, isPending } = useLineup(selectedSeason?.id, id);
+  const { data, isPending } = useLineup(id);
 
   const [view, setView] = useState<LineupView>('pitch');
   const [selectedId, setSelectedId] = useState<string | null>(null);

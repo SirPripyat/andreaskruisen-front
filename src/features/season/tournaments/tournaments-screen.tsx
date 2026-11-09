@@ -56,12 +56,7 @@ const columns: ColumnDef<Tournament>[] = [
 
 export const TournamentsScreen = () => {
   const { selectedSeason, isPending: isSeasonPending } = useSelectedSeason();
-  const {
-    data: tournaments,
-    isPending,
-    isError,
-    error,
-  } = useTournaments(selectedSeason?.id);
+  const { data: tournaments, isPending, isError, error } = useTournaments();
 
   const isLoading = isSeasonPending || isPending;
 

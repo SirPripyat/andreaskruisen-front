@@ -1,19 +1,28 @@
-import { useSeasonStore } from '@/stores';
+import { useMe } from '@/features/auth';
 import { useActiveSeason } from './use-active-season';
 import { useSeasons } from './use-seasons';
 
 export const useSelectedSeason = () => {
-  const selectedSeasonId = useSeasonStore((state) => state.selectedSeasonId);
-  const { data: seasons, isPending: isSeasonsPending } = useSeasons();
-  const { data: activeSeason, isPending: isActivePending } = useActiveSeason();
+  const { data: me, isPending: isMePending } = useMe();
+  const selectedSeasonId = me?.selectedSeasonId ?? null;
 
-  const selectedSeason =
-    seasons?.find((season) => season.id === selectedSeasonId) ??
-    activeSeason ??
-    null;
+  const { data: seasons, isPending: isSeasonsPending } = useSeasons();
+  const { data: activeSeason, isPending: isActivePending } = useActiveSeason({
+    enabled: !selectedSeasonId,
+  });
+
+  if (selectedSeasonId) {
+    const selectedSeason =
+      seasons?.find((season) => season.id === selectedSeasonId) ?? null;
+
+    return {
+      selectedSeason,
+      isPending: isMePending || isSeasonsPending,
+    };
+  }
 
   return {
-    selectedSeason,
-    isPending: isSeasonsPending || isActivePending,
+    selectedSeason: activeSeason ?? null,
+    isPending: isMePending || isActivePending,
   };
 };

@@ -51,12 +51,7 @@ const columns: ColumnDef<Transfer>[] = [
 
 export const TransfersScreen = () => {
   const { selectedSeason, isPending: isSeasonPending } = useSelectedSeason();
-  const {
-    data: transfers,
-    isPending,
-    isError,
-    error,
-  } = useTransfers(selectedSeason?.id);
+  const { data: transfers, isPending, isError, error } = useTransfers();
 
   const isLoading = isSeasonPending || isPending;
 

@@ -5,6 +5,7 @@ export type Me = {
   id: string;
   name: string;
   role: UserRole;
+  selectedSeasonId: string | null;
 };
 
 export const getMe = async () => {

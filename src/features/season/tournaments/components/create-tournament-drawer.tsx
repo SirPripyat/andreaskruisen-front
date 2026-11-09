@@ -55,10 +55,10 @@ export const CreateTournamentDrawer = ({
     Map<string, SelectedTeamEntry>
   >(new Map());
   const [isLinkingTeams, setIsLinkingTeams] = useState(false);
-  const { data: seasonSquads } = useSeasonSquads(open ? seasonId : undefined);
+  const { data: seasonSquads } = useSeasonSquads(open);
   const hasSeededSquadsRef = useRef(false);
   const preexistingSquadsRef = useRef<Set<string>>(new Set());
-  const { mutateAsync, isPending: isCreating } = useCreateTournament(seasonId);
+  const { mutateAsync, isPending: isCreating } = useCreateTournament();
   const sectionRefs = useRef<Partial<Record<StepId, HTMLDivElement>>>({});
   const {
     register,

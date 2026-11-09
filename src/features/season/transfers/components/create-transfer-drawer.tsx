@@ -46,7 +46,7 @@ export const CreateTransferDrawer = ({
   const [incomingTeam, setIncomingTeam] = useState<TeamWithRatings | null>(
     null,
   );
-  const { mutateAsync, isPending: isCreating } = useCreateTransfer(seasonId);
+  const { mutateAsync, isPending: isCreating } = useCreateTransfer();
   const {
     control,
     handleSubmit,

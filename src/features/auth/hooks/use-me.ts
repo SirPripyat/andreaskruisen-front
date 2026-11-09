@@ -12,6 +12,7 @@ export const useMe = () => {
     queryFn: getMe,
     retry: false,
     gcTime: GC_TIME,
+    staleTime: 5 * 60 * 1000,
   });
 
   useEffect(() => {

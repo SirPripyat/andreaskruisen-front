@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
+import { useSelectedSeason } from '@/features/admin/seasons';
 import { getLineup } from '../api';
 
-export const useLineup = (
-  seasonId: string | undefined,
-  teamId: string | undefined,
-  enabled = true,
-) => {
+export const useLineup = (teamId: string | undefined, enabled = true) => {
+  const { selectedSeason } = useSelectedSeason();
+  const seasonId = selectedSeason?.id;
+
   return useQuery({
     queryKey: ['lineup', seasonId, teamId],
-    queryFn: () => getLineup(seasonId as string, teamId as string),
+    queryFn: () => getLineup(teamId as string),
     enabled: !!seasonId && !!teamId && enabled,
   });
 };

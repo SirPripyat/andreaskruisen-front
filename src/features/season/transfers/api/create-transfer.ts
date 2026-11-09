@@ -2,13 +2,7 @@ import { api } from '@/lib';
 import type { CreateTransferPayload } from './schema';
 import type { Transfer } from './transfer';
 
-export const createTransfer = async (
-  seasonId: string,
-  payload: CreateTransferPayload,
-) => {
-  const { data } = await api.post<Transfer>(
-    `/seasons/${seasonId}/transfers`,
-    payload,
-  );
+export const createTransfer = async (payload: CreateTransferPayload) => {
+  const { data } = await api.post<Transfer>('/transfers', payload);
   return data;
 };
