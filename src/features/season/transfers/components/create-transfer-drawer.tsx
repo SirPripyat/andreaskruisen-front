@@ -113,28 +113,29 @@ export const CreateTransferDrawer = ({
       <SheetContent className={'w-full data-[side=right]:sm:max-w-3xl'}>
         <SheetHeader>
           <SheetTitle className={'font-display text-2xl'}>
-            {'Mesa de trocas'}
+            Mesa de trocas
           </SheetTitle>
           <SheetDescription>
-            {
-              'Troque dois jogadores entre times da temporada selecionada, sem custo.'
-            }
+            Troque dois jogadores entre times da temporada selecionada, sem
+            custo.
           </SheetDescription>
         </SheetHeader>
 
         <form
           id={'create-transfer-form'}
           onSubmit={handleSubmit(onSubmit)}
-          className={'flex-1 overflow-y-auto px-4'}
+          className={
+            'flex min-h-0 flex-1 flex-col overflow-y-auto px-4 sm:overflow-hidden'
+          }
         >
           <div
             className={
-              'grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto_1fr] sm:items-start'
+              'grid grid-cols-1 gap-3 sm:min-h-0 sm:flex-1 sm:grid-cols-[1fr_auto_1fr]'
             }
           >
             <TransferSidePanel
               title={'Saída'}
-              tagLabel={'sai da temporada'}
+              tagLabel={'Sai da temporada'}
               tagClassName={'bg-warning-surface text-warning'}
               team={outgoingTeam}
               onTeamChange={(team) => {
@@ -154,7 +155,7 @@ export const CreateTransferDrawer = ({
 
             <TransferSidePanel
               title={'Destino'}
-              tagLabel={'entra na temporada'}
+              tagLabel={'Entra na temporada'}
               tagClassName={'bg-success-surface text-success'}
               team={incomingTeam}
               onTeamChange={(team) => {

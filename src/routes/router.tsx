@@ -1,21 +1,76 @@
+import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router';
-import {
-  HomeScreen,
-  ImportScreen,
-  LoginScreen,
-  PlayersScreen,
-  SeasonsScreen,
-  TeamDetailScreen,
-  TeamsScreen,
-  TournamentDetailScreen,
-  TournamentsScreen,
-  TransfersScreen,
-  UsersScreen,
-} from '@/features';
 import { AppLayout } from './app-layout';
 import { ProtectedRoute } from './protected-route';
+import { RequireRole } from './require-role';
 import { RequireSeason } from './require-season';
 import { RootLayout } from './root-layout';
+
+const LoginScreen = lazy(() =>
+  import('@/features/auth/login-screen').then((m) => ({
+    default: m.LoginScreen,
+  })),
+);
+
+const HomeScreen = lazy(() =>
+  import('@/features/home/home-screen').then((m) => ({
+    default: m.HomeScreen,
+  })),
+);
+
+const UsersScreen = lazy(() =>
+  import('@/features/admin/users/users-screen').then((m) => ({
+    default: m.UsersScreen,
+  })),
+);
+
+const PlayersScreen = lazy(() =>
+  import('@/features/admin/players/players-screen').then((m) => ({
+    default: m.PlayersScreen,
+  })),
+);
+
+const ImportScreen = lazy(() =>
+  import('@/features/admin/import/import-screen').then((m) => ({
+    default: m.ImportScreen,
+  })),
+);
+
+const TeamsScreen = lazy(() =>
+  import('@/features/admin/teams/teams-screen').then((m) => ({
+    default: m.TeamsScreen,
+  })),
+);
+
+const SeasonsScreen = lazy(() =>
+  import('@/features/admin/seasons/seasons-screen').then((m) => ({
+    default: m.SeasonsScreen,
+  })),
+);
+
+const TeamDetailScreen = lazy(() =>
+  import('@/features/season/team-detail/team-detail-screen').then((m) => ({
+    default: m.TeamDetailScreen,
+  })),
+);
+
+const TournamentsScreen = lazy(() =>
+  import('@/features/season/tournaments/tournaments-screen').then((m) => ({
+    default: m.TournamentsScreen,
+  })),
+);
+
+const TournamentDetailScreen = lazy(() =>
+  import('@/features/season/tournaments/tournament-detail-screen').then(
+    (m) => ({ default: m.TournamentDetailScreen }),
+  ),
+);
+
+const TransfersScreen = lazy(() =>
+  import('@/features/season/transfers/transfers-screen').then((m) => ({
+    default: m.TransfersScreen,
+  })),
+);
 
 export const router = createBrowserRouter([
   {
@@ -34,24 +89,29 @@ export const router = createBrowserRouter([
                 handle: { breadcrumb: 'Dashboard' },
               },
               {
-                path: 'users',
-                element: <UsersScreen />,
-                handle: { breadcrumb: 'Usuários' },
-              },
-              {
-                path: 'players',
-                element: <PlayersScreen />,
-                handle: { breadcrumb: 'Dados de jogadores' },
-              },
-              {
-                path: 'import',
-                element: <ImportScreen />,
-                handle: { breadcrumb: 'Importações' },
-              },
-              {
-                path: 'teams',
-                element: <TeamsScreen />,
-                handle: { breadcrumb: 'Dados de times' },
+                element: <RequireRole roles={['ADMIN']} />,
+                children: [
+                  {
+                    path: 'users',
+                    element: <UsersScreen />,
+                    handle: { breadcrumb: 'Usuários' },
+                  },
+                  {
+                    path: 'players',
+                    element: <PlayersScreen />,
+                    handle: { breadcrumb: 'Dados de jogadores' },
+                  },
+                  {
+                    path: 'import',
+                    element: <ImportScreen />,
+                    handle: { breadcrumb: 'Importações' },
+                  },
+                  {
+                    path: 'teams',
+                    element: <TeamsScreen />,
+                    handle: { breadcrumb: 'Dados de times' },
+                  },
+                ],
               },
               {
                 path: 'seasons',

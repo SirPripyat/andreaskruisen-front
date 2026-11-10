@@ -1,4 +1,4 @@
-import type * as React from 'react';
+import type { ComponentProps } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -10,14 +10,15 @@ import {
   SidebarRail,
 } from '@/components/ui';
 import type { Me } from '@/features/auth';
-import { NavAdmin } from './nav-admin';
+import { NavConfig } from './nav-config';
 import { NavMain } from './nav-main';
 import { NavUser } from './nav-user';
 
-export const AppSidebar = ({
-  user,
-  ...props
-}: React.ComponentProps<typeof Sidebar> & { user: Omit<Me, 'id'> }) => {
+type AppSidebarProps = ComponentProps<typeof Sidebar> & {
+  user: Omit<Me, 'id'>;
+};
+
+export const AppSidebar = ({ user, ...props }: AppSidebarProps) => {
   return (
     <Sidebar collapsible="icon" variant="inset" {...props}>
       <SidebarHeader>
@@ -40,7 +41,7 @@ export const AppSidebar = ({
       </SidebarHeader>
       <SidebarContent>
         <NavMain />
-        {user.role === 'ADMIN' && <NavAdmin />}
+        <NavConfig user={user} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />

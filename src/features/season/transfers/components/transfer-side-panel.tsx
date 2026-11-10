@@ -61,7 +61,9 @@ export const TransferSidePanel = ({
 
   return (
     <div
-      className={'flex min-w-0 flex-col gap-3 rounded-xl border bg-card p-3'}
+      className={
+        'flex min-w-0 flex-col gap-3 rounded-xl border bg-card p-3 sm:h-full sm:min-h-0'
+      }
     >
       <div className={'flex items-center justify-between gap-2'}>
         <span className={'font-display font-semibold text-base'}>{title}</span>
@@ -104,14 +106,18 @@ export const TransferSidePanel = ({
         name={name}
         control={control}
         render={({ field }) => (
-          <div className={'flex min-h-56 flex-col gap-3 overflow-y-auto pr-1'}>
+          <div
+            className={
+              'flex min-h-56 flex-col gap-3 overflow-y-auto pr-1 sm:min-h-0 sm:flex-1'
+            }
+          >
             {!team && (
               <div
                 className={
                   'flex flex-1 items-center justify-center rounded-lg border border-dashed p-6 text-center text-muted-foreground text-sm'
                 }
               >
-                {'Escolha um time para ver o elenco disponível.'}
+                Escolha um time para ver o elenco disponível.
               </div>
             )}
 
