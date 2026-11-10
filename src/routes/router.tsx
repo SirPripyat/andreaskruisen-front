@@ -54,6 +54,12 @@ const TeamDetailScreen = lazy(() =>
   })),
 );
 
+const ClubsScreen = lazy(() =>
+  import('@/features/season/clubs/clubs-screen').then((m) => ({
+    default: m.ClubsScreen,
+  })),
+);
+
 const TournamentsScreen = lazy(() =>
   import('@/features/season/tournaments/tournaments-screen').then((m) => ({
     default: m.TournamentsScreen,
@@ -72,6 +78,24 @@ const TransfersScreen = lazy(() =>
   })),
 );
 
+const SeasonPlayersScreen = lazy(() =>
+  import('@/features/season/players/players-screen').then((m) => ({
+    default: m.SeasonPlayersScreen,
+  })),
+);
+
+const PlayerDetailScreen = lazy(() =>
+  import('@/features/season/players/player-detail-screen').then((m) => ({
+    default: m.PlayerDetailScreen,
+  })),
+);
+
+const ProfileScreen = lazy(() =>
+  import('@/features/auth/profile-screen').then((m) => ({
+    default: m.ProfileScreen,
+  })),
+);
+
 export const router = createBrowserRouter([
   {
     element: <RootLayout />,
@@ -87,6 +111,11 @@ export const router = createBrowserRouter([
                 index: true,
                 element: <HomeScreen />,
                 handle: { breadcrumb: 'Dashboard' },
+              },
+              {
+                path: 'profile',
+                element: <ProfileScreen />,
+                handle: { breadcrumb: 'Meu perfil' },
               },
               {
                 element: <RequireRole roles={['ADMIN']} />,
@@ -121,6 +150,21 @@ export const router = createBrowserRouter([
               {
                 element: <RequireSeason />,
                 children: [
+                  {
+                    path: 'clubs',
+                    element: <ClubsScreen />,
+                    handle: { breadcrumb: 'Times' },
+                  },
+                  {
+                    path: 'players/season',
+                    element: <SeasonPlayersScreen />,
+                    handle: { breadcrumb: 'Jogadores' },
+                  },
+                  {
+                    path: 'players/:id',
+                    element: <PlayerDetailScreen />,
+                    handle: { breadcrumb: 'Jogador' },
+                  },
                   {
                     path: 'teams/:id',
                     element: <TeamDetailScreen />,

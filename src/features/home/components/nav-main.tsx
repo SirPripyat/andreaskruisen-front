@@ -1,7 +1,9 @@
 import {
   ArrowLeftRightIcon,
   LayoutDashboardIcon,
+  ShieldIcon,
   TrophyIcon,
+  UserRoundIcon,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import {
@@ -14,6 +16,8 @@ import {
 
 const items = [
   { title: 'Dashboard', url: '/', icon: LayoutDashboardIcon },
+  { title: 'Times', url: '/clubs', icon: ShieldIcon },
+  { title: 'Jogadores', url: '/players/season', icon: UserRoundIcon },
   { title: 'Torneios', url: '/tournaments', icon: TrophyIcon },
   { title: 'Transferências', url: '/transfers', icon: ArrowLeftRightIcon },
 ];

@@ -1,7 +1,9 @@
-import { ChevronsUpDownIcon, LogOutIcon } from 'lucide-react';
+import { ChevronsUpDownIcon, LogOutIcon, UserIcon } from 'lucide-react';
+import { Link } from 'react-router';
 import {
   Avatar,
   AvatarFallback,
+  AvatarImage,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -15,7 +17,7 @@ import {
   useSidebar,
 } from '@/components/ui';
 import type { UserRole } from '@/features/admin';
-import { type Me, useLogout } from '@/features/auth';
+import { type Me, useAvatar, useLogout } from '@/features/auth';
 
 const getInitials = (name: string) =>
   name
@@ -37,6 +39,7 @@ type NavUserProps = {
 export const NavUser = ({ user }: NavUserProps) => {
   const { isMobile } = useSidebar();
   const { mutate: logout, isPending } = useLogout();
+  const { url: avatarUrl } = useAvatar();
 
   const handleLogout = () => {
     logout();
@@ -52,6 +55,7 @@ export const NavUser = ({ user }: NavUserProps) => {
             }
           >
             <Avatar>
+              {avatarUrl && <AvatarImage src={avatarUrl} alt={''} />}
               <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
@@ -72,6 +76,7 @@ export const NavUser = ({ user }: NavUserProps) => {
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar>
+                    {avatarUrl && <AvatarImage src={avatarUrl} alt={''} />}
                     <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
@@ -83,6 +88,11 @@ export const NavUser = ({ user }: NavUserProps) => {
                 </div>
               </DropdownMenuLabel>
             </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem render={<Link to={'/profile'} />}>
+              <UserIcon />
+              Meu perfil
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout} disabled={isPending}>
               <LogOutIcon />

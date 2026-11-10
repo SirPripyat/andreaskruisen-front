@@ -9,3 +9,16 @@ export const loginSchema = z.object({
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
+
+export const updateProfileSchema = z.object({
+  name: z.string().min(4, 'O nome deve ter ao menos 4 caracteres'),
+  pin: z
+    .string()
+    .optional()
+    .refine(
+      (value) => !value || /^\d{4}$/.test(value),
+      'O PIN deve ter 4 dígitos',
+    ),
+});
+
+export type UpdateProfileFormValues = z.infer<typeof updateProfileSchema>;
