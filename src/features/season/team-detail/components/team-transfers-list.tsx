@@ -6,33 +6,21 @@ const dateFormatter = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'medium' });
 
 type TeamTransferView = {
   transfer: Transfer;
-  playerOut: Transfer['outgoingPlayer'];
-  playerIn: Transfer['outgoingPlayer'];
-  partnerTeam: Transfer['outgoingTeam'];
+  direction: 'in' | 'out';
+  partnerTeam: Transfer['fromTeam'];
 };
 
-// Cada Transfer é uma troca entre dois times; outgoing*/incoming* guardam o
-// estado de ANTES da troca (ver tipo Transfer), então o lado do time atual
-// depende de qual dos dois ele era.
+// Cada Transfer é a saída de um jogador de fromTeam para toTeam; o lado do
+// time atual (chegada ou saída) depende de qual dos dois ele era.
 const toTeamPerspective = (
   transfer: Transfer,
   teamId: string,
 ): TeamTransferView | null => {
-  if (transfer.outgoingTeam.id === teamId) {
-    return {
-      transfer,
-      playerOut: transfer.outgoingPlayer,
-      playerIn: transfer.incomingPlayer,
-      partnerTeam: transfer.incomingTeam,
-    };
+  if (transfer.fromTeam.id === teamId) {
+    return { transfer, direction: 'out', partnerTeam: transfer.toTeam };
   }
-  if (transfer.incomingTeam.id === teamId) {
-    return {
-      transfer,
-      playerOut: transfer.incomingPlayer,
-      playerIn: transfer.outgoingPlayer,
-      partnerTeam: transfer.outgoingTeam,
-    };
+  if (transfer.toTeam.id === teamId) {
+    return { transfer, direction: 'in', partnerTeam: transfer.fromTeam };
   }
   return null;
 };
@@ -69,9 +57,9 @@ export const TeamTransfersList = ({
 
   return (
     <div className="flex flex-col">
-      {views.map(({ transfer, playerOut, playerIn, partnerTeam }) => (
+      {views.map(({ transfer, direction, partnerTeam }) => (
         <div
-          key={transfer.id}
+          key={transfer.transferId}
           className="flex items-center gap-3 border-b py-3.5 last:border-0"
         >
           <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
@@ -79,16 +67,16 @@ export const TeamTransfersList = ({
           </span>
           <div className="flex min-w-0 flex-col">
             <span className="text-sm">
-              Trocou <span className="font-medium">{playerOut.name}</span> por{' '}
-              <span className="font-medium">{playerIn.name}</span>
+              {direction === 'out' ? 'Saiu' : 'Chegou'}{' '}
+              <span className="font-medium">{transfer.player.name}</span>
             </span>
             <span className="truncate text-muted-foreground text-xs">
-              com {partnerTeam.name} · solicitado por{' '}
-              {transfer.requestedBy.name}
+              {direction === 'out' ? 'para' : 'de'} {partnerTeam.name} ·
+              solicitado por {transfer.requestedBy.name}
             </span>
           </div>
           <span className="ml-auto shrink-0 font-mono text-muted-foreground text-xs">
-            {dateFormatter.format(new Date(transfer.createdAt))}
+            {dateFormatter.format(new Date(transfer.date))}
           </span>
         </div>
       ))}

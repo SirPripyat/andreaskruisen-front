@@ -153,11 +153,12 @@ export const TeamsScreen = () => {
         }
       />
 
-      <div className={'flex items-center gap-2'}>
+      <div className={'flex flex-wrap items-center gap-2'}>
         <SearchInput
           value={draftName}
           onChange={setDraftName}
           placeholder={'Buscar time...'}
+          className={'w-full sm:w-auto'}
         />
         <Select
           value={leagueId || ALL_LEAGUES}

@@ -64,11 +64,17 @@ export const Header = () => {
         orientation="vertical"
         className="mr-2 data-vertical:h-4 data-vertical:self-auto"
       />
-      <Breadcrumb>
-        <BreadcrumbList>
+      <Breadcrumb className="min-w-0 overflow-hidden">
+        <BreadcrumbList className="flex-nowrap">
           {breadcrumbItems.map((item, index) => (
             <Fragment key={item.label}>
-              <BreadcrumbItem>
+              <BreadcrumbItem
+                className={
+                  index === breadcrumbItems.length - 1
+                    ? 'min-w-0 truncate'
+                    : 'shrink-0'
+                }
+              >
                 <BreadcrumbEntry
                   item={item}
                   isLast={index === breadcrumbItems.length - 1}
@@ -80,7 +86,7 @@ export const Header = () => {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex shrink-0 items-center gap-2">
         <SeasonSwitcher />
         <ThemeToggle />
       </div>

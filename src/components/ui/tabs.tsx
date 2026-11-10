@@ -15,7 +15,7 @@ const Tabs = ({ className, ...props }: TabsPrimitive.Root.Props) => {
 };
 
 const tabsListVariants = cva(
-  'group/tabs-list inline-flex w-fit items-center justify-center text-muted-foreground',
+  'group/tabs-list inline-flex w-fit max-w-full items-center justify-center overflow-x-auto text-muted-foreground',
   {
     variants: {
       variant: {

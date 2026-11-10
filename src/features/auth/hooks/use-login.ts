@@ -11,7 +11,11 @@ export const useLogin = () => {
     meta: { errorMessage: 'Não foi possível entrar. Tente novamente.' },
     onSuccess: (data) => {
       setToken(data.token);
-      setUser({ name: data.user.name, role: data.user.role });
+      setUser({
+        name: data.user.name,
+        role: data.user.role,
+        selectedSeasonId: data.user.selectedSeasonId,
+      });
     },
   });
 };

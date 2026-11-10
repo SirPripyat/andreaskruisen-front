@@ -8,7 +8,7 @@ export const useSimulateMatch = (
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => simulateMatch(tournamentId as string, matchId as string),
+    mutationFn: () => simulateMatch(matchId as string),
     meta: { errorMessage: 'Não foi possível simular a partida.' },
     onSuccess: () => {
       // Invalida tudo que é prefixado por ['tournament', id] (matches,

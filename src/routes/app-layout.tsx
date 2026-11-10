@@ -14,10 +14,10 @@ export const AppLayout = () => {
     <SidebarProvider open={open} onOpenChange={setOpen} className="h-svh">
       <AppSidebar user={user} />
       <SidebarInset className="min-h-0 overflow-hidden bg-card">
-        <div className="shrink-0 border-b px-8 pt-3 pb-2">
+        <div className="shrink-0 border-b px-4 pt-3 pb-2 sm:px-8">
           <Header />
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto px-8 pb-12">
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-12 sm:px-8">
           <div className="flex flex-1 flex-col gap-6">
             <Outlet />
           </div>

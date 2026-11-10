@@ -15,9 +15,8 @@ export const getTournamentMatches = async (
   tournamentId: string,
   query: ListTournamentMatchesQuery,
 ) => {
-  const { data } = await api.get<TournamentMatchesPage>(
-    `/tournaments/${tournamentId}/matches`,
-    { params: query },
-  );
+  const { data } = await api.get<TournamentMatchesPage>('/matches', {
+    params: { ...query, tournamentId },
+  });
   return data;
 };

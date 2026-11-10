@@ -17,7 +17,7 @@ export const importPlayers = async ({
   }
 
   const { data } = await api.post<ImportPlayersResult>(
-    '/players/import',
+    '/import/players',
     formData,
   );
   return data;

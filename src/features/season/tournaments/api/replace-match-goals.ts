@@ -10,12 +10,11 @@ export type ReplaceMatchGoalsPayload = {
 };
 
 export const replaceMatchGoals = async (
-  tournamentId: string,
   matchId: string,
   payload: ReplaceMatchGoalsPayload,
 ) => {
   const { data } = await api.put<MatchDetail>(
-    `/tournaments/${tournamentId}/matches/${matchId}/goals`,
+    `/matches/${matchId}/goals`,
     payload,
   );
   return data;

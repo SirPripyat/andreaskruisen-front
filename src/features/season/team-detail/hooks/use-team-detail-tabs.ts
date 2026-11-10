@@ -12,7 +12,7 @@ export type TeamDetailTab = (typeof TEAM_DETAIL_TABS)[number];
 
 export const useTeamDetailTabs = (defaultTab: TeamDetailTab) => {
   const [{ tab }, setFilters] = useQueryStates({
-    tab: parseAsStringEnum<TeamDetailTab>(TEAM_DETAIL_TABS).withDefault(
+    tab: parseAsStringEnum<TeamDetailTab>([...TEAM_DETAIL_TABS]).withDefault(
       defaultTab,
     ),
   });

@@ -28,12 +28,12 @@ export const SeasonSwitcher = ({ className }: { className?: string }) => {
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          'inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium hover:bg-muted',
+          'inline-flex items-center gap-2 rounded-md border px-2 py-1.5 text-sm font-medium hover:bg-muted sm:px-3',
           className,
         )}
       >
         <CalendarRangeIcon className="size-4 text-muted-foreground" />
-        {selectedSeason.name}
+        <span className="hidden sm:inline">{selectedSeason.name}</span>
         <ChevronsUpDownIcon className="size-3.5 text-muted-foreground" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">

@@ -21,7 +21,7 @@ export const importTeamImages = async ({
   }
 
   const { data } = await api.post<ImportTeamImagesResult>(
-    '/teams/import-crests',
+    '/import/team-crests',
     formData,
   );
   return data;

@@ -101,6 +101,7 @@ export const CreateTournamentDrawer = ({
               name: squad.team.name,
               crestUrl: squad.team.crestUrl,
               league: squad.team.league,
+              formation: null,
               averageOverallRating: null,
               averageDefenseRating: null,
               averageMidfieldRating: null,

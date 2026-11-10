@@ -7,7 +7,7 @@ export const useMatchDetail = (
 ) => {
   return useQuery({
     queryKey: ['tournament', tournamentId, 'matches', matchId],
-    queryFn: () => getMatchDetail(tournamentId as string, matchId as string),
+    queryFn: () => getMatchDetail(matchId as string),
     enabled: !!tournamentId && !!matchId,
   });
 };

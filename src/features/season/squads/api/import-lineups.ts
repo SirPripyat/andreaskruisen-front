@@ -21,7 +21,7 @@ export const importLineups = async ({
   }
 
   const { data } = await api.post<ImportLineupsResult>(
-    '/teams/import-lineups',
+    '/import/team-lineups',
     formData,
   );
   return data;

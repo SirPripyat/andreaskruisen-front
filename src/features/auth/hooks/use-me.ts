@@ -20,9 +20,10 @@ export const useMe = () => {
       setUser({
         name: data.name,
         role: data.role,
+        selectedSeasonId: data.selectedSeasonId,
       });
     }
-  }, [isSuccess, data?.name, data?.role, setUser]);
+  }, [isSuccess, data?.name, data?.role, data?.selectedSeasonId, setUser]);
 
   return {
     ...rest,
