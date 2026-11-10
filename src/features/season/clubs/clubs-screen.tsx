@@ -3,7 +3,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { EyeIcon } from 'lucide-react';
 import { Link } from 'react-router';
 import {
   OverallRatingBadge,
@@ -12,7 +11,6 @@ import {
   TeamCell,
 } from '@/components';
 import {
-  Button,
   DataTable,
   DataTableColumnHeader,
   DataTablePagination,
