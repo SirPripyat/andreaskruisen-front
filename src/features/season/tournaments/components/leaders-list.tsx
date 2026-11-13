@@ -1,13 +1,6 @@
 import { SearchIcon } from 'lucide-react';
-import {
-  Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui';
-import type { TeamSummary } from '../api';
+import { Input, SelectOptions, toSelectOptions } from '@/components/ui';
+import type { TeamSummary } from '../types';
 
 const ALL_TEAMS = 'all';
 
@@ -45,28 +38,16 @@ export const LeadersList = ({
         />
       </div>
 
-      <Select
+      <SelectOptions
         value={teamFilter}
-        onValueChange={(value) => setTeamFilter(value as string)}
-        items={{
-          [ALL_TEAMS]: 'Todos os times',
-          ...Object.fromEntries(teams.map((team) => [team.id, team.name])),
-        }}
-      >
-        <SelectTrigger className={'w-44 shrink-0'}>
-          <SelectValue />
-        </SelectTrigger>
-
-        <SelectContent>
-          <SelectItem value={ALL_TEAMS}>Todos os times</SelectItem>
-
-          {teams.map((team) => (
-            <SelectItem key={team.id} value={team.id}>
-              {team.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        onValueChange={setTeamFilter}
+        options={toSelectOptions(
+          { value: ALL_TEAMS, label: 'Todos os times' },
+          teams,
+          (team) => ({ value: team.id, label: team.name }),
+        )}
+        triggerClassName={'w-44 shrink-0'}
+      />
     </div>
   );
 };

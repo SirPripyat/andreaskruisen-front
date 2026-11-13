@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import { simulateMatch } from '../api';
 
 export const useSimulateMatch = (
@@ -15,7 +16,7 @@ export const useSimulateMatch = (
       // situation, stats...) de uma vez, incluindo a chave pura (de onde
       // vem `currentPhase`/`locked`) — mais simples que listar cada chave.
       queryClient.invalidateQueries({
-        queryKey: ['tournament', tournamentId],
+        queryKey: queryKeys.tournaments.detail(tournamentId),
       });
     },
   });

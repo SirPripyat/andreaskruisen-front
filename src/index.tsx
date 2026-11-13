@@ -1,17 +1,21 @@
-import { QueryClientProvider } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { queryClient } from './lib';
+import { queryClient, queryPersister } from './lib';
 
 const rootEl = document.getElementById('root');
+
 if (rootEl) {
   const root = createRoot(rootEl);
   root.render(
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{ persister: queryPersister }}
+      >
         <App />
-      </QueryClientProvider>
+      </PersistQueryClientProvider>
     </StrictMode>,
   );
 }

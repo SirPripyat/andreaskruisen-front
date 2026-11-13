@@ -1,8 +1,5 @@
 import { api } from '@/lib';
-import type { CreateSeasonPayload } from './schema';
-import type { Season } from './season';
+import type { CreateSeasonPayload, Season } from '../types';
 
-export const createSeason = async (payload: CreateSeasonPayload) => {
-  const { data } = await api.post<Season>('/seasons', payload);
-  return data;
-};
+export const createSeason = (payload: CreateSeasonPayload) =>
+  api.post<Season>('/seasons', payload).then((res) => res.data);

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import { getMatchDetail } from '../api';
 
 export const useMatchDetail = (
@@ -6,7 +7,7 @@ export const useMatchDetail = (
   matchId: string | undefined,
 ) => {
   return useQuery({
-    queryKey: ['tournament', tournamentId, 'matches', matchId],
+    queryKey: queryKeys.tournaments.match(tournamentId, matchId),
     queryFn: () => getMatchDetail(matchId as string),
     enabled: !!tournamentId && !!matchId,
   });

@@ -1,5 +1,5 @@
 import { api } from '@/lib';
-import type { Tournament, TournamentFormat } from './tournament';
+import type { Tournament, TournamentFormat } from '../types';
 
 export type UpdateTournamentPayload = {
   name?: string;
@@ -7,13 +7,10 @@ export type UpdateTournamentPayload = {
   maxTeams?: number;
 };
 
-export const updateTournament = async (
+export const updateTournament = (
   tournamentId: string,
   payload: UpdateTournamentPayload,
-) => {
-  const { data } = await api.patch<Tournament>(
-    `/tournaments/${tournamentId}`,
-    payload,
-  );
-  return data;
-};
+) =>
+  api
+    .patch<Tournament>(`/tournaments/${tournamentId}`, payload)
+    .then((res) => res.data);

@@ -4,6 +4,7 @@ import { Select as SelectPrimitive } from '@base-ui/react/select';
 import { cn } from 'cn';
 import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
 import type * as React from 'react';
+import type { ReactNode } from 'react';
 
 const Select = ({ ...props }: SelectPrimitive.Root.Props<unknown>) => {
   return <SelectPrimitive.Root data-slot="select" {...props} />;
@@ -92,6 +93,67 @@ const SelectItem = ({
   );
 };
 
+export type SelectOption = {
+  value: string;
+  label: ReactNode;
+  disabled?: boolean;
+};
+
+export const toSelectOptions = <T,>(
+  base: SelectOption,
+  items: T[] | undefined,
+  toOption: (item: T) => SelectOption,
+): SelectOption[] => [base, ...(items ?? []).map(toOption)];
+
+type SelectOptionsProps = {
+  value: string;
+  onValueChange: (value: string) => void;
+  options: SelectOption[];
+  triggerClassName?: string;
+  contentClassName?: string;
+  alignItemWithTrigger?: boolean;
+};
+
+const SelectOptions = ({
+  value,
+  onValueChange,
+  options,
+  triggerClassName,
+  contentClassName,
+  alignItemWithTrigger,
+}: SelectOptionsProps) => {
+  const items = Object.fromEntries(
+    options.map((option) => [option.value, option.label]),
+  );
+
+  return (
+    <Select
+      value={value}
+      onValueChange={(nextValue) => onValueChange(nextValue as string)}
+      items={items}
+    >
+      <SelectTrigger className={triggerClassName}>
+        <SelectValue className={'whitespace-nowrap'} />
+      </SelectTrigger>
+
+      <SelectContent
+        className={contentClassName}
+        alignItemWithTrigger={alignItemWithTrigger}
+      >
+        {options.map((option) => (
+          <SelectItem
+            key={option.value}
+            value={option.value}
+            disabled={option.disabled}
+          >
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+};
+
 const SelectGroupLabel = ({
   className,
   ...props
@@ -113,6 +175,7 @@ export {
   SelectContent,
   SelectGroupLabel,
   SelectItem,
+  SelectOptions,
   SelectTrigger,
   SelectValue,
 };

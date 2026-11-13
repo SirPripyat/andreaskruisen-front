@@ -16,10 +16,11 @@
   color-scheme: light;
 
   /* Primitive — brand (Amsterdam flag red / ink) */
-  --p-red-700: #c8102e;
   --p-red-800: #9c0c24;
-  --p-red-500: #ff4a63;
+  --p-red-700: #c8102e;
   --p-red-600: #e5283f;
+  --p-red-500: #ff4a63;
+  --p-red-300: #ff4d6d;
   --p-red-050: #fbe7ea;
 
   --p-ink-950: #14121a;
@@ -42,8 +43,6 @@
   --p-amber-300: #e8be58;
   --p-blue-700: #2f5e7d;
   --p-blue-300: #8fb8ce;
-  --p-orange-700: #b14b26;
-  --p-orange-300: #e8a17c;
 
   /* Primitive — dark surfaces */
   --p-night-950: #0b0a0f;
@@ -85,7 +84,7 @@
   --color-warning-surface: #f6ecd6;
   --color-info: var(--p-blue-700);
   --color-info-surface: #e6eef2;
-  --color-critical: var(--p-orange-700);
+  --color-critical: var(--p-red-700);
   --color-critical-surface: #f7e6dd;
 
   /* Fonts */
@@ -156,7 +155,7 @@
   --color-warning-surface: rgb(232 190 88 / 14%);
   --color-info: var(--p-blue-300);
   --color-info-surface: rgb(143 184 206 / 14%);
-  --color-critical: var(--p-orange-300);
+  --color-critical: var(--p-red-300);
   --color-critical-surface: rgb(232 161 124 / 14%);
 
   --color-secondary: var(--p-night-800);

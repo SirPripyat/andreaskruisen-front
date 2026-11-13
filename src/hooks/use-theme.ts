@@ -1,37 +1,32 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
+import { type Theme, useThemeStore } from '@/stores';
 
-export type Theme = 'light' | 'dark';
+export type ResolvedTheme = 'light' | 'dark';
 
-const STORAGE_KEY = 'theme';
+const DARK_QUERY = '(prefers-color-scheme: dark)';
 
-const getSystemTheme = (): Theme => {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light';
-};
+const getSystemTheme = (): ResolvedTheme =>
+  window.matchMedia(DARK_QUERY).matches ? 'dark' : 'light';
 
-const getStoredTheme = (): Theme | null => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  return stored === 'light' || stored === 'dark' ? stored : null;
+const subscribeToSystemTheme = (onChange: () => void) => {
+  const mql = window.matchMedia(DARK_QUERY);
+  mql.addEventListener('change', onChange);
+  return () => mql.removeEventListener('change', onChange);
 };
 
 export const useTheme = () => {
-  const [theme, setThemeState] = useState<Theme>(
-    () => getStoredTheme() ?? getSystemTheme(),
+  const { theme, setTheme } = useThemeStore();
+  const systemTheme = useSyncExternalStore(
+    subscribeToSystemTheme,
+    getSystemTheme,
   );
+  const resolvedTheme = theme === 'system' ? systemTheme : theme;
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-  }, [theme]);
+    document.documentElement.classList.toggle('dark', resolvedTheme === 'dark');
+  }, [resolvedTheme]);
 
-  const setTheme = useCallback((next: Theme) => {
-    localStorage.setItem(STORAGE_KEY, next);
-    setThemeState(next);
-  }, []);
-
-  const toggleTheme = useCallback(() => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  }, [theme, setTheme]);
-
-  return { theme, setTheme, toggleTheme };
+  return { theme, resolvedTheme, setTheme };
 };
+
+export type { Theme };

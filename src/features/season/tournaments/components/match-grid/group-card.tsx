@@ -1,5 +1,5 @@
 import { cn } from '@/lib';
-import type { MatchListItem } from '../../api';
+import type { MatchListItem } from '../../types';
 import { MatchCard } from '../match-card';
 
 const GROUP_COLORS = [

@@ -6,9 +6,7 @@ export type Me = {
   name: string;
   role: UserRole;
   selectedSeasonId: string | null;
+  teamId: string | null;
 };
 
-export const getMe = async () => {
-  const { data } = await api.get<Me>('/auth/me');
-  return data;
-};
+export const getMe = () => api.get<Me>('/me').then((res) => res.data);

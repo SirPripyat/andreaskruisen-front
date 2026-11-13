@@ -9,12 +9,9 @@ import {
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  SelectOptions,
   Skeleton,
+  toSelectOptions,
 } from '@/components/ui';
 import {
   listTeams,
@@ -80,29 +77,33 @@ export const SelectTournamentTeams = ({
   const ringRatio = maxTeams ? Math.min(1, selectedTeams.size / maxTeams) : 0;
   const ringComplete = !!maxTeams && selectedTeams.size === maxTeams;
 
-  const handleFillRemaining = async () => {
-    if (maxTeams === undefined || remaining <= 0) {
-      return;
-    }
+  const handleFillRemaining = () => {
+    if (maxTeams === undefined || remaining <= 0) return;
+
     setIsFilling(true);
-    try {
-      const result = await listTeams({
-        page: 1,
-        pageSize: maxTeams,
-        sortBy: 'averageOverallRating',
-        sortOrder: 'desc',
+
+    return listTeams({
+      page: 1,
+      pageSize: maxTeams,
+      sortBy: 'averageOverallRating',
+      sortOrder: 'desc',
+    })
+      .then((result) => {
+        result.data
+          .filter((team) => !selectedTeams.has(team.id))
+          .slice(0, remaining)
+          .forEach((team) => {
+            onSelect(team);
+          });
+      })
+      .catch((err) => {
+        toast.error(
+          getErrorMessage(err, 'Não foi possível completar os times.'),
+        );
+      })
+      .finally(() => {
+        setIsFilling(false);
       });
-      result.data
-        .filter((team) => !selectedTeams.has(team.id))
-        .slice(0, remaining)
-        .forEach((team) => {
-          onSelect(team);
-        });
-    } catch (err) {
-      toast.error(getErrorMessage(err, 'Não foi possível completar os times.'));
-    } finally {
-      setIsFilling(false);
-    }
   };
 
   return (
@@ -315,40 +316,26 @@ export const SelectTournamentTeams = ({
                   {team.name}
                 </span>
                 {canAssignOwners && (
-                  <Select
+                  <SelectOptions
                     value={ownerId ?? CPU_OPTION}
                     onValueChange={(value) =>
                       onOwnerChange(
                         team.id,
-                        value === CPU_OPTION ? undefined : (value as string),
+                        value === CPU_OPTION ? undefined : value,
                       )
                     }
-                    items={[
+                    options={toSelectOptions(
                       { value: CPU_OPTION, label: 'CPU' },
-                      ...(users ?? []).map((user) => ({
+                      users,
+                      (user) => ({
                         value: user.id,
                         label: user.name,
-                      })),
-                    ]}
-                  >
-                    <SelectTrigger className={'h-6 w-20 px-1.5 text-[11px]'}>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={CPU_OPTION}>{'CPU'}</SelectItem>
-                      {users?.map((user) => (
-                        <SelectItem
-                          key={user.id}
-                          value={user.id}
-                          disabled={
-                            usedOwnerIds.has(user.id) && user.id !== ownerId
-                          }
-                        >
-                          {user.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                        disabled:
+                          usedOwnerIds.has(user.id) && user.id !== ownerId,
+                      }),
+                    )}
+                    triggerClassName={'h-6 w-20 px-1.5 text-[11px]'}
+                  />
                 )}
                 <Button
                   type={'button'}

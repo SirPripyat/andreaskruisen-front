@@ -6,12 +6,12 @@ import {
 } from 'lucide-react';
 import type { ComponentType } from 'react';
 import { cn } from '@/lib';
+import { TEAM_COUNT_RULES } from '../api';
 import {
-  TEAM_COUNT_RULES,
   TOURNAMENT_FORMAT_LABELS,
   TOURNAMENT_FORMATS,
   type TournamentFormat,
-} from '../api';
+} from '../types';
 
 const FORMAT_DESCRIPTIONS: Record<TournamentFormat, string> = {
   LEAGUE: 'Todos jogam entre si num turno único — o líder da tabela vence.',

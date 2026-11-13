@@ -1,5 +1,5 @@
-import type { GoalLeader } from '../api';
 import { useGoalLeadersList } from '../hooks';
+import type { GoalLeader } from '../types';
 import { LeadersList } from './leaders-list';
 import { LeadersTable } from './leaders-table';
 import { PodiumSection } from './podium-section';

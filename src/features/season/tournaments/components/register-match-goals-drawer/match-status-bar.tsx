@@ -1,9 +1,7 @@
 import { CalendarCheckIcon, ClockIcon, DicesIcon } from 'lucide-react';
 import { Badge, Button } from '@/components/ui';
-import { cn } from '@/lib';
-import type { MatchDetail } from '../../api';
-
-const dateFormatter = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'medium' });
+import { cn, formatDate } from '@/lib';
+import type { MatchDetail } from '../../types';
 
 type MatchStatusBarProps = {
   match: MatchDetail;
@@ -33,7 +31,7 @@ export const MatchStatusBar = ({
       {match.playedAt ? (
         <>
           <CalendarCheckIcon className="size-3" />
-          Disputada em {dateFormatter.format(new Date(match.playedAt))}
+          Disputada em {formatDate(match.playedAt)}
         </>
       ) : (
         <>

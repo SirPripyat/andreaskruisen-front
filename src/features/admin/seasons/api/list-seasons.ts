@@ -1,7 +1,5 @@
 import { api } from '@/lib';
-import type { Season } from './season';
+import type { Season } from '../types';
 
-export const listSeasons = async () => {
-  const { data } = await api.get<Season[]>('/seasons');
-  return data;
-};
+export const listSeasons = () =>
+  api.get<Season[]>('/seasons').then((data) => data.data);

@@ -1,4 +1,4 @@
-import type { TournamentFormat } from './tournament';
+import type { TournamentFormat } from '../types/tournament';
 
 type TeamCountRule = {
   allowed: number[];

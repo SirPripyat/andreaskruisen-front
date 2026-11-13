@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
+import { getInitials } from '@/lib';
 
 type AvatarPlayerProps = {
   photoUrl: string;
@@ -10,7 +11,7 @@ export const AvatarPlayer = ({ photoUrl, name }: AvatarPlayerProps) => {
     <div className={'flex items-center gap-2'}>
       <Avatar size={'lg'}>
         <AvatarImage src={photoUrl} alt={name} />
-        <AvatarFallback>{name.charAt(0)}</AvatarFallback>
+        <AvatarFallback>{getInitials(name)}</AvatarFallback>
       </Avatar>
       <span className={'font-medium'}>{name}</span>
     </div>

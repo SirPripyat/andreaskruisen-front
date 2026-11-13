@@ -1,5 +1,4 @@
 export * from './create-user';
 export * from './delete-user';
+export * from './get-my-active-season';
 export * from './list-users';
-export * from './schema';
-export * from './user';

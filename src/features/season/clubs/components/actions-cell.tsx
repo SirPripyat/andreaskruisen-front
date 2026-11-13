@@ -13,7 +13,7 @@ export const ActionsCell = ({ id }: ActionsCellProps) => {
     <Button
       variant="ghost"
       size="icon-sm"
-      onClick={() => navigate(`/teams/${id}`)}
+      onClick={() => navigate(`/clubs/${id}`)}
     >
       <EyeIcon />
     </Button>

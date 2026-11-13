@@ -5,6 +5,7 @@ import {
 } from '@tanstack/react-table';
 import { Link } from 'react-router';
 import {
+  Button,
   OverallRatingBadge,
   PageHeader,
   SearchInput,
@@ -21,18 +22,16 @@ import {
   type PlayerListItem,
   PlayerPositionCell,
 } from '@/features/admin/players';
-import { calculateAge } from '@/lib';
+import { FavoriteButton } from '@/features/season/favorites';
+import { calculateAge, formatNumber, PREFERRED_FOOT_LABELS } from '@/lib';
+import {
+  ActionCell,
+  NegotiateButton,
+  PlayersFiltersDrawer,
+} from './components';
 import { useSeasonPlayersScreen } from './hooks';
 
 const PAGE_SIZE = 10;
-
-const numberFormatter = new Intl.NumberFormat('pt-BR');
-
-const PREFERRED_FOOT_LABELS: Record<string, string> = {
-  LEFT: 'Canhoto',
-  RIGHT: 'Destro',
-  BOTH: 'Ambidestro',
-};
 
 const columns: ColumnDef<PlayerListItem>[] = [
   {
@@ -96,6 +95,25 @@ const columns: ColumnDef<PlayerListItem>[] = [
     header: 'Idade',
     cell: ({ row }) => calculateAge(row.original.birthdate),
   },
+  {
+    id: 'actions',
+    header: '',
+    meta: { className: 'text-right' },
+    cell: ({ row }) => (
+      <div className={'flex items-center justify-end gap-1'}>
+        <FavoriteButton
+          playerId={row.original.id}
+          isFavorite={row.original.isFavorite}
+        />
+        <NegotiateButton
+          playerId={row.original.id}
+          teamId={row.original.team.id}
+          compact
+        />
+        <ActionCell id={row.original.id} />
+      </div>
+    ),
+  },
 ];
 
 export const SeasonPlayersScreen = () => {
@@ -106,6 +124,12 @@ export const SeasonPlayersScreen = () => {
     setFilters,
     draftName,
     setDraftName,
+    advancedFilters,
+    activeAdvancedFilterCount,
+    hasActiveFilters,
+    clearFilters,
+    applyAdvancedFilters,
+    clearAdvancedFilters,
     isPending,
     isError,
     error,
@@ -115,6 +139,7 @@ export const SeasonPlayersScreen = () => {
   const table = useReactTable({
     data: players,
     columns,
+    getRowId: (player) => player.id,
     state: { sorting },
     enableSortingRemoval: false,
     onSortingChange,
@@ -137,9 +162,22 @@ export const SeasonPlayersScreen = () => {
           placeholder={'Buscar jogador...'}
           className={'w-full sm:w-auto'}
         />
+        <PlayersFiltersDrawer
+          filters={advancedFilters}
+          activeFilterCount={activeAdvancedFilterCount}
+          onApply={applyAdvancedFilters}
+          onClear={clearAdvancedFilters}
+        />
+
+        {hasActiveFilters && (
+          <Button variant={'ghost'} onClick={clearFilters}>
+            Limpar filtros
+          </Button>
+        )}
+
         {data && (
           <span className={'text-muted-foreground text-xs'}>
-            {numberFormatter.format(data.total)} jogador
+            {formatNumber(data.total)} jogador
             {data.total === 1 ? '' : 'es'}
           </span>
         )}

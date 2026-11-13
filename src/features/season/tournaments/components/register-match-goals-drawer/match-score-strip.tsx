@@ -1,7 +1,7 @@
 import { TrophyIcon } from 'lucide-react';
 import { Badge } from '@/components/ui';
 import { cn } from '@/lib';
-import type { MatchDetail } from '../../api';
+import type { MatchDetail } from '../../types';
 import { TeamChip } from '../team-chip';
 
 export const MatchScoreStrip = ({

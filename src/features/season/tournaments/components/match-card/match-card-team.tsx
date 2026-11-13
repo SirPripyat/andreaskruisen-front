@@ -1,5 +1,5 @@
 import { cn } from '@/lib';
-import type { TeamOwner } from '../../api';
+import type { TeamOwner } from '../../types';
 import { TeamChip } from '../team-chip';
 
 type MatchCardTeamProps = {

@@ -6,7 +6,7 @@ import type {
 } from 'react-hook-form';
 import { Button } from '@/components/ui';
 import { cn } from '@/lib';
-import type { MatchTeamWithPlayers } from '../../api';
+import type { MatchTeamWithPlayers } from '../../types';
 import { TeamChip } from '../team-chip';
 import { GoalRow } from './goal-row';
 import type {

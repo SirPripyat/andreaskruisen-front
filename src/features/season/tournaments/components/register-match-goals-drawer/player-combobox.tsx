@@ -14,7 +14,7 @@ import {
   ComboboxTrigger,
 } from '@/components/ui';
 import { cn } from '@/lib';
-import type { MatchPlayerOption } from '../../api';
+import type { MatchPlayerOption } from '../../types';
 import { PlayerAvatar } from './player-avatar';
 
 const POSITION_GROUPS: { label: string; positions: string[] }[] = [

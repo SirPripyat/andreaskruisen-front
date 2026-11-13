@@ -9,15 +9,13 @@ export type ApiErrorResponse = {
 export const getErrorMessage = (error: unknown, fallback: string) => {
   if (isAxiosError<ApiErrorResponse>(error)) {
     const message = error.response?.data?.message;
-    if (Array.isArray(message)) {
-      return message.join(', ');
-    }
+
+    if (Array.isArray(message)) return message.join(', ');
+
     return message ?? fallback;
   }
 
-  if (error instanceof Error) {
-    return error.message;
-  }
+  if (error instanceof Error) return error.message;
 
   return fallback;
 };

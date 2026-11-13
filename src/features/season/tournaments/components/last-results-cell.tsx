@@ -1,6 +1,6 @@
 import { TableCell } from '@/components/ui';
 import { cn } from '@/lib';
-import type { StandingWithOwner } from '../api';
+import type { StandingWithOwner } from '../types';
 
 type LastResultsCellProps = {
   standing: StandingWithOwner;

@@ -10,7 +10,7 @@ import {
 import type { TeamWithRatings } from '@/features/admin/teams';
 import type { RosterBySector } from '@/features/season/squads';
 import { cn } from '@/lib';
-import type { CreateTransferFormValues } from '../api';
+import type { CreateTransferFormValues } from '../types';
 import { PlayerOption } from './player-option';
 import { TeamCombobox } from './team-combobox';
 

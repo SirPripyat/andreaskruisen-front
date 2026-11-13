@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type { Me } from '../api';
-import { type UpdateProfileFormValues, updateProfileSchema } from '../api';
+import { type UpdateProfileFormValues, updateProfileSchema } from '../types';
 import { useUpdateMe } from './use-update-me';
 
 export const useUpdateProfileForm = (me: Me) => {

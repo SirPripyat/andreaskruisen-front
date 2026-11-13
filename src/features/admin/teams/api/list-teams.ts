@@ -1,10 +1,7 @@
 import { api, type PaginatedResult } from '@/lib';
-import type { ListTeamsQuery } from './schema';
-import type { TeamWithRatings } from './team';
+import type { ListTeamsQuery, TeamWithRatings } from '../types';
 
-export const listTeams = async (query: ListTeamsQuery) => {
-  const { data } = await api.get<PaginatedResult<TeamWithRatings>>('/teams', {
-    params: query,
-  });
-  return data;
-};
+export const listTeams = (query: ListTeamsQuery) =>
+  api
+    .get<PaginatedResult<TeamWithRatings>>('/teams', { params: query })
+    .then((res) => res.data);

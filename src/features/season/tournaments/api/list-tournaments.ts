@@ -1,7 +1,5 @@
 import { api } from '@/lib';
-import type { Tournament } from './tournament';
+import type { Tournament } from '../types';
 
-export const listTournaments = async () => {
-  const { data } = await api.get<Tournament[]>('/tournaments');
-  return data;
-};
+export const listTournaments = () =>
+  api.get<Tournament[]>('/tournaments').then((res) => res.data);

@@ -12,7 +12,5 @@ export * from './get-tournament-top-assists';
 export * from './get-tournament-top-scorers';
 export * from './list-tournaments';
 export * from './replace-match-goals';
-export * from './schema';
 export * from './simulate-match';
-export * from './tournament';
 export * from './update-tournament';

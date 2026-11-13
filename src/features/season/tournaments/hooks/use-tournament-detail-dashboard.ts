@@ -1,4 +1,5 @@
-import type { GoalLeader, NextMatchSummary } from '../api';
+import { formatDate } from '@/lib';
+import type { GoalLeader, NextMatchSummary } from '../types';
 import { useTournamentDashboard } from './use-tournament-dashboard';
 
 const getGamesInThisPhase = (playedMatches: number, totalMatches: number) => {
@@ -43,10 +44,6 @@ const getNextMatch = (nextMatch?: NextMatchSummary | null) => {
   };
 };
 
-const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
-  dateStyle: 'medium',
-});
-
 export const useTournamentDetailDashboard = (id?: string) => {
   const { data: dashboard } = useTournamentDashboard(id);
 
@@ -60,7 +57,7 @@ export const useTournamentDetailDashboard = (id?: string) => {
   const getCreatedAt = () => {
     if (!dashboard?.createdAt) return '-';
 
-    return dateFormatter.format(new Date(dashboard.createdAt));
+    return formatDate(dashboard.createdAt);
   };
 
   return {

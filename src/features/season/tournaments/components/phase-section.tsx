@@ -1,6 +1,6 @@
 import { ChevronsRightIcon, Loader2Icon } from 'lucide-react';
 import { Button, Separator } from '@/components/ui';
-import type { MatchListItem, PhaseSummary } from '../api';
+import type { MatchListItem, PhaseSummary } from '../types';
 import { MatchCard } from './match-card';
 import { MatchGrid } from './match-grid';
 

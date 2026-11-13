@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import { importTeamImages } from '../api';
 
 export const useImportTeamImages = () => {
@@ -7,8 +8,8 @@ export const useImportTeamImages = () => {
   return useMutation({
     mutationFn: importTeamImages,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['team'] });
-      queryClient.invalidateQueries({ queryKey: ['teams'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.team.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.teams.all });
     },
   });
 };

@@ -71,3 +71,42 @@ const FORMATION_LABEL: Record<Formation, string> = {
 export const getFormationLabel = (formation: Formation | null): string => {
   return formation ? FORMATION_LABEL[formation] : 'Formação';
 };
+
+// Valores aceitos pelo PATCH /squads/:teamId/lineup/formation do backend
+// (chaves de FORMATION_DISPLAY_TO_ENUM), diferentes dos nomes do enum Formation.
+const FORMATION_REQUEST_VALUE: Record<Formation, string> = {
+  THREE_ONE_FOUR_TWO: '3-1-4-2',
+  THREE_FOUR_ONE_TWO: '3-4-1-2',
+  THREE_FOUR_TWO_ONE: '3-4-2-1',
+  THREE_FOUR_THREE: '3-4-3',
+  THREE_FOUR_THREE_EM_LINHA: '3-4-3 Em linha',
+  THREE_FIVE_TWO: '3-5-2',
+  FOUR_ONE_TWO_ONE_TWO_ABERTO: '4-1-2-1-2 Aberto',
+  FOUR_ONE_TWO_ONE_TWO_FECHADO: '4-1-2-1-2 Fechado',
+  FOUR_ONE_THREE_TWO: '4-1-3-2',
+  FOUR_ONE_FOUR_ONE: '4-1-4-1',
+  FOUR_TWO_ONE_THREE: '4-2-1-3',
+  FOUR_TWO_TWO_TWO: '4-2-2-2',
+  FOUR_TWO_THREE_ONE_ABERTO: '4-2-3-1 Aberto',
+  FOUR_TWO_THREE_ONE_FECHADO: '4-2-3-1 Fechado',
+  FOUR_THREE_ONE_TWO: '4-3-1-2',
+  FOUR_THREE_TWO_ONE: '4-3-2-1',
+  FOUR_THREE_THREE_CONSERVADOR: '4-3-3 Conservador',
+  FOUR_THREE_THREE_DEFENSIVO: '4-3-3 Defensivo',
+  FOUR_THREE_THREE_EM_LINHA: '4-3-3 Em linha',
+  FOUR_THREE_THREE_OFENSIVO: '4-3-3 Ofensivo',
+  FOUR_FOUR_ONE_ONE_MEIO_CAMPO: '4-4-1-1 Meio-campo',
+  FOUR_FOUR_ONE_ONE_OFENSIVO: '4-4-1-1 Ofensivo',
+  FOUR_FOUR_TWO_CONSERVADOR: '4-4-2 Conservador',
+  FOUR_FOUR_TWO_EM_LINHA: '4-4-2 Em linha',
+  FOUR_FIVE_ONE_EM_LINHA: '4-5-1 Em linha',
+  FIVE_TWO_ONE_TWO: '5-2-1-2',
+  FIVE_TWO_TWO_ONE: '5-2-2-1',
+  FIVE_TWO_THREE: '5-2-3',
+  FIVE_THREE_TWO_CONSERVADOR: '5-3-2 Conservador',
+  FIVE_FOUR_ONE_EM_LINHA: '5-4-1 Em linha',
+  FIVE_FOUR_ONE_LOSANGO: '5-4-1 Losango',
+};
+
+export const getFormationRequestValue = (formation: Formation): string =>
+  FORMATION_REQUEST_VALUE[formation];

@@ -1,13 +1,10 @@
 import { api } from '@/lib';
-import type { Squad } from './squad';
+import type { Squad } from '../types';
 
-export const assignSquad = async (
+export const assignSquad = (
   seasonId: string,
   payload: { userId: string; teamId: string },
-) => {
-  const { data } = await api.post<Squad>(
-    `/seasons/${seasonId}/squads/assign`,
-    payload,
-  );
-  return data;
-};
+) =>
+  api
+    .post<Squad>(`/squads/${seasonId}/squads/assign`, payload)
+    .then((res) => res.data);

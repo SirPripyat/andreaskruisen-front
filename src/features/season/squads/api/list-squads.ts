@@ -1,7 +1,5 @@
 import { api } from '@/lib';
-import type { SeasonSquad } from './squad';
+import type { SeasonSquad } from '../types';
 
-export const listSquads = async () => {
-  const { data } = await api.get<SeasonSquad[]>('/squads');
-  return data;
-};
+export const listSquads = () =>
+  api.get<SeasonSquad[]>('/squads').then((res) => res.data);

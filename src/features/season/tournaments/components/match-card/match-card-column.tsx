@@ -1,5 +1,5 @@
 import { cn } from '@/lib';
-import type { MatchListItem } from '../../api';
+import type { MatchListItem } from '../../types';
 import { MatchCardStatusFooter } from './match-card-status-footer';
 import { MatchCardTeam } from './match-card-team';
 import type { MatchStatus } from './match-status';

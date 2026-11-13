@@ -28,21 +28,18 @@ export const CreateSeasonDrawer = () => {
     onSubmit,
     errors,
     register,
-    name,
     users,
     squads,
     assignTeam,
     unassignTeam,
     isPending,
+    progress,
+    hasName,
+    isComplete,
+    usersCount,
+    squadsCount,
+    errorMessage,
   } = useCreateSeasonDrawer();
-
-  const usersCount = users?.length ?? 0;
-  const squadsCount = squads.size;
-  const progress = usersCount
-    ? Math.round((squadsCount / usersCount) * 100)
-    : 0;
-  const hasName = name.trim().length > 0;
-  const isComplete = usersCount > 0 && squadsCount === usersCount;
 
   return (
     <Sheet open={open} onOpenChange={toggleOpen}>
@@ -114,11 +111,7 @@ export const CreateSeasonDrawer = () => {
               hasName && isComplete && 'text-success',
             )}
           >
-            {!hasName
-              ? 'Adicione um nome para continuar'
-              : isComplete
-                ? 'Elenco completo — pronto para criar'
-                : `${squadsCount} de ${usersCount} participantes com time`}
+            {errorMessage}
           </p>
 
           <Button

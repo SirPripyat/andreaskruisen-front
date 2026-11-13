@@ -1,7 +1,9 @@
 export * from './use-advance-phase';
 export * from './use-bracket-connectors';
 export * from './use-create-tournament';
+export * from './use-create-tournament-drawer';
 export * from './use-delete-tournament';
+export * from './use-edit-tournament-drawer';
 export * from './use-goal-leaders-list';
 export * from './use-match-detail';
 export * from './use-replace-match-goals';
@@ -13,6 +15,7 @@ export * from './use-tournament-dashboard';
 export * from './use-tournament-detail-dashboard';
 export * from './use-tournament-detail-tabs';
 export * from './use-tournament-matches';
+export * from './use-tournament-roster';
 export * from './use-tournament-situation';
 export * from './use-tournament-top-assists';
 export * from './use-tournament-top-scorers';

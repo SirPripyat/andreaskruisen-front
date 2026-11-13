@@ -1,4 +1,4 @@
-import type { MatchListItem } from '../../api';
+import type { MatchListItem } from '../../types';
 import { MatchCardColumn } from './match-card-column';
 import { MatchCardRow } from './match-card-row';
 import { getMatchStatus } from './match-status';

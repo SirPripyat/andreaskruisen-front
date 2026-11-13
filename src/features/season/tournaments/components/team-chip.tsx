@@ -20,7 +20,7 @@ const TeamLink = ({
 
   return (
     <Link
-      to={`/teams/${teamId}`}
+      to={`/clubs/${teamId}`}
       className={cn(className, 'hover:underline')}
       onClick={(event) => event.stopPropagation()}
     >

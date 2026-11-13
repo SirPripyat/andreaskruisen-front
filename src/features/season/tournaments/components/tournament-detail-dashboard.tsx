@@ -1,8 +1,8 @@
 import { useParams } from 'react-router';
 import { StatTile } from '@/components';
 import { Badge } from '@/components/ui';
-import { TOURNAMENT_FORMAT_LABELS } from '../api';
 import { useTournamentDetailDashboard } from '../hooks';
+import { TOURNAMENT_FORMAT_LABELS } from '../types';
 
 export const TournamentDetailDashboard = () => {
   const { id } = useParams<{ id: string }>();

@@ -1,13 +1,12 @@
 import { api } from '@/lib';
-import type { TournamentSituation } from './tournament';
+import type { TournamentSituation } from '../types';
 
-export const getTournamentSituation = async (
+export const getTournamentSituation = (
   tournamentId: string,
   query?: { onlyOwnedTeams?: boolean; round?: number },
-) => {
-  const { data } = await api.get<TournamentSituation>(
-    `/tournaments/${tournamentId}/situation`,
-    { params: query },
-  );
-  return data;
-};
+) =>
+  api
+    .get<TournamentSituation>(`/tournaments/${tournamentId}/situation`, {
+      params: query,
+    })
+    .then((res) => res.data);

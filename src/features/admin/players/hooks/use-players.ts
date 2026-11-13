@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import type { ListPlayersQuery } from '../api';
+import { queryKeys } from '@/lib';
 import { listPlayers } from '../api';
+import type { ListPlayersQuery } from '../types';
 
 export const usePlayers = (query: ListPlayersQuery) => {
   return useQuery({
-    queryKey: ['players', query],
+    queryKey: queryKeys.players.list(query),
     queryFn: () => listPlayers(query),
     placeholderData: (previousData) => previousData,
   });

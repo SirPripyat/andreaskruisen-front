@@ -1,15 +1,14 @@
 import { TrophyIcon } from 'lucide-react';
 import { Badge, Skeleton } from '@/components/ui';
 import { TOURNAMENT_FORMAT_LABELS } from '@/features/season/tournaments';
-import type { TeamTitle } from '../api';
+import type { TeamTitle } from '../types';
 
-export const TeamTitlesList = ({
-  titles,
-  isPending,
-}: {
+type TeamTitlesListProps = {
   titles: TeamTitle[];
   isPending: boolean;
-}) => {
+};
+
+export const TeamTitlesList = ({ titles, isPending }: TeamTitlesListProps) => {
   if (isPending) {
     return (
       <div className="flex flex-col gap-2">

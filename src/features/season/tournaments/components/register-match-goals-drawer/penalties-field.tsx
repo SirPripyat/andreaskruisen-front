@@ -1,7 +1,7 @@
 import { AlertTriangleIcon } from 'lucide-react';
 import type { FieldErrors, UseFormRegister } from 'react-hook-form';
 import { Field, FieldError, FieldLabel, Input } from '@/components/ui';
-import type { MatchDetail } from '../../api';
+import type { MatchDetail } from '../../types';
 import type { FormValues } from './goals-form-schema';
 
 type PenaltiesFieldProps = {

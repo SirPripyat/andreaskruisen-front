@@ -1,9 +1,7 @@
 import { api } from '@/lib';
-import type { TournamentDashboard } from './tournament';
+import type { TournamentDashboard } from '../types';
 
-export const getTournamentDashboard = async (tournamentId: string) => {
-  const { data } = await api.get<TournamentDashboard>(
-    `/tournaments/${tournamentId}/dashboard`,
-  );
-  return data;
-};
+export const getTournamentDashboard = (tournamentId: string) =>
+  api
+    .get<TournamentDashboard>(`/tournaments/${tournamentId}/dashboard`)
+    .then((res) => res.data);

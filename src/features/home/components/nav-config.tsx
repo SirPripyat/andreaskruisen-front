@@ -1,7 +1,8 @@
 import {
-  CalendarRangeIcon,
+  FlagIcon,
   type LucideIcon,
   ShieldIcon,
+  TrophyIcon,
   UploadIcon,
   UserRoundIcon,
   UsersIcon,
@@ -27,22 +28,28 @@ type NavConfigItem = {
 const items: NavConfigItem[] = [
   { title: 'Usuários', url: '/users', icon: UsersIcon, roles: ['ADMIN'] },
   {
-    title: 'Dados de jogadores',
+    title: 'Jogadores (cadastro)',
     url: '/players',
     icon: UserRoundIcon,
     roles: ['ADMIN'],
   },
   {
-    title: 'Dados de times',
+    title: 'Times (cadastro)',
     url: '/teams',
     icon: ShieldIcon,
     roles: ['ADMIN'],
   },
   {
-    title: 'Temporadas',
-    url: '/seasons',
-    icon: CalendarRangeIcon,
-    roles: ['PARTICIPANT', 'ADMIN'],
+    title: 'Nacionalidades',
+    url: '/nationalities',
+    icon: FlagIcon,
+    roles: ['ADMIN'],
+  },
+  {
+    title: 'Ligas',
+    url: '/leagues',
+    icon: TrophyIcon,
+    roles: ['ADMIN'],
   },
   { title: 'Importações', url: '/import', icon: UploadIcon, roles: ['ADMIN'] },
 ];
@@ -56,9 +63,11 @@ export const NavConfig = ({ user }: NavConfigProps) => {
 
   const filteredItems = items.filter((item) => item.roles.includes(user.role));
 
+  if (filteredItems.length === 0) return null;
+
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Configurações</SidebarGroupLabel>
+      <SidebarGroupLabel>Administração</SidebarGroupLabel>
       <SidebarMenu>
         {filteredItems.map((item) => (
           <SidebarMenuItem key={item.title}>

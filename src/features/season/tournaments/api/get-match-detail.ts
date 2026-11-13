@@ -1,7 +1,5 @@
 import { api } from '@/lib';
-import type { MatchDetail } from './tournament';
+import type { MatchDetail } from '../types';
 
-export const getMatchDetail = async (matchId: string) => {
-  const { data } = await api.get<MatchDetail>(`/matches/${matchId}`);
-  return data;
-};
+export const getMatchDetail = (matchId: string) =>
+  api.get<MatchDetail>(`/matches/${matchId}`).then((res) => res.data);

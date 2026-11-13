@@ -1,7 +1,5 @@
 import { api } from '@/lib';
-import type { PlayerDetail } from './player';
+import type { PlayerDetail } from '../types';
 
-export const getPlayer = async (id: string) => {
-  const { data } = await api.get<PlayerDetail>(`/players/${id}`);
-  return data;
-};
+export const getPlayer = (id: string) =>
+  api.get<PlayerDetail>(`/players/${id}`).then((res) => res.data);

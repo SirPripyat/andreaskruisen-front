@@ -7,13 +7,10 @@ import { Link } from 'react-router';
 import { PageHeader } from '@/components';
 import { Badge, DataTable } from '@/components/ui';
 import { useSelectedSeason } from '@/features/admin/seasons';
-import { TOURNAMENT_FORMAT_LABELS, type Tournament } from './api';
+import { formatDate } from '@/lib';
 import { CreateTournamentDrawer, TournamentActionsMenu } from './components';
 import { useTournaments } from './hooks';
-
-const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
-  dateStyle: 'medium',
-});
+import { TOURNAMENT_FORMAT_LABELS, type Tournament } from './types';
 
 const columns: ColumnDef<Tournament>[] = [
   {
@@ -44,7 +41,7 @@ const columns: ColumnDef<Tournament>[] = [
   {
     accessorKey: 'createdAt',
     header: 'Criado em',
-    cell: ({ row }) => dateFormatter.format(new Date(row.original.createdAt)),
+    cell: ({ row }) => formatDate(row.original.createdAt),
   },
   {
     id: 'actions',

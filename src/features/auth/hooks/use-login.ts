@@ -15,6 +15,7 @@ export const useLogin = () => {
         name: data.user.name,
         role: data.user.role,
         selectedSeasonId: data.user.selectedSeasonId,
+        teamId: data.user.teamId,
       });
     },
   });

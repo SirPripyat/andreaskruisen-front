@@ -1,14 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { useSelectedSeason } from '@/features/admin/seasons';
+import { queryKeys } from '@/lib';
 import { listSquads } from '../api';
 
 export const useSeasonSquads = (enabled = true) => {
-  const { selectedSeason } = useSelectedSeason();
-  const seasonId = selectedSeason?.id;
-
   return useQuery({
-    queryKey: ['squads', seasonId],
+    queryKey: queryKeys.squads,
     queryFn: () => listSquads(),
-    enabled: !!seasonId && enabled,
+    enabled: enabled,
   });
 };

@@ -1,15 +1,8 @@
 import { CameraIcon, Loader2Icon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
+import { getInitials } from '@/lib';
 import { useAvatar, useUploadAvatar } from '../hooks';
-
-const getInitials = (name: string) =>
-  name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join('');
 
 type AvatarUploadProps = {
   name: string;

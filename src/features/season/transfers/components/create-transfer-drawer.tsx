@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from 'lucide-react';
-import { useState } from 'react';
+import { type ReactElement, useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import {
@@ -13,11 +13,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui';
-import type { TeamWithRatings } from '@/features/admin/teams';
+import { type TeamWithRatings, useTeam } from '@/features/admin/teams';
 import type { RosterBySector } from '@/features/season/squads';
 import { useRoster } from '@/features/season/squads';
-import { type CreateTransferFormValues, createTransferSchema } from '../api';
 import { useCreateTransfer } from '../hooks';
+import { type CreateTransferFormValues, createTransferSchema } from '../types';
 import { SwapAxis } from './swap-axis';
 import { TradeSummary } from './trade-summary';
 import { TransferSidePanel } from './transfer-side-panel';
@@ -36,8 +36,18 @@ const findRosterPlayer = (
 
 export const CreateTransferDrawer = ({
   seasonId,
+  outgoingTeamId,
+  outgoingPlayerId: initialOutgoingPlayerId,
+  incomingTeamId,
+  incomingPlayerId: initialIncomingPlayerId,
+  trigger,
 }: {
   seasonId: string | undefined;
+  outgoingTeamId?: string;
+  outgoingPlayerId?: string;
+  incomingTeamId?: string;
+  incomingPlayerId?: string;
+  trigger?: ReactElement;
 }) => {
   const [open, setOpen] = useState(false);
   const [outgoingTeam, setOutgoingTeam] = useState<TeamWithRatings | null>(
@@ -47,6 +57,8 @@ export const CreateTransferDrawer = ({
     null,
   );
   const { mutateAsync, isPending: isCreating } = useCreateTransfer();
+  const { data: preselectedOutgoingTeam } = useTeam(outgoingTeamId, open);
+  const { data: preselectedIncomingTeam } = useTeam(incomingTeamId, open);
   const {
     control,
     handleSubmit,
@@ -60,6 +72,18 @@ export const CreateTransferDrawer = ({
       incomingPlayerId: '',
     },
   });
+
+  useEffect(() => {
+    if (!open || !preselectedOutgoingTeam) return;
+    setOutgoingTeam(preselectedOutgoingTeam);
+    setValue('outgoingPlayerId', initialOutgoingPlayerId ?? '');
+  }, [open, preselectedOutgoingTeam, initialOutgoingPlayerId, setValue]);
+
+  useEffect(() => {
+    if (!open || !preselectedIncomingTeam) return;
+    setIncomingTeam(preselectedIncomingTeam);
+    setValue('incomingPlayerId', initialIncomingPlayerId ?? '');
+  }, [open, preselectedIncomingTeam, initialIncomingPlayerId, setValue]);
 
   const outgoingPlayerId = useWatch({ control, name: 'outgoingPlayerId' });
   const incomingPlayerId = useWatch({ control, name: 'incomingPlayerId' });
@@ -78,19 +102,19 @@ export const CreateTransferDrawer = ({
     setIncomingTeam(null);
   };
 
-  const onSubmit = async (values: CreateTransferFormValues) => {
-    try {
-      await mutateAsync({
-        outgoingPlayerId: values.outgoingPlayerId,
-        incomingPlayerId: values.incomingPlayerId,
+  const onSubmit = (values: CreateTransferFormValues) =>
+    mutateAsync({
+      outgoingPlayerId: values.outgoingPlayerId,
+      incomingPlayerId: values.incomingPlayerId,
+    })
+      .then(() => {
+        toast.success('Transferência registrada com sucesso.');
+        resetAll();
+        setOpen(false);
+      })
+      .catch(() => {
+        // Erro já reportado pelo toast global de mutation (meta.errorMessage em useCreateTransfer).
       });
-      toast.success('Transferência registrada com sucesso.');
-      resetAll();
-      setOpen(false);
-    } catch {
-      // Erro já reportado pelo toast global de mutation (meta.errorMessage em useCreateTransfer).
-    }
-  };
 
   return (
     <Sheet
@@ -104,10 +128,12 @@ export const CreateTransferDrawer = ({
     >
       <SheetTrigger
         render={
-          <Button disabled={!seasonId}>
-            <PlusIcon />
-            {'Nova transferência'}
-          </Button>
+          trigger ?? (
+            <Button disabled={!seasonId}>
+              <PlusIcon />
+              {'Nova transferência'}
+            </Button>
+          )
         }
       />
       <SheetContent className={'w-full data-[side=right]:sm:max-w-3xl'}>

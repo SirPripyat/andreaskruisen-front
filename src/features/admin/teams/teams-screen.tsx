@@ -3,33 +3,20 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ListFilterIcon } from 'lucide-react';
 import {
-  OverallRatingBadge,
-  PageHeader,
-  SearchInput,
-  TeamCell,
-} from '@/components';
-import {
-  Button,
   DataTable,
   DataTableColumnHeader,
   DataTablePagination,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui';
-import type { TeamWithRatings } from './api';
-import { TeamRowActions } from './components';
-import { useLeagues, useTeamsScreen } from './hooks';
+  OverallRatingBadge,
+  PageHeader,
+  TeamCell,
+} from '@/components';
+import { LeagueCell } from '@/features/admin/leagues';
+import { TeamDataFilter, TeamRowActions } from './components';
+import { useTeamsScreen } from './hooks';
+import type { TeamWithRatings } from './types';
 
 const PAGE_SIZE = 10;
-
-const ALL_LEAGUES = 'all';
-
-const numberFormatter = new Intl.NumberFormat('pt-BR');
 
 const columns: ColumnDef<TeamWithRatings>[] = [
   {
@@ -48,7 +35,12 @@ const columns: ColumnDef<TeamWithRatings>[] = [
   {
     id: 'league',
     header: 'Liga',
-    cell: ({ row }) => row.original.league.name,
+    cell: ({ row }) => (
+      <LeagueCell
+        logoUrl={row.original.league.logoUrl}
+        name={row.original.league.name}
+      />
+    ),
   },
   {
     id: 'formation',
@@ -121,19 +113,11 @@ export const TeamsScreen = () => {
     sorting,
     onSortingChange,
     setFilters,
-    draftName,
-    setDraftName,
-    withoutFormation,
-    toggleWithoutFormation,
-    leagueId,
-    setLeagueId,
     isPending,
     isError,
     error,
     data,
   } = useTeamsScreen();
-
-  const { data: leagues } = useLeagues();
 
   const table = useReactTable({
     data: teams,
@@ -153,53 +137,7 @@ export const TeamsScreen = () => {
         }
       />
 
-      <div className={'flex flex-wrap items-center gap-2'}>
-        <SearchInput
-          value={draftName}
-          onChange={setDraftName}
-          placeholder={'Buscar time...'}
-          className={'w-full sm:w-auto'}
-        />
-        <Select
-          value={leagueId || ALL_LEAGUES}
-          onValueChange={(value) =>
-            setLeagueId(value === ALL_LEAGUES ? '' : (value as string))
-          }
-          items={{
-            [ALL_LEAGUES]: 'Todas as ligas',
-            ...Object.fromEntries(
-              (leagues ?? []).map((league) => [league.id, league.name]),
-            ),
-          }}
-        >
-          <SelectTrigger className={'w-auto min-w-44 shrink-0'}>
-            <SelectValue className={'whitespace-nowrap'} />
-          </SelectTrigger>
-
-          <SelectContent className={'max-h-64'} alignItemWithTrigger={false}>
-            <SelectItem value={ALL_LEAGUES}>Todas as ligas</SelectItem>
-
-            {leagues?.map((league) => (
-              <SelectItem key={league.id} value={league.id}>
-                {league.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Button
-          variant={withoutFormation ? 'default' : 'outline'}
-          onClick={toggleWithoutFormation}
-        >
-          <ListFilterIcon />
-          Sem formação
-        </Button>
-        {data && (
-          <span className={'text-muted-foreground text-sm'}>
-            {numberFormatter.format(data.total)} time
-            {data.total === 1 ? '' : 's'}
-          </span>
-        )}
-      </div>
+      <TeamDataFilter data={data} />
 
       <DataTable
         table={table}

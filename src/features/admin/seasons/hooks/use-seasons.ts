@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import { listSeasons } from '../api';
 
 export const useSeasons = () => {
   return useQuery({
-    queryKey: ['seasons'],
+    queryKey: queryKeys.seasons.all,
     queryFn: listSeasons,
-    staleTime: 5 * 60 * 1000,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };

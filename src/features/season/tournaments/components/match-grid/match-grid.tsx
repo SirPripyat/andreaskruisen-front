@@ -1,4 +1,4 @@
-import type { MatchListItem } from '../../api';
+import type { MatchListItem } from '../../types';
 import { GroupCard } from './group-card';
 import { MatchRoundTitle } from './match-round-title';
 

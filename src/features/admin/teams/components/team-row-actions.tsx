@@ -1,11 +1,13 @@
 import { PencilIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui';
-import type { TeamWithRatings } from '../api';
-import { EditTeamCrestDrawer } from './edit-team-crest-drawer';
+import type { TeamWithRatings } from '../types';
+import { EditTeamCrestDrawer } from './edit-team-drawer';
 
 export const TeamRowActions = ({ team }: { team: TeamWithRatings }) => {
   const [editOpen, setEditOpen] = useState(false);
+
+  const toggleOpen = () => setEditOpen((prev) => !prev);
 
   return (
     <>
@@ -13,15 +15,15 @@ export const TeamRowActions = ({ team }: { team: TeamWithRatings }) => {
         variant={'ghost'}
         size={'icon-sm'}
         aria-label={`Editar ${team.name}`}
-        onClick={() => setEditOpen(true)}
+        onClick={toggleOpen}
       >
         <PencilIcon />
       </Button>
 
       <EditTeamCrestDrawer
-        team={team}
+        id={team.id}
         open={editOpen}
-        onOpenChange={setEditOpen}
+        toggleOpen={toggleOpen}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import type { GoalLeader } from '../api';
+import type { GoalLeader } from '../types';
 import { PodiumCard } from './podium-card';
 
 type PodiumSectionProps = {

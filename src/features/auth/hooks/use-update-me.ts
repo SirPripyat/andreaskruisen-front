@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import { updateMe } from '../api';
 
 export const useUpdateMe = () => {
@@ -8,7 +9,7 @@ export const useUpdateMe = () => {
     mutationFn: updateMe,
     meta: { errorMessage: 'Não foi possível atualizar o perfil.' },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['me'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.me.detail });
     },
   });
 };

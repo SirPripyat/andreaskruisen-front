@@ -1,5 +1,3 @@
 import { api } from '@/lib';
 
-export const deleteUser = async (userId: string) => {
-  await api.delete(`/users/${userId}`);
-};
+export const deleteUser = (userId: string) => api.delete(`/users/${userId}`);

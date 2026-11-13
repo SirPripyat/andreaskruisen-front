@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import { getTeam } from '../api';
 
-export const useTeam = (id: string | undefined) => {
+export const useTeam = (id: string | undefined, open: boolean = true) => {
   return useQuery({
-    queryKey: ['team', id],
+    queryKey: queryKeys.team.detail(id),
     queryFn: () => getTeam(id as string),
-    enabled: !!id,
+    enabled: open && !!id,
   });
 };

@@ -1,4 +1,4 @@
-import { MoreHorizontalIcon, Trash2Icon } from 'lucide-react';
+import { MoreHorizontalIcon, Pencil, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 import {
   Button,
@@ -7,11 +7,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui';
-import type { Season } from '../api';
+import type { Season } from '../types';
 import { DeleteSeasonDialog } from './delete-season-dialog';
+import { EditSeasonDrawer } from './edit-season-drawer';
 
 export const SeasonActionsMenu = ({ season }: { season: Season }) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   return (
     <>
@@ -29,6 +31,11 @@ export const SeasonActionsMenu = ({ season }: { season: Season }) => {
         />
 
         <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => setEditOpen(true)}>
+            <Pencil />
+            Editar
+          </DropdownMenuItem>
+
           <DropdownMenuItem
             variant="destructive"
             onClick={() => setDeleteOpen(true)}
@@ -38,11 +45,18 @@ export const SeasonActionsMenu = ({ season }: { season: Season }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
       <DeleteSeasonDialog
         seasonId={season.id}
         seasonName={season.name}
         open={deleteOpen}
         onOpenChange={setDeleteOpen}
+      />
+
+      <EditSeasonDrawer
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        id={season.id}
       />
     </>
   );

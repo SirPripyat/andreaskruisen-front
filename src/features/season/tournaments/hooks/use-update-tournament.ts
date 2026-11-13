@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import type { UpdateTournamentPayload } from '../api';
 import { updateTournament } from '../api';
 
@@ -9,12 +10,12 @@ export const useUpdateTournament = (tournamentId: string | undefined) => {
     mutationFn: (payload: UpdateTournamentPayload) =>
       updateTournament(tournamentId as string, payload),
     meta: { errorMessage: 'Não foi possível atualizar o torneio.' },
-    onSuccess: (tournament) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['tournament', tournamentId],
+        queryKey: queryKeys.tournaments.detail(tournamentId),
       });
       queryClient.invalidateQueries({
-        queryKey: ['tournaments', tournament.seasonId],
+        queryKey: queryKeys.tournaments.all,
       });
     },
   });

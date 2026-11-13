@@ -1,6 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import {
   Button,
   Field,
@@ -14,43 +11,28 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui';
-import {
-  type CreateSeasonFormValues,
-  createSeasonSchema,
-  type Season,
-} from '../api';
-import { useUpdateSeason } from '../hooks';
+import { useEditSeasonDrawer } from '../hooks';
 
 export const EditSeasonDrawer = ({
-  season,
+  id,
   open,
   onOpenChange,
 }: {
-  season: Season;
+  id: string | undefined;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) => {
-  const { mutate, isPending } = useUpdateSeason(season.id);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CreateSeasonFormValues>({
-    resolver: zodResolver(createSeasonSchema),
-    defaultValues: { name: season.name },
-  });
-
-  const onSubmit = (values: CreateSeasonFormValues) => {
-    mutate(values, {
-      onSuccess: () => {
-        toast.success(`Temporada "${values.name}" atualizada com sucesso.`);
-        onOpenChange(false);
-      },
-    });
-  };
+  const { register, reset, handleSubmit, onSubmit, errors, isPending } =
+    useEditSeasonDrawer({ id, open, onOpenChange });
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet
+      open={open}
+      onOpenChange={(nextOpen) => {
+        if (!nextOpen) reset();
+        onOpenChange(nextOpen);
+      }}
+    >
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Editar temporada</SheetTitle>

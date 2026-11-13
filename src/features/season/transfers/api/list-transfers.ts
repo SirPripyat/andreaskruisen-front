@@ -1,7 +1,5 @@
 import { api } from '@/lib';
-import type { Transfer } from './transfer';
+import type { Transfer } from '../types';
 
-export const listTransfers = async () => {
-  const { data } = await api.get<Transfer[]>('/transfers');
-  return data;
-};
+export const listTransfers = () =>
+  api.get<Transfer[]>('/transfers').then((res) => res.data);

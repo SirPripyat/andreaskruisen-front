@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import { advancePhase } from '../api';
 
 export const useAdvancePhase = (tournamentId: string | undefined) => {
@@ -13,7 +14,7 @@ export const useAdvancePhase = (tournamentId: string | undefined) => {
       // que é prefixado por ['tournament', id] (matches, situation,
       // currentPhase, `locked`...) de uma vez.
       queryClient.invalidateQueries({
-        queryKey: ['tournament', tournamentId],
+        queryKey: queryKeys.tournaments.detail(tournamentId),
       });
     },
   });

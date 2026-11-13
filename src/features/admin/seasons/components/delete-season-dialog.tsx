@@ -11,27 +11,28 @@ import {
 } from '@/components/ui';
 import { useDeleteSeason } from '../hooks';
 
+type DeleteSeasonDialogProps = {
+  seasonId: string;
+  seasonName: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
 export const DeleteSeasonDialog = ({
   seasonId,
   seasonName,
   open,
   onOpenChange,
-}: {
-  seasonId: string;
-  seasonName: string;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}) => {
+}: DeleteSeasonDialogProps) => {
   const { mutate, isPending } = useDeleteSeason();
 
-  const handleConfirm = () => {
+  const handleConfirm = () =>
     mutate(seasonId, {
       onSuccess: () => {
         toast.success(`Temporada "${seasonName}" excluída.`);
         onOpenChange(false);
       },
     });
-  };
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>

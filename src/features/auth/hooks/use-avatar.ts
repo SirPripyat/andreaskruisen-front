@@ -1,15 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import { getAvatar } from '../api';
-
-const ONE_DAY = 24 * 60 * 60 * 1000; // 24h em ms
 
 export const useAvatar = () => {
   const { data, ...rest } = useQuery({
-    queryKey: ['avatar'],
+    queryKey: queryKeys.avatar,
     queryFn: getAvatar,
     retry: false,
-    staleTime: ONE_DAY,
-    gcTime: ONE_DAY,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 
   return { ...rest, url: data ?? null };

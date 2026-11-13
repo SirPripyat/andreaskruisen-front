@@ -7,14 +7,10 @@ import { ArrowRightIcon } from 'lucide-react';
 import { PageHeader } from '@/components';
 import { DataTable } from '@/components/ui';
 import { useSelectedSeason } from '@/features/admin/seasons';
-import type { Transfer } from './api';
+import { formatDateTime } from '@/lib';
 import { CreateTransferDrawer, PlayerCell, TeamCell } from './components';
 import { useTransfers } from './hooks';
-
-const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
-  dateStyle: 'medium',
-  timeStyle: 'short',
-});
+import type { Transfer } from './types';
 
 const columns: ColumnDef<Transfer>[] = [
   {
@@ -45,7 +41,7 @@ const columns: ColumnDef<Transfer>[] = [
   {
     accessorKey: 'createdAt',
     header: 'Data',
-    cell: ({ row }) => dateFormatter.format(new Date(row.original.date)),
+    cell: ({ row }) => formatDateTime(row.original.date),
   },
 ];
 

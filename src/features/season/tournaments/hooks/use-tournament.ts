@@ -1,10 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import { getTournament } from '../api';
 
-export const useTournament = (tournamentId: string | undefined) => {
+export const useTournament = (
+  tournamentId: string | undefined,
+  open: boolean = true,
+) => {
   return useQuery({
-    queryKey: ['tournament', tournamentId],
+    queryKey: queryKeys.tournaments.detail(tournamentId),
     queryFn: () => getTournament(tournamentId as string),
-    enabled: !!tournamentId,
+    enabled: open && !!tournamentId,
   });
 };

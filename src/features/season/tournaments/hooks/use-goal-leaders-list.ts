@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDebouncedValue } from '@/hooks';
-import type { GoalLeader, TeamSummary } from '../api';
+import type { GoalLeader, TeamSummary } from '../types';
 
 const ALL_TEAMS = 'all';
 

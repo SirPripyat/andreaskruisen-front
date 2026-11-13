@@ -1,7 +1,7 @@
 import { Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui';
-import type { User } from '../api';
+import type { User } from '../types';
 import { DeleteUserDialog } from './delete-user-dialog';
 
 export const UserRowActions = ({ user }: { user: User }) => {

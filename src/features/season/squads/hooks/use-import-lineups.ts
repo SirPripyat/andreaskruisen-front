@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import { importLineups } from '../api';
 
 export const useImportLineups = () => {
@@ -7,9 +8,9 @@ export const useImportLineups = () => {
   return useMutation({
     mutationFn: importLineups,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['lineup'] });
-      queryClient.invalidateQueries({ queryKey: ['roster'] });
-      queryClient.invalidateQueries({ queryKey: ['team'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.lineup.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.roster.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.team.all });
     },
   });
 };

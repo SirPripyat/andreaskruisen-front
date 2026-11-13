@@ -1,9 +1,7 @@
 import { api } from '@/lib';
-import type { GoalLeader } from './tournament';
+import type { GoalLeader } from '../types';
 
-export const getTournamentTopScorers = async (tournamentId: string) => {
-  const { data } = await api.get<GoalLeader[]>(
-    `/tournaments/${tournamentId}/top-scorers`,
-  );
-  return data;
-};
+export const getTournamentTopScorers = (tournamentId: string) =>
+  api
+    .get<GoalLeader[]>(`/tournaments/${tournamentId}/top-scorers`)
+    .then((res) => res.data);

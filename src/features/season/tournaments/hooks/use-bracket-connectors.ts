@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import type { MatchListItem, PhaseSummary } from '../api';
+import type { MatchListItem, PhaseSummary } from '../types';
 
 export type BracketRound = {
   phase: PhaseSummary;

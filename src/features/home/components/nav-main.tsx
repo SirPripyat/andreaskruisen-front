@@ -1,7 +1,9 @@
 import {
   ArrowLeftRightIcon,
+  CalendarRangeIcon,
   LayoutDashboardIcon,
   ShieldIcon,
+  StarIcon,
   TrophyIcon,
   UserRoundIcon,
 } from 'lucide-react';
@@ -16,10 +18,12 @@ import {
 
 const items = [
   { title: 'Dashboard', url: '/', icon: LayoutDashboardIcon },
+  { title: 'Temporada', url: '/seasons', icon: CalendarRangeIcon },
   { title: 'Times', url: '/clubs', icon: ShieldIcon },
   { title: 'Jogadores', url: '/players/season', icon: UserRoundIcon },
   { title: 'Torneios', url: '/tournaments', icon: TrophyIcon },
   { title: 'Transferências', url: '/transfers', icon: ArrowLeftRightIcon },
+  { title: 'Favoritos', url: '/favorites', icon: StarIcon },
 ];
 
 export const NavMain = () => {

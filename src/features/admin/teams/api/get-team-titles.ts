@@ -1,7 +1,5 @@
 import { api } from '@/lib';
-import type { TeamTitle } from './team-title';
+import type { TeamTitle } from '../types';
 
-export const getTeamTitles = async (id: string) => {
-  const { data } = await api.get<TeamTitle[]>(`/teams/${id}/titles`);
-  return data;
-};
+export const getTeamTitles = (id: string) =>
+  api.get<TeamTitle[]>(`/teams/${id}/titles`).then((res) => res.data);

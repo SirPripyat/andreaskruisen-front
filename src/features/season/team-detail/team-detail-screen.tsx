@@ -69,7 +69,7 @@ export const TeamDetailScreen = () => {
             </TabsPanel>
 
             <TabsPanel value="lineup">
-              <TeamLineupTab />
+              <TeamLineupTab managerId={manager?.id ?? null} />
             </TabsPanel>
 
             <TabsPanel value="titles">

@@ -1,10 +1,9 @@
-import { api, type PaginatedResult } from '@/lib';
-import type { PlayerListItem } from './player';
-import type { ListPlayersQuery } from './schema';
+import { api, type PaginatedResult, serializeQueryParams } from '@/lib';
+import type { ListPlayersQuery, PlayerListItem } from '../types';
 
-export const listPlayers = async (query: ListPlayersQuery) => {
-  const { data } = await api.get<PaginatedResult<PlayerListItem>>('/players', {
-    params: query,
-  });
-  return data;
-};
+export const listPlayers = (query: ListPlayersQuery) =>
+  api
+    .get<PaginatedResult<PlayerListItem>>('/players', {
+      params: serializeQueryParams(query),
+    })
+    .then((res) => res.data);

@@ -1,5 +1,5 @@
 import { api } from '@/lib';
-import type { MatchDetail } from './tournament';
+import type { MatchDetail } from '../types';
 
 export type ReplaceMatchGoalsPayload = {
   goals: { scorerId: string; assistId?: string }[];
@@ -9,13 +9,10 @@ export type ReplaceMatchGoalsPayload = {
   penalties?: { homeScore: number; awayScore: number };
 };
 
-export const replaceMatchGoals = async (
+export const replaceMatchGoals = (
   matchId: string,
   payload: ReplaceMatchGoalsPayload,
-) => {
-  const { data } = await api.put<MatchDetail>(
-    `/matches/${matchId}/goals`,
-    payload,
-  );
-  return data;
-};
+) =>
+  api
+    .put<MatchDetail>(`/matches/${matchId}/goals`, payload)
+    .then((res) => res.data);

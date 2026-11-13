@@ -1,6 +1,6 @@
 import { Switch } from '@/components/ui';
-import type { Season } from '../api';
 import { useSelectSeason } from '../hooks';
+import type { Season } from '../types';
 
 type SeasonSelectCellProps = {
   season: Season;

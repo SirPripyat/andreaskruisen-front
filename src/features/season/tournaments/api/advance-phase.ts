@@ -1,5 +1,4 @@
 import { api } from '@/lib';
 
-export const advancePhase = async (tournamentId: string, phaseId: string) => {
-  await api.post(`/tournaments/${tournamentId}/phases/${phaseId}/advance`);
-};
+export const advancePhase = (tournamentId: string, phaseId: string) =>
+  api.post(`/tournaments/${tournamentId}/phases/${phaseId}/advance`);

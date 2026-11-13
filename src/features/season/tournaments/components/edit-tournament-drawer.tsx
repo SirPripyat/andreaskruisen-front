@@ -1,6 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { Controller } from 'react-hook-form';
 import {
   Button,
   Field,
@@ -15,57 +13,37 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui';
-import {
-  type CreateTournamentFormValues,
-  createTournamentSchema,
-  type Tournament,
-} from '../api';
-import { useUpdateTournament } from '../hooks';
+import { useEditTournamentDrawer } from '../hooks';
 import { TournamentFormatPicker } from './tournament-format-picker';
 
 export const EditTournamentDrawer = ({
-  tournament,
+  id,
   open,
   onOpenChange,
 }: {
-  tournament: Tournament;
+  id: string | undefined;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) => {
-  const { mutate, isPending } = useUpdateTournament(tournament.id);
   const {
     register,
     control,
     handleSubmit,
+    reset,
     setValue,
-    formState: { errors },
-  } = useForm<CreateTournamentFormValues>({
-    resolver: zodResolver(createTournamentSchema),
-    defaultValues: {
-      name: tournament.name,
-      format: tournament.format,
-      maxTeams: String(tournament.maxTeams),
-    },
-  });
-
-  const onSubmit = (values: CreateTournamentFormValues) => {
-    mutate(
-      {
-        name: values.name,
-        format: values.format,
-        maxTeams: Number(values.maxTeams),
-      },
-      {
-        onSuccess: () => {
-          toast.success(`Torneio "${values.name}" atualizado com sucesso.`);
-          onOpenChange(false);
-        },
-      },
-    );
-  };
+    onSubmit,
+    errors,
+    isPending,
+  } = useEditTournamentDrawer({ id, open, onOpenChange });
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet
+      open={open}
+      onOpenChange={(nextOpen) => {
+        if (!nextOpen) reset();
+        onOpenChange(nextOpen);
+      }}
+    >
       <SheetContent className={'data-[side=right]:sm:max-w-md'}>
         <SheetHeader>
           <SheetTitle>{'Editar torneio'}</SheetTitle>

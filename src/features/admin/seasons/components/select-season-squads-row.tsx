@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, Button } from '@/components/ui';
 import type { TeamWithRatings } from '@/features/admin/teams';
 import type { User } from '@/features/admin/users';
 import { cn, getInitials } from '@/lib';
-import { SeasonTeamPicker } from './season-team-picker';
+import { SeasonTeamPicker } from './season-team-picker/season-team-picker';
 
 type SelectSeasonSquadsRowProps = {
   user: User;

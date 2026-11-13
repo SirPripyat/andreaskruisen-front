@@ -2,7 +2,6 @@ import type { ComponentProps } from 'react';
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -12,7 +11,6 @@ import {
 import type { Me } from '@/features/auth';
 import { NavConfig } from './nav-config';
 import { NavMain } from './nav-main';
-import { NavUser } from './nav-user';
 
 type AppSidebarProps = ComponentProps<typeof Sidebar> & {
   user: Omit<Me, 'id'>;
@@ -43,9 +41,6 @@ export const AppSidebar = ({ user, ...props }: AppSidebarProps) => {
         <NavMain />
         <NavConfig user={user} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={user} />
-      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

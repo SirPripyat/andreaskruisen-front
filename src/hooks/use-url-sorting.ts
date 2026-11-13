@@ -18,7 +18,9 @@ export const useUrlSorting = <TSortField extends string>({
     const next = (
       typeof updater === 'function' ? updater(sorting) : updater
     )[0];
+
     if (!next) return;
+
     onSortingChange({
       sortBy: next.id as TSortField,
       sortOrder: next.desc ? 'desc' : 'asc',

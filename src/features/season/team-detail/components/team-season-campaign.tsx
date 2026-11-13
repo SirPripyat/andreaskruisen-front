@@ -1,12 +1,9 @@
 import type { SeasonCampaign } from '@/features/admin/teams';
+import { formatDecimal } from '@/lib';
 
 type TeamSeasonCampaignProps = {
   campaign: SeasonCampaign | null;
 };
-
-const numberFormatter = new Intl.NumberFormat('pt-BR', {
-  maximumFractionDigits: 2,
-});
 
 export const TeamSeasonCampaign = ({ campaign }: TeamSeasonCampaignProps) => {
   if (!campaign) {
@@ -25,13 +22,13 @@ export const TeamSeasonCampaign = ({ campaign }: TeamSeasonCampaignProps) => {
       key: 'goalsFor',
       label: 'Gols pró',
       value: campaign.goalsFor,
-      sub: `${numberFormatter.format(campaign.goalsFor / campaign.games)} por jogo`,
+      sub: `${formatDecimal(campaign.goalsFor / campaign.games)} por jogo`,
     },
     {
       key: 'goalsAgainst',
       label: 'Gols contra',
       value: campaign.goalsAgainst,
-      sub: `${numberFormatter.format(campaign.goalsAgainst / campaign.games)} por jogo`,
+      sub: `${formatDecimal(campaign.goalsAgainst / campaign.games)} por jogo`,
     },
     {
       key: 'goalDifference',

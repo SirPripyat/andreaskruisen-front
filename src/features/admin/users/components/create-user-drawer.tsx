@@ -11,8 +11,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui';
-import type { CreateUserFormValues } from '../api';
 import { useCreateUser } from '../hooks';
+import type { CreateUserFormValues } from '../types';
 import { CreateUserForm } from './create-user-form';
 
 export const CreateUserDrawer = () => {

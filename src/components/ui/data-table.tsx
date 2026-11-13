@@ -8,7 +8,7 @@ import {
   CircleAlertIcon,
   InboxIcon,
 } from 'lucide-react';
-import { getErrorMessage } from '@/lib';
+import { formatNumber, getErrorMessage } from '@/lib';
 import {
   Pagination,
   PaginationContent,
@@ -25,8 +25,6 @@ import {
   TableHeader,
   TableRow,
 } from './table';
-
-const numberFormatter = new Intl.NumberFormat('pt-BR');
 
 declare module '@tanstack/react-table' {
   // Declaration merging is the only way to extend a library's generic
@@ -201,8 +199,7 @@ export const DataTablePagination = ({
   return (
     <div className={cn('flex items-center justify-between', className)}>
       <span className="text-muted-foreground text-sm">
-        Página {numberFormatter.format(page)} de{' '}
-        {numberFormatter.format(totalPages)}
+        Página {formatNumber(page)} de {formatNumber(totalPages)}
       </span>
       <Pagination className="mx-0 w-fit">
         <PaginationContent>

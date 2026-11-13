@@ -1,5 +1,6 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui';
 import type { RecentMatchResult } from '@/features/admin/teams';
+import { formatShortDate } from '@/lib';
 
 type TeamRecentFormProps = {
   matches: RecentMatchResult[];
@@ -45,8 +46,6 @@ const BAR_HEIGHT_PERCENT: Record<ResultKey, number> = {
   E: 34,
   D: 12,
 };
-
-const dateFormatter = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short' });
 
 const sortByPlayedAtAsc = (matches: RecentMatchResult[]) =>
   [...matches].sort(
@@ -142,7 +141,7 @@ export const TeamRecentForm = ({ matches }: TeamRecentFormProps) => {
                     {meta.points} pts
                   </span>
                   <span className={'text-background/70'}>
-                    {dateFormatter.format(new Date(match.playedAt))}
+                    {formatShortDate(match.playedAt)}
                   </span>
                 </div>
               </TooltipContent>
@@ -178,7 +177,7 @@ export const TeamRecentForm = ({ matches }: TeamRecentFormProps) => {
                   {match.opponent.name}
                 </span>
                 <span className={'text-muted-foreground text-xs'}>
-                  {dateFormatter.format(new Date(match.playedAt))}
+                  {formatShortDate(match.playedAt)}
                 </span>
               </div>
 

@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui';
 import { cn, getPositionGroupClassName } from '@/lib';
-import type { PlayerPosition } from '../api';
+import type { PlayerPosition } from '../types';
 
 type PlayerPositionCellProps = {
   positions: PlayerPosition[];

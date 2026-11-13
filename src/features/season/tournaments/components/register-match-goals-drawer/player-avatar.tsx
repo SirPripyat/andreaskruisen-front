@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
-import type { MatchPlayerOption } from '../../api';
+import type { MatchPlayerOption } from '../../types';
 
 type PlayerAvatarProps = {
   player: MatchPlayerOption;

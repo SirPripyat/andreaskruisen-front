@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import type { ReplaceMatchGoalsPayload } from '../api';
 import { replaceMatchGoals } from '../api';
 
@@ -17,7 +18,7 @@ export const useReplaceMatchGoals = (
       // situation, stats...) de uma vez, incluindo a chave pura (de onde
       // vem `currentPhase`/`locked`) — mais simples que listar cada chave.
       queryClient.invalidateQueries({
-        queryKey: ['tournament', tournamentId],
+        queryKey: queryKeys.tournaments.detail(tournamentId),
       });
     },
   });

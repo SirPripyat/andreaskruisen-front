@@ -1,7 +1,7 @@
 import { SportShoeIcon, VolleyballIcon, XIcon } from 'lucide-react';
 import { type Control, Controller, type FieldErrors } from 'react-hook-form';
 import { Button, Field, FieldError, FieldLabel } from 'src/components/ui';
-import type { MatchTeamWithPlayers } from '../../api';
+import type { MatchTeamWithPlayers } from '../../types';
 import type { FormValues, GoalsFieldName } from './goals-form-schema';
 import { PlayerCombobox } from './player-combobox';
 

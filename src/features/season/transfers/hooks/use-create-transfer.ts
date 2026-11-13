@@ -1,18 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useSelectedSeason } from '@/features/admin/seasons';
-import type { CreateTransferPayload } from '../api';
+import { queryKeys } from '@/lib';
 import { createTransfer } from '../api';
+import type { CreateTransferPayload } from '../types';
 
 export const useCreateTransfer = () => {
   const queryClient = useQueryClient();
-  const { selectedSeason } = useSelectedSeason();
 
   return useMutation({
     mutationFn: (payload: CreateTransferPayload) => createTransfer(payload),
     meta: { errorMessage: 'Não foi possível registrar a transferência.' },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['transfers', selectedSeason?.id],
+        queryKey: queryKeys.transfers,
       });
     },
   });

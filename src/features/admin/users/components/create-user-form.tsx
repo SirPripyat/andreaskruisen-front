@@ -12,7 +12,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui';
-import { type CreateUserFormValues, createUserSchema } from '../api';
+import { type CreateUserFormValues, createUserSchema } from '../types';
 
 type CreateUserFormProps = {
   onSubmit: (values: CreateUserFormValues) => void;

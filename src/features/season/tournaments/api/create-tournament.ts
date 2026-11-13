@@ -1,8 +1,5 @@
 import { api } from '@/lib';
-import type { CreateTournamentPayload } from './schema';
-import type { Tournament } from './tournament';
+import type { CreateTournamentPayload, Tournament } from '../types';
 
-export const createTournament = async (payload: CreateTournamentPayload) => {
-  const { data } = await api.post<Tournament>('/tournaments', payload);
-  return data;
-};
+export const createTournament = (payload: CreateTournamentPayload) =>
+  api.post<Tournament>('/tournaments', payload).then((res) => res.data);

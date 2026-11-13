@@ -1,5 +1,5 @@
 import { api, type PaginatedResult } from '@/lib';
-import type { MatchListItem, PhaseSummary } from './tournament';
+import type { MatchListItem, PhaseSummary } from '../types';
 
 export type ListTournamentMatchesQuery = {
   round?: number;
@@ -11,12 +11,12 @@ export type TournamentMatchesPage = PaginatedResult<MatchListItem> & {
   phase: PhaseSummary;
 };
 
-export const getTournamentMatches = async (
+export const getTournamentMatches = (
   tournamentId: string,
   query: ListTournamentMatchesQuery,
-) => {
-  const { data } = await api.get<TournamentMatchesPage>('/matches', {
-    params: { ...query, tournamentId },
-  });
-  return data;
-};
+) =>
+  api
+    .get<TournamentMatchesPage>('/matches', {
+      params: { ...query, tournamentId },
+    })
+    .then((res) => res.data);

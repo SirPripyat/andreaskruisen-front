@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import { type LoginFormValues, loginSchema } from '../api';
+import { type LoginFormValues, loginSchema } from '../types';
 import { useLogin } from './use-login';
 
 export const useLoginForm = () => {

@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { formatFileSize, getErrorMessage } from '@/lib';
-import { type FileImportFormValues, fileImportSchema } from '../api';
+import { type FileImportFormValues, fileImportSchema } from '../types';
 
 type ImportMutate<TResult> = (
   payload: { file: File; capturedAt?: string },

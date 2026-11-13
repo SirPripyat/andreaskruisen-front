@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui';
-import type { StandingWithOwner } from '../api';
+import type { StandingWithOwner } from '../types';
 import { GoalDiffCell } from './goal-diff-cell';
 import { LastResultsCell } from './last-results-cell';
 import { TeamChip } from './team-chip';

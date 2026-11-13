@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import { selectSeason } from '../api';
 
 export const useSelectSeason = () => {
@@ -8,8 +9,12 @@ export const useSelectSeason = () => {
     mutationFn: selectSeason,
     meta: { errorMessage: 'Não foi possível trocar a temporada.' },
     onSuccess: (data) => {
-      queryClient.setQueryData(['me'], data);
-      queryClient.invalidateQueries({ queryKey: ['seasons'] });
+      queryClient.setQueryData(queryKeys.me.detail, data);
+      // Temporada é o limite do tenant: nenhuma query fica de fora do
+      // invalidate, já que praticamente tudo (time, elenco, torneios,
+      // transferências...) é potencialmente escopado por temporada e
+      // nenhuma dessas chaves inclui o seasonId.
+      queryClient.invalidateQueries();
     },
   });
 };

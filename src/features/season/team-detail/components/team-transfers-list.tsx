@@ -1,8 +1,7 @@
 import { ArrowLeftRightIcon } from 'lucide-react';
 import { Skeleton } from '@/components/ui';
 import type { Transfer } from '@/features/season/transfers';
-
-const dateFormatter = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'medium' });
+import { formatDate } from '@/lib';
 
 type TeamTransferView = {
   transfer: Transfer;
@@ -76,7 +75,7 @@ export const TeamTransfersList = ({
             </span>
           </div>
           <span className="ml-auto shrink-0 font-mono text-muted-foreground text-xs">
-            {dateFormatter.format(new Date(transfer.date))}
+            {formatDate(transfer.date)}
           </span>
         </div>
       ))}

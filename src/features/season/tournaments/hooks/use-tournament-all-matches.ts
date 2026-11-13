@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import type { MatchesByPhase } from '../api';
 import { getTournamentFixtures } from '../api';
 
@@ -11,7 +12,7 @@ export const useTournamentAllMatches = (
   isPending: boolean;
 } => {
   const { data, isPending } = useQuery({
-    queryKey: ['tournament', tournamentId, 'fixtures'],
+    queryKey: queryKeys.tournaments.fixtures(tournamentId),
     queryFn: () => getTournamentFixtures(tournamentId as string),
     enabled: !!tournamentId,
   });

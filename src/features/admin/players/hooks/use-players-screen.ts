@@ -6,7 +6,7 @@ import {
 } from 'nuqs';
 import { useDebouncedSearch, useUrlSorting } from '@/hooks';
 import type { SortOrder } from '@/lib';
-import type { PlayerSortField } from '../api';
+import type { PlayerSortField } from '../types';
 import { usePlayers } from './use-players';
 
 const PAGE_SIZE = 10;
@@ -36,8 +36,6 @@ export const usePlayersScreen = () => {
     sortOrder,
   });
 
-  const players = data?.data ?? [];
-
   const { sorting, onSortingChange } = useUrlSorting({
     sortBy,
     sortOrder,
@@ -46,7 +44,7 @@ export const usePlayersScreen = () => {
   });
 
   return {
-    players,
+    players: data?.data ?? [],
     sorting,
     onSortingChange,
     setFilters,

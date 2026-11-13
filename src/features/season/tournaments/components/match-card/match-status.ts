@@ -1,4 +1,4 @@
-import type { MatchListItem } from '../../api';
+import type { MatchListItem } from '../../types';
 
 export type MatchStatus = {
   played: boolean;

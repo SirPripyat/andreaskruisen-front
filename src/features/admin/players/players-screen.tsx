@@ -3,38 +3,25 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { UploadIcon } from 'lucide-react';
-import { Link } from 'react-router';
 import {
+  DataTable,
+  DataTableColumnHeader,
+  DataTablePagination,
   OverallRatingBadge,
   PageHeader,
   SearchInput,
   TeamCell,
 } from '@/components';
-import {
-  Button,
-  DataTable,
-  DataTableColumnHeader,
-  DataTablePagination,
-} from '@/components/ui';
-import { calculateAge } from '@/lib';
-import type { PlayerListItem } from './api';
+import { calculateAge, formatNumber, PREFERRED_FOOT_LABELS } from '@/lib';
 import {
   AvatarPlayer,
   NationalityCell,
   PlayerPositionCell,
 } from './components';
 import { usePlayersScreen } from './hooks';
+import type { PlayerListItem } from './types';
 
 const PAGE_SIZE = 10;
-
-const numberFormatter = new Intl.NumberFormat('pt-BR');
-
-const PREFERRED_FOOT_LABELS: Record<string, string> = {
-  LEFT: 'Canhoto',
-  RIGHT: 'Destro',
-  BOTH: 'Ambidestro',
-};
 
 const columns: ColumnDef<PlayerListItem>[] = [
   {
@@ -126,12 +113,6 @@ export const PlayersScreen = () => {
         description={
           'Base de jogadores extraída do scraper, com posições, nacionalidade e avaliações.'
         }
-        actions={
-          <Button variant={'default'} render={<Link to={'/import'} />}>
-            <UploadIcon />
-            Importar
-          </Button>
-        }
       />
 
       <div className="flex flex-wrap items-center gap-3">
@@ -143,7 +124,7 @@ export const PlayersScreen = () => {
         />
         {data && (
           <span className="text-muted-foreground text-xs">
-            {numberFormatter.format(data.total)} jogador
+            {formatNumber(data.total)} jogador
             {data.total === 1 ? '' : 'es'}
           </span>
         )}

@@ -5,40 +5,28 @@ import {
 } from '@tanstack/react-table';
 import { Link } from 'react-router';
 import {
-  OverallRatingBadge,
-  PageHeader,
-  SearchInput,
-  TeamCell,
-} from '@/components';
-import {
   DataTable,
   DataTableColumnHeader,
   DataTablePagination,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui';
-import {
-  type TeamWithRatings,
-  useLeagues,
-  useTeamsScreen,
-} from '@/features/admin/teams';
-import { ActionsCell } from './components';
+  OverallRatingBadge,
+  PageHeader,
+  TeamCell,
+} from '@/components';
+import { LeagueCell } from '@/features/admin/leagues';
+import { ActionsCell, ClubsDataFilters } from './components';
+import { useClubsScreen } from './hooks';
+import type { ClubWithRatings } from './types';
 
 const PAGE_SIZE = 10;
 
-const ALL_LEAGUES = 'all';
-
-const columns: ColumnDef<TeamWithRatings>[] = [
+const columns: ColumnDef<ClubWithRatings>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => (
       <DataTableColumnHeader column={column}>Equipe</DataTableColumnHeader>
     ),
     cell: ({ row }) => (
-      <Link to={`/teams/${row.original.id}`} className={'hover:underline'}>
+      <Link to={`/clubs/${row.original.id}`} className={'hover:underline'}>
         <TeamCell
           crestUrl={row.original.crestUrl}
           name={row.original.name}
@@ -50,7 +38,12 @@ const columns: ColumnDef<TeamWithRatings>[] = [
   {
     id: 'league',
     header: 'Liga',
-    cell: ({ row }) => row.original.league.name,
+    cell: ({ row }) => (
+      <LeagueCell
+        logoUrl={row.original.league.logoUrl}
+        name={row.original.league.name}
+      />
+    ),
   },
   {
     id: 'averageOverallRating',
@@ -72,24 +65,18 @@ const columns: ColumnDef<TeamWithRatings>[] = [
 
 export const ClubsScreen = () => {
   const {
-    teams,
+    clubs,
     sorting,
     onSortingChange,
     setFilters,
-    draftName,
-    setDraftName,
-    leagueId,
-    setLeagueId,
     isPending,
     isError,
     error,
     data,
-  } = useTeamsScreen();
-
-  const { data: leagues } = useLeagues();
+  } = useClubsScreen();
 
   const table = useReactTable({
-    data: teams,
+    data: clubs,
     columns,
     state: { sorting },
     enableSortingRemoval: false,
@@ -106,40 +93,7 @@ export const ClubsScreen = () => {
         }
       />
 
-      <div className={'flex flex-wrap items-center gap-2'}>
-        <SearchInput
-          value={draftName}
-          onChange={setDraftName}
-          placeholder={'Buscar time...'}
-          className={'w-full sm:w-auto'}
-        />
-        <Select
-          value={leagueId || ALL_LEAGUES}
-          onValueChange={(value) =>
-            setLeagueId(value === ALL_LEAGUES ? '' : (value as string))
-          }
-          items={{
-            [ALL_LEAGUES]: 'Todas as ligas',
-            ...Object.fromEntries(
-              (leagues ?? []).map((league) => [league.id, league.name]),
-            ),
-          }}
-        >
-          <SelectTrigger className={'w-auto min-w-44 shrink-0'}>
-            <SelectValue className={'whitespace-nowrap'} />
-          </SelectTrigger>
-
-          <SelectContent className={'max-h-64'} alignItemWithTrigger={false}>
-            <SelectItem value={ALL_LEAGUES}>Todas as ligas</SelectItem>
-
-            {leagues?.map((league) => (
-              <SelectItem key={league.id} value={league.id}>
-                {league.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <ClubsDataFilters data={data} />
 
       <DataTable
         table={table}

@@ -10,19 +10,15 @@ export type ImportTeamImagesResult = {
   imagesUpdated: number;
 };
 
-export const importTeamImages = async ({
+export const importTeamImages = ({
   file,
   capturedAt,
 }: ImportTeamImagesPayload) => {
   const formData = new FormData();
   formData.append('file', file);
-  if (capturedAt) {
-    formData.append('capturedAt', capturedAt);
-  }
+  if (capturedAt) formData.append('capturedAt', capturedAt);
 
-  const { data } = await api.post<ImportTeamImagesResult>(
-    '/import/team-crests',
-    formData,
-  );
-  return data;
+  return api
+    .post<ImportTeamImagesResult>('/import/team-crests', formData)
+    .then((res) => res.data);
 };

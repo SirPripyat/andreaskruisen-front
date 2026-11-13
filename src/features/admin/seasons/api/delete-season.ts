@@ -1,5 +1,4 @@
 import { api } from '@/lib';
 
-export const deleteSeason = async (seasonId: string) => {
-  await api.delete(`/seasons/${seasonId}`);
-};
+export const deleteSeason = (seasonId: string) =>
+  api.delete(`/seasons/${seasonId}`);

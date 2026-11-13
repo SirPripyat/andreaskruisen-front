@@ -10,19 +10,12 @@ export type ImportLineupsResult = {
   lineupsInserted: number;
 };
 
-export const importLineups = async ({
-  file,
-  capturedAt,
-}: ImportLineupsPayload) => {
+export const importLineups = ({ file, capturedAt }: ImportLineupsPayload) => {
   const formData = new FormData();
   formData.append('file', file);
-  if (capturedAt) {
-    formData.append('capturedAt', capturedAt);
-  }
+  if (capturedAt) formData.append('capturedAt', capturedAt);
 
-  const { data } = await api.post<ImportLineupsResult>(
-    '/import/team-lineups',
-    formData,
-  );
-  return data;
+  return api
+    .post<ImportLineupsResult>('/import/team-lineups', formData)
+    .then((res) => res.data);
 };

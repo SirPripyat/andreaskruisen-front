@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type { TeamWithRatings } from '@/features/admin/teams';
 import { useUsers } from '@/features/admin/users';
-import { type CreateSeasonFormValues, createSeasonSchema } from '../api';
+import { type CreateSeasonFormValues, createSeasonSchema } from '../types';
 import { useCreateSeason } from './use-create-season';
 
 export const useCreateSeasonDrawer = () => {
@@ -27,21 +27,29 @@ export const useCreateSeasonDrawer = () => {
 
   const name = watch('name');
 
+  const usersCount = users?.length ?? 0;
+  const squadsCount = squads.size;
+
+  const progress = usersCount
+    ? Math.round((squadsCount / usersCount) * 100)
+    : 0;
+
+  const hasName = name.trim().length > 0;
+  const isComplete = usersCount > 0 && squadsCount === usersCount;
+
   const toggleOpen = () => setOpen((prevState) => !prevState);
 
-  const assignTeam = (userId: string, team: TeamWithRatings) => {
+  const assignTeam = (userId: string, team: TeamWithRatings) =>
     setSquads((current) => new Map(current).set(userId, team));
-  };
 
-  const unassignTeam = (userId: string) => {
+  const unassignTeam = (userId: string) =>
     setSquads((current) => {
       const next = new Map(current);
       next.delete(userId);
       return next;
     });
-  };
 
-  const onSubmit = (values: CreateSeasonFormValues) => {
+  const onSubmit = (values: CreateSeasonFormValues) =>
     mutate(
       {
         name: values.name,
@@ -59,6 +67,13 @@ export const useCreateSeasonDrawer = () => {
         },
       },
     );
+
+  const getErrorMessage = () => {
+    if (!hasName) return 'Adicione um nome para continuar';
+
+    if (isComplete) return 'Elenco completo — pronto para criar';
+
+    return `${squadsCount} de ${usersCount} participantes com time`;
   };
 
   return {
@@ -74,5 +89,11 @@ export const useCreateSeasonDrawer = () => {
     assignTeam,
     unassignTeam,
     isPending,
+    progress,
+    hasName,
+    isComplete,
+    usersCount,
+    squadsCount,
+    errorMessage: getErrorMessage(),
   };
 };

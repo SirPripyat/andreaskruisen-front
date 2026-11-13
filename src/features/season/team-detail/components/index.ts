@@ -3,7 +3,6 @@ export * from './team-head-to-head';
 export * from './team-info-panel';
 export * from './team-leaders-list';
 export * from './team-lineup-bench';
-export * from './team-lineup-list';
 export * from './team-lineup-pitch';
 export * from './team-lineup-player-detail';
 export * from './team-lineup-strength';

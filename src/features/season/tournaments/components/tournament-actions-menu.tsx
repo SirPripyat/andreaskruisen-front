@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui';
-import type { Tournament } from '../api';
+import type { Tournament } from '../types';
 import { DeleteTournamentDialog } from './delete-tournament-dialog';
 import { EditTournamentDrawer } from './edit-tournament-drawer';
 
@@ -62,15 +62,13 @@ export const TournamentActionsMenu = ({
       </DropdownMenu>
 
       <EditTournamentDrawer
-        key={tournament.id}
-        tournament={tournament}
+        id={tournament.id}
         open={editOpen}
         onOpenChange={setEditOpen}
       />
       <DeleteTournamentDialog
         tournamentId={tournament.id}
         tournamentName={tournament.name}
-        seasonId={tournament.seasonId}
         open={deleteOpen}
         onOpenChange={setDeleteOpen}
       />

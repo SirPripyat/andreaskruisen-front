@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
 import { cn } from '@/lib';
-import type { GoalLeader } from '../api';
+import type { GoalLeader } from '../types';
 import { TeamChip } from './team-chip';
 
 const PODIUM_STYLES = [

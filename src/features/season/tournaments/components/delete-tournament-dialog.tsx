@@ -14,19 +14,17 @@ import { useDeleteTournament } from '../hooks';
 export const DeleteTournamentDialog = ({
   tournamentId,
   tournamentName,
-  seasonId,
   open,
   onOpenChange,
   onDeleted,
 }: {
   tournamentId: string;
   tournamentName: string;
-  seasonId: string | undefined;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onDeleted?: () => void;
 }) => {
-  const { mutate, isPending } = useDeleteTournament(seasonId);
+  const { mutate, isPending } = useDeleteTournament();
 
   const handleConfirm = () => {
     mutate(tournamentId, {

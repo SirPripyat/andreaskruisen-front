@@ -1,13 +1,11 @@
 import { api } from '@/lib';
+import type { LoginFormValues } from '../types';
 import type { Me } from './me';
-import type { LoginFormValues } from './schema';
 
 export type LoginResponse = {
   user: Me;
   token: string;
 };
 
-export const login = async (payload: LoginFormValues) => {
-  const { data } = await api.post<LoginResponse>('/auth/login', payload);
-  return data;
-};
+export const login = (payload: LoginFormValues) =>
+  api.post<LoginResponse>('/auth/login', payload).then((res) => res.data);

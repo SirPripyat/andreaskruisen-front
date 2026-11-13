@@ -1,7 +1,5 @@
 import { api } from '@/lib';
-import type { MatchDetail } from './tournament';
+import type { MatchDetail } from '../types';
 
-export const simulateMatch = async (matchId: string) => {
-  const { data } = await api.post<MatchDetail>(`/matches/${matchId}/simulate`);
-  return data;
-};
+export const simulateMatch = (matchId: string) =>
+  api.post<MatchDetail>(`/matches/${matchId}/simulate`).then((res) => res.data);

@@ -5,19 +5,16 @@ import {
 } from '@tanstack/react-table';
 import { PageHeader } from '@/components';
 import { DataTable } from '@/components/ui';
-import type { Season } from './api';
+import { formatDate } from '@/lib';
 import {
   CreateSeasonDrawer,
   SeasonActionsMenu,
   SeasonSelectCell,
 } from './components';
 import { useSeasons, useSelectedSeason } from './hooks';
+import type { Season } from './types';
 
-const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
-  dateStyle: 'medium',
-});
-
-const getColumns = (selectedSeasonId: string | null): ColumnDef<Season>[] => [
+const getColumns = (selectedSeasonId?: string): ColumnDef<Season>[] => [
   {
     accessorKey: 'name',
     header: 'Nome',
@@ -26,7 +23,7 @@ const getColumns = (selectedSeasonId: string | null): ColumnDef<Season>[] => [
   {
     accessorKey: 'startedAt',
     header: 'Iniciada em',
-    cell: ({ row }) => dateFormatter.format(new Date(row.original.startedAt)),
+    cell: ({ row }) => formatDate(row.original.startedAt),
   },
   {
     id: 'selected',
@@ -51,7 +48,7 @@ export const SeasonsScreen = () => {
   const { data: seasons, isPending } = useSeasons();
   const { selectedSeason } = useSelectedSeason();
 
-  const columns = getColumns(selectedSeason?.id ?? null);
+  const columns = getColumns(selectedSeason?.id);
 
   const table = useReactTable({
     data: seasons ?? [],

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import { getTournamentSituation } from '../api';
 
 export const useTournamentSituation = (
@@ -6,7 +7,7 @@ export const useTournamentSituation = (
   query?: { onlyOwnedTeams?: boolean; round?: number },
 ) => {
   return useQuery({
-    queryKey: ['tournament', tournamentId, 'situation', query],
+    queryKey: queryKeys.tournaments.situation(tournamentId, query),
     queryFn: () => getTournamentSituation(tournamentId as string, query),
     enabled: !!tournamentId,
   });

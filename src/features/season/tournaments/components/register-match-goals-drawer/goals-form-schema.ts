@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { MatchDetail, PhaseType } from '../../api';
+import type { MatchDetail, PhaseType } from '../../types';
 
 export const GoalRowSchema = z.object({
   scorerId: z.string().min(1, 'Selecione o artilheiro'),

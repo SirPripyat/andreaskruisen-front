@@ -19,9 +19,8 @@ const POSITION_GROUP_LABEL: Record<PositionGroup, string> = {
   ATT: 'Ataque',
 };
 
-export const getPositionGroupLabel = (group: PositionGroup): string => {
-  return POSITION_GROUP_LABEL[group];
-};
+export const getPositionGroupLabel = (group: PositionGroup): string =>
+  POSITION_GROUP_LABEL[group];
 
 const POSITION_GROUP_SURFACE_CLASS: Record<PositionGroup, string> = {
   GOL: 'bg-warning-surface text-warning',

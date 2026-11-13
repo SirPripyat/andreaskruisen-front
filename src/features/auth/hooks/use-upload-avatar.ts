@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/lib';
 import {
   confirmAvatarUpload,
   getAvatarUploadUrl,
@@ -10,20 +11,20 @@ export const useUploadAvatar = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (file: File) => {
+    mutationFn: (file: File) => {
       if (!isAvatarContentType(file.type)) {
-        throw new Error(
-          'Formato de imagem não suportado. Use JPEG, PNG ou WEBP.',
+        return Promise.reject(
+          new Error('Formato de imagem não suportado. Use JPEG, PNG ou WEBP.'),
         );
       }
 
-      const uploadUrl = await getAvatarUploadUrl(file.type);
-      await uploadAvatarFile(uploadUrl, file);
-      await confirmAvatarUpload();
+      return getAvatarUploadUrl(file.type)
+        .then((uploadUrl) => uploadAvatarFile(uploadUrl, file))
+        .then(() => confirmAvatarUpload());
     },
     meta: { errorMessage: 'Não foi possível atualizar a foto de perfil.' },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['avatar'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.avatar });
     },
   });
 };
