@@ -219,10 +219,10 @@ const matchToFormationLayout = (
   template: FormationSlot[],
   slotPositions: PositionCode[],
 ): PitchSlot[] => {
-  const remainingSlots = template.map((slot, index) => ({
-    slot,
-    position: slotPositions[index],
-  }));
+  const remainingSlots = template.map((slot, index) => {
+    const position = slotPositions[index];
+    return { slot, position, anchor: anchorForPosition(position) };
+  });
   const remainingPlayers = outfield.map((player, index) => ({
     player,
     hint: naturalSlot(player),
@@ -242,8 +242,8 @@ const matchToFormationLayout = (
     remainingPlayers.forEach((playerEntry, playerIndex) => {
       remainingSlots.forEach((slotEntry, slotIndex) => {
         const distance =
-          (slotEntry.slot.line - playerEntry.hint.line) ** 2 +
-          (slotEntry.slot.column - playerEntry.hint.column) ** 2;
+          (slotEntry.anchor.line - playerEntry.hint.line) ** 2 +
+          (slotEntry.anchor.column - playerEntry.hint.column) ** 2;
         if (distance < bestDistance) {
           bestDistance = distance;
           bestPlayer = playerIndex;
