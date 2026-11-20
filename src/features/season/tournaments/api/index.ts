@@ -10,6 +10,7 @@ export * from './get-tournament-matches';
 export * from './get-tournament-situation';
 export * from './get-tournament-top-assists';
 export * from './get-tournament-top-scorers';
+export * from './list-my-tournaments';
 export * from './list-tournaments';
 export * from './replace-match-goals';
 export * from './simulate-match';

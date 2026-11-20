@@ -5,5 +5,6 @@ export * from './use-team-data-filter';
 export * from './use-team-filters';
 export * from './use-team-titles';
 export * from './use-teams';
+export * from './use-teams-public';
 export * from './use-teams-screen';
 export * from './use-update-team';

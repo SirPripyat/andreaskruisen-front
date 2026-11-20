@@ -6,6 +6,7 @@ export * from './use-delete-tournament';
 export * from './use-edit-tournament-drawer';
 export * from './use-goal-leaders-list';
 export * from './use-match-detail';
+export * from './use-my-tournaments';
 export * from './use-replace-match-goals';
 export * from './use-simulate-match';
 export * from './use-tournament';

@@ -7,11 +7,28 @@ export type PlayerPosition = {
   isPrimary: boolean;
 };
 
+export type PlayerRole = {
+  position: string;
+  name: string;
+  level: number;
+};
+
+export type PlayerPositionRating = {
+  position: string;
+  overall: number;
+  base: number;
+  bonus: number;
+  natural: boolean;
+};
+
 export type PlayerRating = {
   capturedAt: string;
   overallRating: number;
   skillMoves: number;
   weakFootAbility: number;
+  specialities: string[];
+  roles: PlayerRole[];
+  positionRatings: PlayerPositionRating[];
   pac: number | null;
   sho: number | null;
   pas: number | null;

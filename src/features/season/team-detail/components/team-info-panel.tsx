@@ -1,6 +1,6 @@
-import { UserIcon } from 'lucide-react';
+import { CoinsIcon, TicketPercentIcon, UserIcon } from 'lucide-react';
 import { Badge } from '@/components/ui';
-import { cn, getOverallRatingClassName } from '@/lib';
+import { cn, formatNumber, getOverallRatingClassName } from '@/lib';
 
 type TeamInfoPanelProps = {
   crestUrl: string;
@@ -8,6 +8,8 @@ type TeamInfoPanelProps = {
   league: string;
   manager: string | null;
   overall: number | null;
+  coins: number | null;
+  couponBalance: number | null;
 };
 
 export const TeamInfoPanel = ({
@@ -16,6 +18,8 @@ export const TeamInfoPanel = ({
   league,
   manager,
   overall,
+  coins,
+  couponBalance,
 }: TeamInfoPanelProps) => {
   return (
     <div
@@ -52,6 +56,26 @@ export const TeamInfoPanel = ({
             >
               <UserIcon className={'size-3.5'} />
               Treinador: {manager}
+            </Badge>
+          )}
+
+          {coins !== null && (
+            <Badge
+              className={
+                'gap-1.5 border-transparent bg-warning-surface text-warning'
+              }
+            >
+              <CoinsIcon className={'size-3.5'} />
+              {formatNumber(coins)} coins
+            </Badge>
+          )}
+
+          {couponBalance !== null && couponBalance > 0 && (
+            <Badge variant={'outline'} className={'gap-1.5'}>
+              <TicketPercentIcon className={'size-3.5'} />
+              {couponBalance === 1
+                ? '1 cupom de isenção'
+                : `${couponBalance} cupons de isenção`}
             </Badge>
           )}
         </div>

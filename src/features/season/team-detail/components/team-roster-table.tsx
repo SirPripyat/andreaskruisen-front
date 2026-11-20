@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import {
   Avatar,
   AvatarFallback,
@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui';
+import { ActionCell } from '@/features/season/players';
 import { type RosterPlayer, useRoster } from '@/features/season/squads';
 import {
   calculateAge,
@@ -76,6 +77,7 @@ export const TeamRosterTable = () => {
             <TableHead>Nação</TableHead>
             <TableHead>Idade</TableHead>
             <TableHead>Titular</TableHead>
+            <TableHead className={'w-8'} />
           </TableRow>
         </TableHeader>
 
@@ -84,7 +86,7 @@ export const TeamRosterTable = () => {
             <Fragment key={group}>
               <TableRow className="hover:bg-transparent">
                 <TableCell
-                  colSpan={8}
+                  colSpan={9}
                   className="bg-muted/40 py-1.5 font-mono text-[11px] text-muted-foreground uppercase tracking-wide"
                 >
                   {SECTOR_GROUPS[group]}
@@ -98,13 +100,16 @@ export const TeamRosterTable = () => {
                   </TableCell>
 
                   <TableCell className="font-medium">
-                    <div className="flex items-center gap-2">
+                    <Link
+                      to={`/players/${player.id}`}
+                      className="flex items-center gap-2 hover:underline"
+                    >
                       <Avatar>
                         <AvatarImage src={player.photoUrl} alt="" />
                         <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
                       </Avatar>
                       {player.name}
-                    </div>
+                    </Link>
                   </TableCell>
                   <TableCell className="text-right">
                     <Badge
@@ -127,7 +132,14 @@ export const TeamRosterTable = () => {
                     {FOOT_LABELS[player.preferredFoot]}
                   </TableCell>
                   <TableCell className="text-muted-foreground">
-                    {player.nationality.name}
+                    <div className="flex items-center gap-1.5">
+                      <img
+                        src={player.nationality.flagUrl}
+                        alt={player.nationality.name}
+                        className="size-3.5 rounded-full object-cover"
+                      />
+                      {player.nationality.name}
+                    </div>
                   </TableCell>
                   <TableCell className="text-muted-foreground">
                     {calculateAge(player.birthdate)}
@@ -141,6 +153,9 @@ export const TeamRosterTable = () => {
                     ) : (
                       <span className="text-muted-foreground text-xs">—</span>
                     )}
+                  </TableCell>
+                  <TableCell>
+                    <ActionCell id={player.id} />
                   </TableCell>
                 </TableRow>
               ))}

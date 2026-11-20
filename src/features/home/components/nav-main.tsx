@@ -22,7 +22,7 @@ const items = [
   { title: 'Times', url: '/clubs', icon: ShieldIcon },
   { title: 'Jogadores', url: '/players/season', icon: UserRoundIcon },
   { title: 'Torneios', url: '/tournaments', icon: TrophyIcon },
-  { title: 'Transferências', url: '/transfers', icon: ArrowLeftRightIcon },
+  { title: 'Mercado', url: '/transfers', icon: ArrowLeftRightIcon },
   { title: 'Favoritos', url: '/favorites', icon: StarIcon },
 ];
 

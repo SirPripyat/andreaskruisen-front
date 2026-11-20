@@ -1,10 +1,15 @@
+import { Link } from 'react-router';
+
 type TeamCellProps = {
-  team: { name: string; crestUrl: string };
+  team: { id: string; name: string; crestUrl: string };
 };
 
 export const TeamCell = ({ team }: TeamCellProps) => {
   return (
-    <div className={'flex items-center gap-1.5 text-sm'}>
+    <Link
+      to={`/clubs/${team.id}`}
+      className={'flex items-center gap-1.5 text-sm hover:underline'}
+    >
       <img
         src={team.crestUrl}
         alt={''}
@@ -14,6 +19,6 @@ export const TeamCell = ({ team }: TeamCellProps) => {
         }}
       />
       <span className={'truncate'}>{team.name}</span>
-    </div>
+    </Link>
   );
 };

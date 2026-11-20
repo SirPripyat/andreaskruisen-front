@@ -10,6 +10,7 @@ import {
 import {
   PlayerAttributesPanel,
   PlayerInfoPanel,
+  PlayerPositionRatings,
   PlayerStatSquare,
   SimilarPlayersPanel,
 } from './components';
@@ -95,7 +96,8 @@ export const PlayerDetailScreen = () => {
       >
         <TabsList>
           <TabsTab value={'attributes'}>{'Atributos'}</TabsTab>
-          <TabsTab value={'players'}>{'Jogadores'}</TabsTab>
+          <TabsTab value={'positions'}>{'Posições'}</TabsTab>
+          <TabsTab value={'players'}>{'Jogadores Semelhantes'}</TabsTab>
         </TabsList>
 
         <TabsPanel value={'attributes'}>
@@ -103,6 +105,14 @@ export const PlayerDetailScreen = () => {
             <PlayerAttributesPanel
               rating={player.latestRating}
               isGoalkeeper={isGoalkeeper}
+            />
+          )}
+        </TabsPanel>
+
+        <TabsPanel value={'positions'}>
+          {player.latestRating && (
+            <PlayerPositionRatings
+              positionRatings={player.latestRating.positionRatings}
             />
           )}
         </TabsPanel>

@@ -2,7 +2,9 @@ import type { ListLeaguesQuery } from '@/features/admin/leagues/types';
 import type { ListNationalitiesQuery } from '@/features/admin/nationalities/types';
 import type { ListPlayersQuery } from '@/features/admin/players/types';
 import type { ListTeamsQuery } from '@/features/admin/teams/types';
+import type { ListNotificationsQuery } from '@/features/notifications/types';
 import type { ListClubsQuery } from '@/features/season/clubs/types';
+import type { ListNegotiationsQuery } from '@/features/season/negotiations/types';
 import type { ListTournamentMatchesQuery } from '@/features/season/tournaments/api';
 
 export const queryKeys = {
@@ -50,6 +52,11 @@ export const queryKeys = {
     list: (query: ListTeamsQuery) => ['teams', query] as const,
   },
 
+  teamsPublic: {
+    all: ['teams-public'] as const,
+    list: (query: ListTeamsQuery) => ['teams-public', query] as const,
+  },
+
   team: {
     all: ['team'] as const,
     detail: (id: string | undefined) => ['team', id] as const,
@@ -60,7 +67,35 @@ export const queryKeys = {
 
   favorites: ['favorites'] as const,
 
-  transfers: ['transfers'] as const,
+  notifications: {
+    all: ['notifications'] as const,
+    list: (query: ListNotificationsQuery) => ['notifications', query] as const,
+  },
+
+  negotiations: {
+    all: ['negotiations'] as const,
+    list: (query: ListNegotiationsQuery) => ['negotiations', query] as const,
+  },
+
+  negotiationWindow: {
+    status: ['negotiation-window'] as const,
+  },
+
+  transfers: {
+    all: ['transfers'] as const,
+    quote: (
+      outgoingPlayerId: string,
+      incomingPlayerId: string,
+      useCoupon: boolean,
+    ) =>
+      [
+        'transfers',
+        'quote',
+        outgoingPlayerId,
+        incomingPlayerId,
+        useCoupon,
+      ] as const,
+  },
 
   lineup: {
     all: ['lineup'] as const,
@@ -76,6 +111,7 @@ export const queryKeys = {
 
   tournaments: {
     all: ['tournaments'] as const,
+    mine: ['tournaments', 'mine'] as const,
     detail: (tournamentId: string | undefined) =>
       ['tournament', tournamentId] as const,
     dashboard: (tournamentId: string | undefined) =>

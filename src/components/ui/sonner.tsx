@@ -30,7 +30,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
           '--normal-text': 'var(--color-popover-foreground)',
           '--normal-border': 'var(--color-border)',
           '--border-radius': 'var(--radius)',
-          '--error-bg': 'var(--color-accent-surface)',
+          '--error-bg':
+            'color-mix(in srgb, var(--color-destructive) 16%, var(--color-background))',
           '--error-border': 'var(--color-destructive)',
           '--error-text': 'var(--color-destructive)',
         } as React.CSSProperties

@@ -161,3 +161,15 @@ export type TournamentDashboard = TournamentSummary & {
   topScorer: GoalLeader | null;
   nextMatch: NextMatchSummary | null;
 };
+
+export type MyStanding = Pick<
+  GroupStanding,
+  'position' | 'points' | 'goalDifference' | 'last5'
+>;
+
+// GET /tournaments/mine — torneios da temporada que o time do usuário
+// disputa, com a classificação e o próximo jogo dele na fase vigente.
+export type MyTournament = TournamentSummary & {
+  myStanding: MyStanding | null;
+  nextMatch: NextMatchSummary | null;
+};

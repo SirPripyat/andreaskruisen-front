@@ -2,7 +2,7 @@ import { HandshakeIcon } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { useSelectedSeason } from '@/features/admin/seasons';
 import { useMe } from '@/features/auth';
-import { CreateTransferDrawer } from '@/features/season/transfers';
+import { CreateNegotiationDrawer } from '@/features/season/negotiations';
 
 type NegotiateButtonProps = {
   playerId: string;
@@ -21,11 +21,10 @@ export const NegotiateButton = ({
   const isMyTeam = me?.teamId === teamId;
 
   return (
-    <CreateTransferDrawer
+    <CreateNegotiationDrawer
       seasonId={selectedSeason?.id}
-      outgoingTeamId={isMyTeam ? teamId : undefined}
       outgoingPlayerId={isMyTeam ? playerId : undefined}
-      incomingTeamId={isMyTeam ? undefined : teamId}
+      targetTeamId={isMyTeam ? undefined : teamId}
       incomingPlayerId={isMyTeam ? undefined : playerId}
       trigger={
         compact ? (

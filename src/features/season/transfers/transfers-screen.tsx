@@ -1,79 +1,78 @@
+import type { ReactNode } from 'react';
+import { PageHeader, Tabs, TabsList, TabsPanel, TabsTab } from '@/components';
+import { NegotiationWindowBanner } from '@/features/admin/negotiation-window';
+import { CreateNegotiationDrawer } from '@/features/season/negotiations';
 import {
-  type ColumnDef,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
-import { ArrowRightIcon } from 'lucide-react';
-import { PageHeader } from '@/components';
-import { DataTable } from '@/components/ui';
-import { useSelectedSeason } from '@/features/admin/seasons';
-import { formatDateTime } from '@/lib';
-import { CreateTransferDrawer, PlayerCell, TeamCell } from './components';
-import { useTransfers } from './hooks';
-import type { Transfer } from './types';
-
-const columns: ColumnDef<Transfer>[] = [
-  {
-    id: 'player',
-    header: 'Jogador',
-    cell: ({ row }) => <PlayerCell player={row.original.player} />,
-  },
-  {
-    id: 'fromTeam',
-    header: 'Saiu de',
-    cell: ({ row }) => <TeamCell team={row.original.fromTeam} />,
-  },
-  {
-    id: 'arrow',
-    header: '',
-    cell: () => <ArrowRightIcon className={'size-4 text-muted-foreground'} />,
-  },
-  {
-    id: 'toTeam',
-    header: 'Foi para',
-    cell: ({ row }) => <TeamCell team={row.original.toTeam} />,
-  },
-  {
-    id: 'requestedBy',
-    header: 'Solicitado por',
-    cell: ({ row }) => row.original.requestedBy.name,
-  },
-  {
-    accessorKey: 'createdAt',
-    header: 'Data',
-    cell: ({ row }) => formatDateTime(row.original.date),
-  },
-];
+  CreateTransferDrawer,
+  NegotiationHistory,
+  ReceivedNegotiationList,
+  SentNegotationList,
+} from './components';
+import {
+  MARKET_TABS,
+  type MarketTab,
+  useMarketTabs,
+  useTransfersScreen,
+} from './hooks';
 
 export const TransfersScreen = () => {
-  const { selectedSeason, isPending: isSeasonPending } = useSelectedSeason();
-  const { data: transfers, isPending, isError, error } = useTransfers();
+  const { tab, setTab } = useMarketTabs('history');
 
-  const isLoading = isSeasonPending || isPending;
+  const {
+    selectedSeason,
+    myTeamId,
+    isWindowStatusPending,
+    isWindowClosed,
+    windowStatus,
+  } = useTransfersScreen();
 
-  const table = useReactTable({
-    data: transfers ?? [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const tabContent: Record<MarketTab, ReactNode> = {
+    history: <NegotiationHistory />,
+    received: <ReceivedNegotiationList myTeamId={myTeamId} />,
+    sent: <SentNegotationList myTeamId={myTeamId} />,
+  };
 
   return (
     <>
       <PageHeader
-        title={'Transferências'}
-        description={`Trocas de jogadores realizadas na temporada "${selectedSeason?.name}".`}
-        actions={<CreateTransferDrawer seasonId={selectedSeason?.id} />}
+        title={'Mercado'}
+        description={`Trocas de mercado e negociações diretas na temporada "${selectedSeason?.name}".`}
+        actions={
+          <div className={'flex items-center gap-2'}>
+            <CreateNegotiationDrawer
+              seasonId={selectedSeason?.id}
+              windowClosed={isWindowClosed}
+            />
+            <CreateTransferDrawer
+              seasonId={selectedSeason?.id}
+              windowClosed={isWindowClosed}
+            />
+          </div>
+        }
       />
 
-      <DataTable
-        table={table}
-        isPending={isLoading}
-        isError={isError}
-        error={error}
-        errorMessage={'Não foi possível carregar as transferências.'}
-        emptyMessage={'Nenhuma transferência registrada ainda.'}
-        skeletonRowCount={3}
+      <NegotiationWindowBanner
+        data={windowStatus}
+        isPending={isWindowStatusPending}
       />
+
+      <Tabs
+        value={tab}
+        onValueChange={(value) => setTab(value as MarketTab)}
+        className={'w-full items-center'}
+      >
+        <TabsList>
+          <TabsTab value={'history'}>{'Histórico de trocas'}</TabsTab>
+          <TabsTab value={'received'}>{'Negociações recebidas'}</TabsTab>
+          <TabsTab value={'sent'}>{'Negociações enviadas'}</TabsTab>
+        </TabsList>
+
+        {MARKET_TABS.map((marketTab) => (
+          <TabsPanel key={marketTab} value={marketTab}>
+            {tabContent[marketTab]}
+          </TabsPanel>
+        ))}
+      </Tabs>
     </>
   );
 };

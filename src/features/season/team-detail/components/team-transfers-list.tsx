@@ -1,7 +1,10 @@
-import { ArrowLeftRightIcon } from 'lucide-react';
-import { Skeleton } from '@/components/ui';
-import type { Transfer } from '@/features/season/transfers';
-import { formatDate } from '@/lib';
+import { ArrowLeftRightIcon, CoinsIcon } from 'lucide-react';
+import { Badge, Skeleton } from '@/components/ui';
+import {
+  type Transfer,
+  TransferOriginBadge,
+} from '@/features/season/transfers';
+import { formatDate, formatNumber } from '@/lib';
 
 type TeamTransferView = {
   transfer: Transfer;
@@ -74,7 +77,23 @@ export const TeamTransfersList = ({
               solicitado por {transfer.requestedBy.name}
             </span>
           </div>
-          <span className="ml-auto shrink-0 font-mono text-muted-foreground text-xs">
+          <TransferOriginBadge
+            originType={transfer.originType}
+            className={'shrink-0'}
+          />
+          {direction === 'out' && (
+            <Badge
+              variant={'destructive'}
+              className={'ml-auto shrink-0 gap-1.5'}
+            >
+              <CoinsIcon className={'size-3.5'} />
+              {`-${formatNumber(transfer.cost)} coins`}
+            </Badge>
+          )}
+
+          <span
+            className={`shrink-0 font-mono text-muted-foreground text-xs ${direction === 'out' ? '' : 'ml-auto'}`}
+          >
             {formatDate(transfer.date)}
           </span>
         </div>

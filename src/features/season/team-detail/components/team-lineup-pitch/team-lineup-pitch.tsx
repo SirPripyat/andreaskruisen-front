@@ -3,31 +3,33 @@ import type { Formation, RosterPlayer } from '@/features/season/squads';
 import { PITCH_HEIGHT, PITCH_WIDTH } from './pitch-dimensions';
 import { PitchField } from './pitch-field';
 import { buildPitchSlots } from './pitch-layout';
-import { PlayerXILineup } from './player-xi-lineup';
+import { PitchPlayerSlot } from './pitch-player-slot';
 
-export const TeamLineupPitch = ({
-  lineup,
-  formation,
-  isPending,
-  selectedId,
-  onSelect,
-}: {
-  lineup: RosterPlayer[];
+type TeamLineupPitchProps = {
+  starters: RosterPlayer[];
   formation: Formation | null;
   isPending: boolean;
-  selectedId: string | null;
+  editable: boolean;
   onSelect: (playerId: string) => void;
-}) => {
+};
+
+export const TeamLineupPitch = ({
+  starters,
+  formation,
+  isPending,
+  editable,
+  onSelect,
+}: TeamLineupPitchProps) => {
   if (isPending) {
     return (
       <Skeleton
-        className="mx-auto w-full max-w-xl"
+        className={'mx-auto w-full max-w-xl'}
         style={{ aspectRatio: `${PITCH_WIDTH} / ${PITCH_HEIGHT}` }}
       />
     );
   }
 
-  const slots = buildPitchSlots(lineup, formation);
+  const slots = buildPitchSlots(starters, formation);
 
   return (
     <svg
@@ -39,11 +41,12 @@ export const TeamLineupPitch = ({
     >
       <title>Escalação titular</title>
       <PitchField />
-      {slots.map((slot) => (
-        <PlayerXILineup
-          key={slot.player.id}
+      {slots.map((slot, index) => (
+        <PitchPlayerSlot
+          key={slot.player?.id ?? `empty-${index}`}
           slot={slot}
-          selected={slot.player.id === selectedId}
+          slotId={`slot-${index}`}
+          editable={editable}
           onSelect={onSelect}
         />
       ))}

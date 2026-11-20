@@ -45,6 +45,8 @@ export const TeamDetailScreen = () => {
             league={team.league.name}
             manager={manager?.name ?? null}
             overall={team.averageOverallRating}
+            coins={team.coins}
+            couponBalance={team.couponBalance}
           />
 
           <Tabs

@@ -10,7 +10,7 @@ import {
   ComboboxPopup,
   ComboboxTrigger,
 } from '@/components/ui';
-import { type TeamWithRatings, useTeams } from '@/features/admin/teams';
+import { type TeamWithRatings, useTeamsPublic } from '@/features/admin/teams';
 import { useDebouncedValue } from '@/hooks';
 import { cn } from '@/lib';
 import { TeamOption } from './team-option';
@@ -34,7 +34,7 @@ export const TeamCombobox = ({
 }) => {
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebouncedValue(query, 300);
-  const { data, isPending } = useTeams({
+  const { data, isPending } = useTeamsPublic({
     name: debouncedQuery || undefined,
     page: 1,
     pageSize: PAGE_SIZE,
@@ -72,7 +72,7 @@ export const TeamCombobox = ({
           placeholder={placeholder}
           className={cn(value && 'pl-7')}
         />
-        <ComboboxClear aria-label={'Limpar seleção'} />
+        {!disabled && <ComboboxClear aria-label={'Limpar seleção'} />}
         <ComboboxTrigger />
       </ComboboxInputGroup>
 

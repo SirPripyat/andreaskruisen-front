@@ -11,7 +11,7 @@ export const useCreateTransfer = () => {
     meta: { errorMessage: 'Não foi possível registrar a transferência.' },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.transfers,
+        queryKey: queryKeys.transfers.all,
       });
     },
   });

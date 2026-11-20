@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from '@/lib';
 import { deleteSeason } from '../api';
 
 export const useDeleteSeason = () => {
@@ -9,7 +8,10 @@ export const useDeleteSeason = () => {
     mutationFn: (seasonId: string) => deleteSeason(seasonId),
     meta: { errorMessage: 'Não foi possível excluir a temporada.' },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.seasons.all });
+      // Temporada é o limite do tenant: se a temporada excluída era a
+      // selecionada, toda query escopada por temporada (elenco,
+      // transferências, torneios, active-season...) precisa ser descartada.
+      queryClient.invalidateQueries();
     },
   });
 };

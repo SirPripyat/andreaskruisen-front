@@ -4,7 +4,7 @@ import { listTransfers } from '../api';
 
 export const useTransfers = (enabled = true) => {
   return useQuery({
-    queryKey: queryKeys.transfers,
+    queryKey: queryKeys.transfers.all,
     queryFn: () => listTransfers(),
     enabled: enabled,
   });

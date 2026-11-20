@@ -51,6 +51,12 @@ const LeaguesScreen = lazy(() =>
   })),
 );
 
+const NegotiationWindowScreen = lazy(() =>
+  import('@/features/admin/negotiation-window/negotiation-window-screen').then(
+    (m) => ({ default: m.NegotiationWindowScreen }),
+  ),
+);
+
 const SeasonsScreen = lazy(() =>
   import('@/features/admin/seasons/seasons-screen').then((m) => ({
     default: m.SeasonsScreen,
@@ -209,12 +215,22 @@ export const router = createBrowserRouter([
                   {
                     path: 'transfers',
                     element: <TransfersScreen />,
-                    handle: { breadcrumb: 'Transferências' },
+                    handle: { breadcrumb: 'Mercado' },
                   },
                   {
                     path: 'favorites',
                     element: <FavoritesScreen />,
                     handle: { breadcrumb: 'Favoritos' },
+                  },
+                  {
+                    element: <RequireRole roles={['ADMIN']} />,
+                    children: [
+                      {
+                        path: 'negotiation-window',
+                        element: <NegotiationWindowScreen />,
+                        handle: { breadcrumb: 'Janela de negociação' },
+                      },
+                    ],
                   },
                 ],
               },

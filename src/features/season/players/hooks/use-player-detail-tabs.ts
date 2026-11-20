@@ -1,6 +1,10 @@
 import { parseAsStringEnum, useQueryStates } from 'nuqs';
 
-export const PLAYER_DETAIL_TABS = ['attributes', 'players'] as const;
+export const PLAYER_DETAIL_TABS = [
+  'attributes',
+  'positions',
+  'players',
+] as const;
 
 export type PlayerDetailTab = (typeof PLAYER_DETAIL_TABS)[number];
 

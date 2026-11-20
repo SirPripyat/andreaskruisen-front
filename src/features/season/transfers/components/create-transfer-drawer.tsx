@@ -5,6 +5,8 @@ import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import {
   Button,
+  Field,
+  FieldLabel,
   Sheet,
   SheetContent,
   SheetDescription,
@@ -14,10 +16,16 @@ import {
   SheetTrigger,
 } from '@/components/ui';
 import { type TeamWithRatings, useTeam } from '@/features/admin/teams';
+import { useUsers } from '@/features/admin/users';
+import { useMe } from '@/features/auth';
 import type { RosterBySector } from '@/features/season/squads';
 import { useRoster } from '@/features/season/squads';
-import { useCreateTransfer } from '../hooks';
+import { useCreateTransfer, useTransferQuote } from '../hooks';
 import { type CreateTransferFormValues, createTransferSchema } from '../types';
+import {
+  RequestedByCombobox,
+  type RequestedByUser,
+} from './requested-by-combobox';
 import { SwapAxis } from './swap-axis';
 import { TradeSummary } from './trade-summary';
 import { TransferSidePanel } from './transfer-side-panel';
@@ -40,6 +48,7 @@ export const CreateTransferDrawer = ({
   outgoingPlayerId: initialOutgoingPlayerId,
   incomingTeamId,
   incomingPlayerId: initialIncomingPlayerId,
+  windowClosed,
   trigger,
 }: {
   seasonId: string | undefined;
@@ -47,6 +56,7 @@ export const CreateTransferDrawer = ({
   outgoingPlayerId?: string;
   incomingTeamId?: string;
   incomingPlayerId?: string;
+  windowClosed?: boolean;
   trigger?: ReactElement;
 }) => {
   const [open, setOpen] = useState(false);
@@ -56,7 +66,13 @@ export const CreateTransferDrawer = ({
   const [incomingTeam, setIncomingTeam] = useState<TeamWithRatings | null>(
     null,
   );
+  const [requestedByUser, setRequestedByUser] =
+    useState<RequestedByUser | null>(null);
   const { mutateAsync, isPending: isCreating } = useCreateTransfer();
+  const { data: me } = useMe();
+  const isAdmin = me?.role === 'ADMIN';
+  const { data: myTeam } = useTeam(me?.teamId ?? undefined, open);
+  const { data: users } = useUsers({ enabled: open && isAdmin });
   const { data: preselectedOutgoingTeam } = useTeam(outgoingTeamId, open);
   const { data: preselectedIncomingTeam } = useTeam(incomingTeamId, open);
   const {
@@ -70,6 +86,8 @@ export const CreateTransferDrawer = ({
     defaultValues: {
       outgoingPlayerId: '',
       incomingPlayerId: '',
+      useCoupon: false,
+      requestedByUserId: '',
     },
   });
 
@@ -79,6 +97,22 @@ export const CreateTransferDrawer = ({
     setValue('outgoingPlayerId', initialOutgoingPlayerId ?? '');
   }, [open, preselectedOutgoingTeam, initialOutgoingPlayerId, setValue]);
 
+  // Sem um time de saída pré-definido (ex.: botão "Negociar" de um jogador
+  // específico), o painel de Saída começa com o time do usuário logado —
+  // participante nunca troca esse time, só o admin pode.
+  useEffect(() => {
+    if (!open || outgoingTeamId || !myTeam) return;
+    setOutgoingTeam(myTeam);
+  }, [open, outgoingTeamId, myTeam]);
+
+  // Solicitante começa sempre como o próprio usuário logado — só o admin
+  // pode trocar por outra pessoa (ver CLAUDE.md do backend).
+  useEffect(() => {
+    if (!open || !me) return;
+    setRequestedByUser({ id: me.id, name: me.name });
+    setValue('requestedByUserId', me.id);
+  }, [open, me, setValue]);
+
   useEffect(() => {
     if (!open || !preselectedIncomingTeam) return;
     setIncomingTeam(preselectedIncomingTeam);
@@ -87,6 +121,7 @@ export const CreateTransferDrawer = ({
 
   const outgoingPlayerId = useWatch({ control, name: 'outgoingPlayerId' });
   const incomingPlayerId = useWatch({ control, name: 'incomingPlayerId' });
+  const useCoupon = useWatch({ control, name: 'useCoupon' });
 
   const { data: outgoingRoster, isPending: isOutgoingRosterPending } =
     useRoster(outgoingTeam?.id, open);
@@ -96,16 +131,37 @@ export const CreateTransferDrawer = ({
   const outgoingPlayer = findRosterPlayer(outgoingRoster, outgoingPlayerId);
   const incomingPlayer = findRosterPlayer(incomingRoster, incomingPlayerId);
 
+  const canQuote = Boolean(
+    outgoingPlayerId &&
+      incomingPlayerId &&
+      outgoingPlayerId !== incomingPlayerId,
+  );
+  const {
+    data: quote,
+    isPending: isQuotePending,
+    error: quoteError,
+  } = useTransferQuote(
+    outgoingPlayerId,
+    incomingPlayerId,
+    useCoupon,
+    open && canQuote,
+  );
+
   const resetAll = () => {
     reset();
     setOutgoingTeam(null);
     setIncomingTeam(null);
+    setRequestedByUser(null);
   };
 
   const onSubmit = (values: CreateTransferFormValues) =>
     mutateAsync({
       outgoingPlayerId: values.outgoingPlayerId,
       incomingPlayerId: values.incomingPlayerId,
+      useCoupon: values.useCoupon,
+      requestedByUserId: isAdmin
+        ? values.requestedByUserId || undefined
+        : undefined,
     })
       .then(() => {
         toast.success('Transferência registrada com sucesso.');
@@ -129,7 +185,9 @@ export const CreateTransferDrawer = ({
       <SheetTrigger
         render={
           trigger ?? (
-            <Button disabled={!seasonId}>
+            <Button
+              disabled={!seasonId || windowClosed || (!isAdmin && !me?.teamId)}
+            >
               <PlusIcon />
               {'Nova transferência'}
             </Button>
@@ -142,8 +200,7 @@ export const CreateTransferDrawer = ({
             Mesa de trocas
           </SheetTitle>
           <SheetDescription>
-            Troque dois jogadores entre times da temporada selecionada, sem
-            custo.
+            Troque dois jogadores entre times da temporada selecionada.
           </SheetDescription>
         </SheetHeader>
 
@@ -170,6 +227,22 @@ export const CreateTransferDrawer = ({
               }}
               excludeTeamId={incomingTeam?.id}
               placeholder={'Buscar time de saída...'}
+              teamDisabled={!isAdmin}
+              extraField={
+                isAdmin && (
+                  <Field>
+                    <FieldLabel>{'Solicitado por'}</FieldLabel>
+                    <RequestedByCombobox
+                      users={users ?? []}
+                      value={requestedByUser}
+                      onValueChange={(user) => {
+                        setRequestedByUser(user);
+                        setValue('requestedByUserId', user?.id ?? '');
+                      }}
+                    />
+                  </Field>
+                )
+              }
               roster={outgoingRoster}
               isRosterPending={isOutgoingRosterPending}
               control={control}
@@ -207,11 +280,25 @@ export const CreateTransferDrawer = ({
             outgoingPlayer={outgoingPlayer}
             incomingTeam={incomingTeam}
             incomingPlayer={incomingPlayer}
+            quote={quote}
+            isQuotePending={canQuote && isQuotePending}
+            quoteError={quoteError}
+            useCoupon={useCoupon}
+            onUseCouponChange={(checked) => setValue('useCoupon', checked)}
           />
           <Button
             type={'submit'}
             form={'create-transfer-form'}
-            disabled={isCreating || !outgoingPlayerId || !incomingPlayerId}
+            disabled={
+              isCreating ||
+              !outgoingPlayerId ||
+              !incomingPlayerId ||
+              (canQuote &&
+                (isQuotePending ||
+                  Boolean(quoteError) ||
+                  quote?.sufficientBalance === false ||
+                  (useCoupon && quote?.couponBalance === 0)))
+            }
             className={'shrink-0'}
           >
             {isCreating ? 'Registrando...' : 'Registrar transferência'}

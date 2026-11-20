@@ -14,9 +14,9 @@ import {
   toSelectOptions,
 } from '@/components/ui';
 import {
-  listTeams,
+  listTeamsPublic,
   type TeamWithRatings,
-  useTeams,
+  useTeamsPublic,
 } from '@/features/admin/teams';
 import { useUsers } from '@/features/admin/users';
 import { useDebouncedValue } from '@/hooks';
@@ -55,7 +55,7 @@ export const SelectTournamentTeams = ({
   const [page, setPage] = useState(1);
   const debouncedName = useDebouncedValue(draftName, 400);
 
-  const { data, isPending } = useTeams({
+  const { data, isPending } = useTeamsPublic({
     name: debouncedName || undefined,
     page,
     pageSize: PAGE_SIZE,
@@ -82,7 +82,7 @@ export const SelectTournamentTeams = ({
 
     setIsFilling(true);
 
-    return listTeams({
+    return listTeamsPublic({
       page: 1,
       pageSize: maxTeams,
       sortBy: 'averageOverallRating',

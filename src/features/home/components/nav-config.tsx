@@ -1,4 +1,5 @@
 import {
+  DoorOpenIcon,
   FlagIcon,
   type LucideIcon,
   ShieldIcon,
@@ -52,6 +53,12 @@ const items: NavConfigItem[] = [
     roles: ['ADMIN'],
   },
   { title: 'Importações', url: '/import', icon: UploadIcon, roles: ['ADMIN'] },
+  {
+    title: 'Janela de negociação',
+    url: '/negotiation-window',
+    icon: DoorOpenIcon,
+    roles: ['ADMIN'],
+  },
 ];
 
 type NavConfigProps = {

@@ -10,7 +10,7 @@ import {
 } from '@/components/ui';
 import type { Me } from '@/features/auth';
 import { cn } from '@/lib';
-import { SeasonSwitcher } from '../../features';
+import { NotificationsBell, SeasonSwitcher } from '../../features';
 import { useBreadcrumbStore } from '../../stores';
 import { UserMenu } from '../user-menu';
 import { BreadcrumbEntry } from './breadcrumb-entry';
@@ -19,9 +19,10 @@ type RouteHandle = { breadcrumb: string };
 
 type HeaderProps = {
   user: Omit<Me, 'id'>;
+  isCompact?: boolean;
 };
 
-export const Header = ({ user }: HeaderProps) => {
+export const Header = ({ user, isCompact }: HeaderProps) => {
   const { items } = useBreadcrumbStore();
 
   const matches = useMatches();
@@ -37,8 +38,9 @@ export const Header = ({ user }: HeaderProps) => {
   return (
     <header
       className={cn(
-        'flex h-12 shrink-0 items-center gap-2 transition-[width,height] ease-linear',
+        'flex h-12 shrink-0 items-center gap-2 transition-[width,height] duration-200 ease-linear',
         'group-has-data-[collapsible=icon]/sidebar-wrapper:h-10',
+        isCompact && 'h-9',
       )}
     >
       <SidebarTrigger className={'-ml-1'} />
@@ -70,6 +72,7 @@ export const Header = ({ user }: HeaderProps) => {
 
       <div className="ml-auto flex shrink-0 items-center gap-2">
         <SeasonSwitcher />
+        <NotificationsBell />
         <UserMenu user={user} />
       </div>
     </header>

@@ -1,4 +1,4 @@
-import { Separator } from '@/components';
+import { Badge, Separator } from '@/components';
 import type { PlayerRating } from '@/features/admin/players';
 import { cn, formatDate, getOverallRatingClassName } from '@/lib';
 import { PlayerAttributesRadar } from './player-attributes-radar';
@@ -110,25 +110,49 @@ export const PlayerAttributesPanel = ({
 
   return (
     <div className={'flex flex-col gap-4'}>
-      <div
-        className={
-          'flex flex-wrap items-center justify-between gap-2 border-b pb-3'
-        }
-      >
-        <h2
-          className={'font-display font-bold text-lg uppercase tracking-tight'}
-        >
-          Atributos
-        </h2>
-        <div
-          className={
-            'flex flex-wrap items-center gap-3 text-muted-foreground text-xs'
-          }
-        >
-          <span>Habilidades {rating.skillMoves}★</span>
-          <span>Pé fraco {rating.weakFootAbility}★</span>
-          <span>Avaliado em {formatDate(rating.capturedAt)}</span>
+      <div className={'flex flex-col gap-3 border-b pb-3'}>
+        <div className={'flex flex-wrap items-center justify-between gap-2'}>
+          <h2
+            className={
+              'font-display font-bold text-lg uppercase tracking-tight'
+            }
+          >
+            Atributos
+          </h2>
+          <div
+            className={
+              'flex flex-wrap items-center gap-3 text-muted-foreground text-xs'
+            }
+          >
+            <span>Habilidades {rating.skillMoves}★</span>
+            <span>Pé fraco {rating.weakFootAbility}★</span>
+            <span>Avaliado em {formatDate(rating.capturedAt)}</span>
+          </div>
         </div>
+
+        {rating.roles.length > 0 && (
+          <div className={'flex flex-wrap items-center gap-1.5'}>
+            <span className={'text-muted-foreground text-xs'}>Funções</span>
+            {rating.roles.map((role) => (
+              <Badge key={`${role.position}-${role.name}`} variant={'outline'}>
+                {role.name} {'★'.repeat(role.level)}
+              </Badge>
+            ))}
+          </div>
+        )}
+
+        {rating.specialities.length > 0 && (
+          <div className={'flex flex-wrap items-center gap-1.5'}>
+            <span className={'text-muted-foreground text-xs'}>
+              Especialidades
+            </span>
+            {rating.specialities.map((speciality) => (
+              <Badge key={speciality} variant={'secondary'}>
+                {speciality}
+              </Badge>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className={'flex flex-col gap-4 lg:flex-row lg:items-start'}>

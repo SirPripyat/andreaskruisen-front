@@ -1,6 +1,9 @@
 import { XIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage, Badge } from '@/components/ui';
-import type { RosterPlayer } from '@/features/season/squads';
+import {
+  getOverallAtPosition,
+  type RosterPlayer,
+} from '@/features/season/squads';
 import {
   cn,
   getInitials,
@@ -25,14 +28,18 @@ export const TeamLineupPlayerDetail = ({
   onClose: () => void;
 }) => {
   const group = getPositionGroup(player.position);
+  const playerOverall = getOverallAtPosition(player, player.position);
   const lineMates = starters.filter(
     (teammate) => getPositionGroup(teammate.position) === group,
   );
   const lineAverage = lineMates.length
-    ? lineMates.reduce((sum, teammate) => sum + teammate.overallRating, 0) /
-      lineMates.length
-    : player.overallRating;
-  const diff = Math.round(player.overallRating - lineAverage);
+    ? lineMates.reduce(
+        (sum, teammate) =>
+          sum + getOverallAtPosition(teammate, teammate.position),
+        0,
+      ) / lineMates.length
+    : playerOverall;
+  const diff = Math.round(playerOverall - lineAverage);
   const isStarter = starters.some((teammate) => teammate.id === player.id);
 
   return (
@@ -47,11 +54,9 @@ export const TeamLineupPlayerDetail = ({
           <span className={'font-semibold text-sm'}>{player.name}</span>
           <Badge
             variant={'outline'}
-            className={getOverallRatingClassName(
-              Math.round(player.overallRating),
-            )}
+            className={getOverallRatingClassName(Math.round(playerOverall))}
           >
-            {Math.round(player.overallRating)}
+            {Math.round(playerOverall)}
           </Badge>
         </div>
         <div

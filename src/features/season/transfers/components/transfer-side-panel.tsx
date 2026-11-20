@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Control, FieldError } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import { OverallRatingBadge } from '@/components';
@@ -36,6 +37,12 @@ type TransferSidePanelProps = {
   onTeamChange: (team: TeamWithRatings | null) => void;
   excludeTeamId: string | undefined;
   placeholder: string;
+  // Participante sempre opera com o próprio time (ver CreateTransferDrawer)
+  // — só o admin pode trocar o time desse painel.
+  teamDisabled?: boolean;
+  // Campo extra exibido abaixo do time, hoje só usado pelo admin pra
+  // escolher quem solicitou a transferência.
+  extraField?: ReactNode;
   roster: RosterBySector | undefined;
   isRosterPending: boolean;
   control: Control<CreateTransferFormValues>;
@@ -51,6 +58,8 @@ export const TransferSidePanel = ({
   onTeamChange,
   excludeTeamId,
   placeholder,
+  teamDisabled,
+  extraField,
   roster,
   isRosterPending,
   control,
@@ -82,8 +91,11 @@ export const TransferSidePanel = ({
           onValueChange={onTeamChange}
           excludeTeamId={excludeTeamId}
           placeholder={placeholder}
+          disabled={teamDisabled}
         />
       </Field>
+
+      {extraField}
 
       {team && (
         <div

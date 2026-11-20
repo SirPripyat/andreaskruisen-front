@@ -45,6 +45,8 @@ export type HeadToHeadRecord = {
 
 export type TeamStats = {
   owner: TeamOwner | null;
+  coins: number | null;
+  couponBalance: number | null;
   seasonCampaign: SeasonCampaign | null;
   lastMatches: RecentMatchResult[];
   topScorers: GoalLeader[];

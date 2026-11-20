@@ -1,5 +1,8 @@
 import { Progress } from '@/components/ui';
-import type { RosterPlayer } from '@/features/season/squads';
+import {
+  getOverallAtPosition,
+  type RosterPlayer,
+} from '@/features/season/squads';
 import {
   getOverallRatingIndicatorClassName,
   getPositionGroup,
@@ -23,8 +26,10 @@ const getTiles = (starters: RosterPlayer[]) => {
     if (players.length === 0) return null;
 
     const average =
-      players.reduce((sum, player) => sum + player.overallRating, 0) /
-      players.length;
+      players.reduce(
+        (sum, player) => sum + getOverallAtPosition(player, player.position),
+        0,
+      ) / players.length;
 
     return { group, average };
   }).filter((tile): tile is StrengthTile => tile !== null);
