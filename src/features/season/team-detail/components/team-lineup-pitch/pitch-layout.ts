@@ -153,50 +153,114 @@ const buildGenericSlots = (outfield: RosterPlayer[]): PitchSlot[] => {
 
 // Rotula cada slot geométrico da formação (FORMATION_LAYOUTS) com a posição
 // que ele representa, usando o conjunto de posições verificado do backend
-// (FORMATION_SLOT_TEMPLATES) — mesma busca gulosa por vizinho mais próximo
-// de matchToFormationLayout, só que no sentido posição -> slot em vez de
-// titular -> slot. É o que permite rotular/segmentar um slot mesmo vazio
-// (sem titular ali) e saber pra qual posição mandar o PATCH ao soltar
-// alguém nele.
+// (FORMATION_SLOT_TEMPLATES) — mesmo casamento global de matchToFormationLayout,
+// só que no sentido posição -> slot em vez de titular -> slot. É o que
+// permite rotular/segmentar um slot mesmo vazio (sem titular ali) e saber
+// pra qual posição mandar o PATCH ao soltar alguém nele.
+//
+// Importante: a cada passo escolhe o par (slot, posição) mais próximo entre
+// TODOS os que sobraram, não só o mais próximo pra cada slot na ordem do
+// array — um greedy "em ordem" deixa um slot roubar a posição certa de outro
+// slot que viria depois (ex: posições repetidas como VOL/VOL, ou um slot
+// lateral avançado competindo com um slot central avançado pela mesma
+// posição), sobrando posição errada pro slot que ficou por último.
 const assignSlotPositions = (
   formation: Formation,
   template: FormationSlot[],
 ): PositionCode[] => {
-  const available = (FORMATION_SLOT_TEMPLATES[formation] ?? []).filter(
-    (position) => position !== 'GOL',
-  );
+  const remainingPositions = (FORMATION_SLOT_TEMPLATES[formation] ?? [])
+    .filter((position) => position !== 'GOL')
+    .map((position) => ({ position, anchor: anchorForPosition(position) }));
+  const remainingSlots = template.map((slot, index) => ({ slot, index }));
 
-  return template.map((slot) => {
-    let closestIndex = 0;
-    let closestDistance = Number.POSITIVE_INFINITY;
-    available.forEach((position, index) => {
-      const anchor = anchorForPosition(position);
-      const distance =
-        (anchor.line - slot.line) ** 2 + (anchor.column - slot.column) ** 2;
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestIndex = index;
-      }
+  const assigned = new Map<number, PositionCode>();
+
+  while (remainingSlots.length > 0 && remainingPositions.length > 0) {
+    let bestSlot = 0;
+    let bestPosition = 0;
+    let bestDistance = Number.POSITIVE_INFINITY;
+
+    remainingSlots.forEach((slotEntry, slotIndex) => {
+      remainingPositions.forEach((positionEntry, positionIndex) => {
+        const distance =
+          (positionEntry.anchor.line - slotEntry.slot.line) ** 2 +
+          (positionEntry.anchor.column - slotEntry.slot.column) ** 2;
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestSlot = slotIndex;
+          bestPosition = positionIndex;
+        }
+      });
     });
 
-    return available.length > 0 ? available.splice(closestIndex, 1)[0] : 'MC';
-  });
+    assigned.set(
+      remainingSlots[bestSlot].index,
+      remainingPositions[bestPosition].position,
+    );
+    remainingSlots.splice(bestSlot, 1);
+    remainingPositions.splice(bestPosition, 1);
+  }
+
+  return template.map((_, index) => assigned.get(index) ?? 'MC');
 };
 
 // Encaixa cada titular de linha no slot livre mais próximo da sua posição
-// natural dentro do layout da formação (busca gulosa: não é um casamento
-// ótimo, mas como o layout já segue o formato real da formação, o resultado
-// fica correto na prática). O que sobra (formação pede mais slots do que a
-// quantidade de titulares de linha) vira slot vazio, nunca é descartado.
+// natural dentro do layout da formação. A cada passo escolhe o par
+// (titular, slot) mais próximo entre TODOS os que sobraram — não o slot mais
+// próximo de cada titular na ordem do array (ver assignSlotPositions): um
+// greedy "em ordem" deixa o primeiro titular roubar o slot certo de outro
+// que viria depois (ex: dois titulares na mesma posição, ou um titular de
+// lateral competindo com um de ponta avançada pelo mesmo canto), fazendo o
+// cartão de um jogador aparecer no lugar geométrico de outra posição no
+// campo. O que sobra (formação pede mais slots do que a quantidade de
+// titulares de linha) vira slot vazio, nunca é descartado.
 const matchToFormationLayout = (
   outfield: RosterPlayer[],
   template: FormationSlot[],
   slotPositions: PositionCode[],
 ): PitchSlot[] => {
-  const available = template.map((slot, index) => ({
+  const remainingSlots = template.map((slot, index) => ({
     slot,
     position: slotPositions[index],
   }));
+  const remainingPlayers = outfield.map((player, index) => ({
+    player,
+    hint: naturalSlot(player),
+    index,
+  }));
+
+  const placements = new Map<
+    number,
+    { position: PositionCode } & FormationSlot
+  >();
+
+  while (remainingPlayers.length > 0 && remainingSlots.length > 0) {
+    let bestPlayer = 0;
+    let bestSlot = 0;
+    let bestDistance = Number.POSITIVE_INFINITY;
+
+    remainingPlayers.forEach((playerEntry, playerIndex) => {
+      remainingSlots.forEach((slotEntry, slotIndex) => {
+        const distance =
+          (slotEntry.slot.line - playerEntry.hint.line) ** 2 +
+          (slotEntry.slot.column - playerEntry.hint.column) ** 2;
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestPlayer = playerIndex;
+          bestSlot = slotIndex;
+        }
+      });
+    });
+
+    const playerEntry = remainingPlayers[bestPlayer];
+    const slotEntry = remainingSlots[bestSlot];
+    placements.set(playerEntry.index, {
+      position: slotEntry.position,
+      ...slotEntry.slot,
+    });
+    remainingPlayers.splice(bestPlayer, 1);
+    remainingSlots.splice(bestSlot, 1);
+  }
 
   // Elenco com titulares a mais pra formação (bug de dados — ex: 2 titulares
   // na mesma posição numa formação com 1 slot só) estoura o template: quem
@@ -206,26 +270,13 @@ const matchToFormationLayout = (
   // cada repetição da mesma dica ganha um leve deslocamento.
   const overflowCount = new Map<string, number>();
 
-  const filled = outfield.map((player) => {
-    const hint = naturalSlot(player);
-
-    let closestIndex = 0;
-    let closestDistance = Number.POSITIVE_INFINITY;
-    available.forEach((entry, index) => {
-      const distance =
-        (entry.slot.line - hint.line) ** 2 +
-        (entry.slot.column - hint.column) ** 2;
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestIndex = index;
-      }
-    });
-
-    if (available.length > 0) {
-      const entry = available.splice(closestIndex, 1)[0];
-      return { player, position: entry.position, ...toPixels(entry.slot) };
+  const filled = outfield.map((player, index) => {
+    const placement = placements.get(index);
+    if (placement) {
+      return { player, position: placement.position, ...toPixels(placement) };
     }
 
+    const hint = naturalSlot(player);
     const hintKey = `${hint.line},${hint.column}`;
     const repeat = overflowCount.get(hintKey) ?? 0;
     overflowCount.set(hintKey, repeat + 1);
@@ -242,7 +293,7 @@ const matchToFormationLayout = (
     };
   });
 
-  const empty = available.map(({ slot, position }) => ({
+  const empty = remainingSlots.map(({ slot, position }) => ({
     player: null,
     position,
     ...toPixels(slot),
