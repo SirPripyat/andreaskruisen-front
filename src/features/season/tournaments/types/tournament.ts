@@ -19,6 +19,8 @@ export type Tournament = {
   format: TournamentFormat;
   maxTeams: number;
   createdAt: string;
+  // null = em andamento; setado via POST /tournaments/:id/finish.
+  finishedAt: string | null;
 };
 
 export type PhaseType = 'GROUP' | 'KNOCKOUT';
@@ -102,7 +104,8 @@ export type MatchListItem = {
   homeTeam: ConfrontoTeam;
   awayTeam: ConfrontoTeam;
   // true = a fase seguinte já foi gerada a partir desta (ver POST
-  // /tournaments/:id/phases/:phaseId/advance) — resultado não pode mais
+  // /tournaments/:id/phases/:phaseId/advance) ou o torneio já foi
+  // encerrado (POST /tournaments/:id/finish) — resultado não pode mais
   // ser editado.
   locked: boolean;
 };
@@ -135,7 +138,8 @@ export type MatchDetail = {
   awayTeam: MatchTeamWithPlayers;
   goals: MatchGoal[];
   // true = a fase seguinte já foi gerada a partir desta (ver POST
-  // /tournaments/:id/phases/:phaseId/advance) — resultado não pode mais
+  // /tournaments/:id/phases/:phaseId/advance) ou o torneio já foi
+  // encerrado (POST /tournaments/:id/finish) — resultado não pode mais
   // ser editado.
   locked: boolean;
 };

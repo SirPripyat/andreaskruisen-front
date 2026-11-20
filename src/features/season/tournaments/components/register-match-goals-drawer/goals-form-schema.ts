@@ -22,10 +22,21 @@ export const PenaltiesSchema = z
     path: ['awayScore'],
   });
 
+// O shape fica fora do PenaltiesSchema de validação: o campo de pênaltis
+// continua registrado pelo react-hook-form (shouldUnregister é false por
+// padrão) mesmo depois que o usuário desfaz o empate removendo gols, então
+// validar esse shape incondicionalmente faria o submit falhar em silêncio
+// (o PenaltiesField já nem está mais montado pra mostrar o erro). A validação
+// de fato só roda dentro do superRefine, e só quando o empate persiste.
+const PenaltiesShape = z.object({
+  homeScore: z.string(),
+  awayScore: z.string(),
+});
+
 const BaseFormSchema = z.object({
   homeGoals: z.array(GoalRowSchema),
   awayGoals: z.array(GoalRowSchema),
-  penalties: PenaltiesSchema.optional(),
+  penalties: PenaltiesShape.optional(),
 });
 
 export type FormValues = z.infer<typeof BaseFormSchema>;
@@ -41,12 +52,22 @@ export const createFormSchema = (phaseType: PhaseType) => {
       phaseType === 'KNOCKOUT' &&
       values.homeGoals.length === values.awayGoals.length;
 
-    if (isTiedKnockout && !values.penalties) {
+    if (!isTiedKnockout) return;
+
+    if (!values.penalties) {
       ctx.addIssue({
         code: 'custom',
         path: ['penalties'],
         message: 'Empate na eliminatória: informe o resultado dos pênaltis',
       });
+      return;
+    }
+
+    const result = PenaltiesSchema.safeParse(values.penalties);
+    if (!result.success) {
+      for (const issue of result.error.issues) {
+        ctx.addIssue({ ...issue, path: ['penalties', ...issue.path] });
+      }
     }
   });
 };

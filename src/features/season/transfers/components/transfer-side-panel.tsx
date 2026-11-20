@@ -34,12 +34,16 @@ type TransferSidePanelProps = {
   tagLabel: string;
   tagClassName: string;
   team: TeamWithRatings | null;
-  onTeamChange: (team: TeamWithRatings | null) => void;
-  excludeTeamId: string | undefined;
-  placeholder: string;
-  // Participante sempre opera com o próprio time (ver CreateTransferDrawer)
-  // — só o admin pode trocar o time desse painel.
+  onTeamChange?: (team: TeamWithRatings | null) => void;
+  excludeTeamId?: string;
+  placeholder?: string;
+  // Participante sempre opera com o próprio time (ver CpuTransferForm) —
+  // só o admin pode trocar o time desse painel.
   teamDisabled?: boolean;
+  // Quando presente, substitui o TeamCombobox padrão — hoje só o painel de
+  // Destino do modo CPU usa, pra restringir a busca a times sem Squad (ver
+  // CpuTeamCombobox).
+  picker?: ReactNode;
   // Campo extra exibido abaixo do time, hoje só usado pelo admin pra
   // escolher quem solicitou a transferência.
   extraField?: ReactNode;
@@ -59,6 +63,7 @@ export const TransferSidePanel = ({
   excludeTeamId,
   placeholder,
   teamDisabled,
+  picker,
   extraField,
   roster,
   isRosterPending,
@@ -86,13 +91,15 @@ export const TransferSidePanel = ({
 
       <Field>
         <FieldLabel>{'Time'}</FieldLabel>
-        <TeamCombobox
-          value={team}
-          onValueChange={onTeamChange}
-          excludeTeamId={excludeTeamId}
-          placeholder={placeholder}
-          disabled={teamDisabled}
-        />
+        {picker ?? (
+          <TeamCombobox
+            value={team}
+            onValueChange={onTeamChange ?? (() => {})}
+            excludeTeamId={excludeTeamId}
+            placeholder={placeholder}
+            disabled={teamDisabled}
+          />
+        )}
       </Field>
 
       {extraField}

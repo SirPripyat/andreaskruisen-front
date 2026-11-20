@@ -8,9 +8,12 @@ export const useAddFavorite = () => {
   return useMutation({
     mutationFn: addFavorite,
     meta: { errorMessage: 'Não foi possível favoritar o jogador.' },
-    onSuccess: () => {
+    onSuccess: (_data, playerId) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.favorites });
       queryClient.invalidateQueries({ queryKey: queryKeys.seasonPlayers.all });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.seasonPlayers.detail(playerId),
+      });
     },
   });
 };

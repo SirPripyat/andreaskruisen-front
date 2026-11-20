@@ -1,16 +1,21 @@
 import { ChevronsRightIcon, Loader2Icon } from 'lucide-react';
 import { Button, Separator } from '@/components/ui';
 import type { MatchListItem, PhaseSummary } from '../types';
+import { FinishTournamentButton } from './finish-tournament-button';
 import { MatchCard } from './match-card';
 import { MatchGrid } from './match-grid';
 
 type PhaseSectionProps = {
+  tournamentId: string;
   phase: PhaseSummary;
   matches: MatchListItem[];
   isLatestPhase: boolean;
   // Liga não tem fase seguinte pra avançar — o endpoint de avanço nem
   // existe pra esse formato, então o botão não aparece.
   isLeague?: boolean;
+  // null = torneio em andamento. Com isso setado, a fase decisiva já
+  // trocou "Finalizar torneio" por nada — ela foi finalizada.
+  tournamentFinishedAt?: string | null;
   onRegisterGoals?: (matchId: string) => void;
   onAdvancePhase: (phaseId: string) => void;
   isAdvancingPhase?: boolean;
@@ -34,15 +39,22 @@ const groupByRound = (matches: MatchListItem[]) => {
 };
 
 export const PhaseSection = ({
+  tournamentId,
   phase,
   matches,
   isLatestPhase,
   isLeague,
+  tournamentFinishedAt,
   onRegisterGoals,
   onAdvancePhase,
   isAdvancingPhase,
 }: PhaseSectionProps) => {
   const isFinalPhase = phase.type === 'KNOCKOUT' && phase.name === 'Final';
+  // Liga só tem uma fase (sempre a "vigente") e mata-mata não avança além
+  // da Final — em ambos os casos não existe próxima fase, essa é a
+  // decisiva, e é nela que "Finalizar torneio" aparece em vez de "Avançar
+  // fase".
+  const isDecisivePhase = isLeague || isFinalPhase;
 
   const allPlayed =
     matches.length > 0 &&
@@ -66,7 +78,7 @@ export const PhaseSection = ({
 
         <Separator className={'shrink'} />
 
-        {isLatestPhase && !isFinalPhase && !isLeague && (
+        {isLatestPhase && !isDecisivePhase && (
           <Button
             type="button"
             variant="outline"
@@ -81,6 +93,13 @@ export const PhaseSection = ({
             )}
             Avançar fase
           </Button>
+        )}
+
+        {isLatestPhase && isDecisivePhase && !tournamentFinishedAt && (
+          <FinishTournamentButton
+            tournamentId={tournamentId}
+            disabled={!allPlayed}
+          />
         )}
       </div>
 

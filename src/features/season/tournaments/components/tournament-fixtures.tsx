@@ -32,10 +32,12 @@ export const TournamentFixtures = ({
       {phases.map(({ phase, matches }, phaseIndex) => (
         <PhaseSection
           key={phase.id}
+          tournamentId={tournament?.id as string}
           phase={phase}
           matches={matches}
           isLatestPhase={phaseIndex === phases.length - 1}
           isLeague={isLeague}
+          tournamentFinishedAt={tournament?.finishedAt}
           onRegisterGoals={onRegisterGoals}
           onAdvancePhase={onAdvancePhase}
           isAdvancingPhase={isAdvancingPhase}

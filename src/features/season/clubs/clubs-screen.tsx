@@ -46,6 +46,19 @@ const columns: ColumnDef<ClubWithRatings>[] = [
     ),
   },
   {
+    id: 'formation',
+    header: 'Formação',
+    cell: ({ row }) => (
+      <span
+        className={
+          row.original.formation === null ? 'text-muted-foreground' : ''
+        }
+      >
+        {row.original.formation ?? 'Sem formação'}
+      </span>
+    ),
+  },
+  {
     id: 'averageOverallRating',
     header: ({ column }) => (
       <DataTableColumnHeader column={column}>Overall</DataTableColumnHeader>

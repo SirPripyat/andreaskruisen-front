@@ -18,15 +18,6 @@ export const FavoritesRowActions = ({
 
   return (
     <div className={'flex items-center justify-end gap-1'}>
-      <Button
-        variant={'ghost'}
-        size={'icon-sm'}
-        aria-label={'Remover dos favoritos'}
-        disabled={isPending}
-        onClick={() => removeFavorite(playerId)}
-      >
-        <XIcon />
-      </Button>
       <NegotiateButton playerId={playerId} teamId={teamId} compact />
       <Button
         variant={'ghost'}
@@ -35,6 +26,15 @@ export const FavoritesRowActions = ({
         onClick={() => navigate(`/players/${playerId}`)}
       >
         <EyeIcon />
+      </Button>
+      <Button
+        variant={'ghost'}
+        size={'icon-sm'}
+        aria-label={'Remover dos favoritos'}
+        disabled={isPending}
+        onClick={() => removeFavorite(playerId)}
+      >
+        <XIcon />
       </Button>
     </div>
   );

@@ -34,18 +34,18 @@ export const DashboardMyTeamCard = ({
   const campaign = team.seasonCampaign;
 
   return (
-    <Card className={'col-span-2 gap-4 p-4'}>
-      <div className={'flex items-start justify-between gap-2'}>
-        <div className={'flex items-center gap-2.5'}>
+    <Card className={'col-span-2 gap-6 p-4'}>
+      <div className={'flex items-center justify-between gap-2'}>
+        <div className={'flex items-center gap-1'}>
           <span
             className={
-              'flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md bg-accent-surface'
+              'flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md'
             }
           >
             {team.crestUrl ? (
               <img
                 src={team.crestUrl}
-                alt={''}
+                alt={team.name}
                 className={'size-full object-contain p-1'}
               />
             ) : (
@@ -78,10 +78,11 @@ export const DashboardMyTeamCard = ({
               'font-display text-2xl font-extrabold leading-none tabular-nums'
             }
           >
-            {campaign ? `${campaign.points} pts` : '—'}
+            {`${campaign?.points} pts`}
           </p>
+
           <p className={'text-muted-foreground text-xs'}>
-            {campaign
+            {campaign && campaign.games !== 0
               ? `${Math.round(campaign.pointsPercentage)}% de aproveitamento`
               : 'Nenhuma partida disputada'}
           </p>

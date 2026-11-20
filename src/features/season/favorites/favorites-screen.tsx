@@ -6,7 +6,11 @@ import {
 import { Link } from 'react-router';
 import { OverallRatingBadge, PageHeader, TeamCell } from '@/components';
 import { DataTable } from '@/components/ui';
-import { AvatarPlayer, NationalityCell } from '@/features/admin/players';
+import {
+  AvatarPlayer,
+  NationalityCell,
+  PlayerPositionCell,
+} from '@/features/admin/players';
 import { formatNumber } from '@/lib';
 import { FavoritesRowActions } from './components';
 import { useFavorites } from './hooks';
@@ -28,6 +32,20 @@ const columns: ColumnDef<FavoritePlayer>[] = [
     ),
   },
   {
+    id: 'overallRating',
+    header: 'Overall',
+    cell: ({ row }) => (
+      <OverallRatingBadge rating={row.original.latestOverallRating} />
+    ),
+  },
+  {
+    id: 'positions',
+    header: 'Posições',
+    cell: ({ row }) => (
+      <PlayerPositionCell positions={row.original.positions} />
+    ),
+  },
+  {
     id: 'team',
     header: 'Equipe',
     cell: ({ row }) => (
@@ -45,13 +63,6 @@ const columns: ColumnDef<FavoritePlayer>[] = [
         flagUrl={row.original.nationality.flagUrl}
         name={row.original.nationality.name}
       />
-    ),
-  },
-  {
-    id: 'overallRating',
-    header: 'Overall',
-    cell: ({ row }) => (
-      <OverallRatingBadge rating={row.original.latestOverallRating} />
     ),
   },
   {

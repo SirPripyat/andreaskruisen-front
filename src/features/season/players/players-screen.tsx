@@ -46,6 +46,19 @@ const columns: ColumnDef<PlayerListItem>[] = [
     ),
   },
   {
+    id: 'overallRating',
+    accessorFn: (row) => row.latestRating?.overallRating,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column}>Overall</DataTableColumnHeader>
+    ),
+    sortDescFirst: true,
+    cell: ({ row }) => (
+      <OverallRatingBadge
+        rating={row.original.latestRating?.overallRating ?? null}
+      />
+    ),
+  },
+  {
     id: 'positions',
     header: 'Posições',
     cell: ({ row }) => (
@@ -76,19 +89,6 @@ const columns: ColumnDef<PlayerListItem>[] = [
     id: 'foot',
     header: 'Pé preferido',
     cell: ({ row }) => PREFERRED_FOOT_LABELS[row.original.preferredFoot],
-  },
-  {
-    id: 'overallRating',
-    accessorFn: (row) => row.latestRating?.overallRating,
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column}>Overall</DataTableColumnHeader>
-    ),
-    sortDescFirst: true,
-    cell: ({ row }) => (
-      <OverallRatingBadge
-        rating={row.original.latestRating?.overallRating ?? null}
-      />
-    ),
   },
   {
     id: 'age',

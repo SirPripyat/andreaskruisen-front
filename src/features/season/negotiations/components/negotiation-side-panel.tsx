@@ -30,7 +30,7 @@ type NegotiationSidePanelProps = {
   hint: string;
   team: TeamWithRatings | null;
   // Só o painel do time de destino recebe um seletor — o meu lado é sempre
-  // o time do técnico logado (ver CreateNegotiationDrawer). Quando
+  // o time do técnico logado (ver DirectNegotiationForm). Quando
   // presente, substitui o nome estático do time.
   picker?: ReactNode;
   roster: RosterBySector | undefined;

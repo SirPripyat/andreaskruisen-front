@@ -79,7 +79,7 @@ export const DashboardMarketCard = ({
       <Link
         to={'/transfers'}
         className={
-          'flex items-center justify-between gap-2 border-t pt-3 font-semibold text-accent text-xs hover:underline'
+          'mt-auto flex items-center justify-between gap-2 border-t pt-3 font-semibold text-accent text-xs hover:underline'
         }
       >
         Ver mercado

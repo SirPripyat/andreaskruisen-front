@@ -11,19 +11,18 @@ type PitchRow = {
 };
 
 const PITCH_ROWS: PitchRow[] = [
-  { top: 8, positions: ['ATE', 'ATA', 'ATD'] },
-  { top: 24, positions: ['PE', 'MAE', 'SA', 'MAD', 'PD'] },
-  { top: 40, positions: ['MEE', 'MEI', 'MED'] },
-  { top: 54, positions: ['ME', 'MCE', 'MC', 'MCD', 'MD'] },
-  { top: 68, positions: ['ADE', 'VE', 'VOL', 'VD', 'ADD'] },
-  { top: 82, positions: ['LE', 'ZGE', 'ZAG', 'ZGD', 'LD'] },
-  { top: 95, positions: ['GOL'] },
+  { top: 8, positions: ['PE', 'ATA', 'PD'] },
+  { top: 24, positions: ['MEI'] },
+  { top: 40, positions: ['ME', 'MC', 'MD'] },
+  { top: 56, positions: ['ADE', 'VOL', 'ADD'] },
+  { top: 72, positions: ['LE', 'ZAG', 'LD'] },
+  { top: 88, positions: ['GOL'] },
 ];
 
 const ROW_COLUMNS: Record<number, number[]> = {
   1: [50],
+  2: [30, 70],
   3: [25, 50, 75],
-  5: [8, 29, 50, 71, 92],
 };
 
 export const PlayerPositionRatings = ({
@@ -48,7 +47,7 @@ export const PlayerPositionRatings = ({
 
       <div
         className={
-          'relative mx-auto aspect-[2/3] w-full max-w-sm rounded-xl border border-success/30 bg-success/5 p-2'
+          'relative mx-auto aspect-3/4 w-full max-w-sm rounded-xl border border-success/30 bg-success/5 p-2'
         }
       >
         <svg

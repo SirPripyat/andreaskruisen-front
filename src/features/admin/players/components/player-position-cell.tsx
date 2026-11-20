@@ -9,7 +9,7 @@ type PlayerPositionCellProps = {
 export const PlayerPositionCell = ({ positions }: PlayerPositionCellProps) => {
   return (
     <div className="flex flex-wrap gap-1">
-      {positions.map(({ position }) => (
+      {positions?.map(({ position }) => (
         <Badge
           key={position}
           variant="outline"

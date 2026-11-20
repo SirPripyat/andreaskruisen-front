@@ -1,4 +1,4 @@
-export * from './create-negotiation-drawer';
+export * from './direct-negotiation-form';
 export * from './negotiation-card';
 export * from './negotiation-clause-badge';
 export * from './negotiation-clause-builder';

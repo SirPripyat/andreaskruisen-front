@@ -125,7 +125,7 @@ export const RegisterMatchGoalsDrawer = ({
           </SheetTitle>
           <SheetDescription>
             {readOnly
-              ? 'Partida travada: a fase seguinte já foi gerada a partir dela, então o placar não pode mais ser editado.'
+              ? 'Partida travada: a fase seguinte já foi gerada a partir dela ou o torneio já foi encerrado, então o placar não pode mais ser editado.'
               : 'Informe o placar e, pra cada gol, quem marcou e quem deu a assistência.'}
           </SheetDescription>
 

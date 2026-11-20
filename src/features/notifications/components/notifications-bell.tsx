@@ -9,11 +9,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui';
-import { useNotifications } from '../hooks';
+import { useMarkAllNotificationsRead, useNotifications } from '../hooks';
 import { NotificationItem } from './notification-item';
 
 export const NotificationsBell = () => {
   const { data } = useNotifications({ page: 1, pageSize: 20 });
+  const { mutate: markAllRead, isPending: isMarkingAllRead } =
+    useMarkAllNotificationsRead();
 
   const notifications = data?.data ?? [];
   const unreadCount = notifications.filter((item) => !item.readAt).length;
@@ -42,8 +44,20 @@ export const NotificationsBell = () => {
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent className={'w-80'} align={'end'} sideOffset={4}>
-        <DropdownMenuGroup>
+        <DropdownMenuGroup
+          className={'flex items-center justify-between gap-2 pr-1'}
+        >
           <DropdownMenuLabel>Notificações</DropdownMenuLabel>
+          {unreadCount > 0 && (
+            <Button
+              variant={'link'}
+              size={'xs'}
+              disabled={isMarkingAllRead}
+              onClick={() => markAllRead()}
+            >
+              Marcar todas como lidas
+            </Button>
+          )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         {notifications.length === 0 && (

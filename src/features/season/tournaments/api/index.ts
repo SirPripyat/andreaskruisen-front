@@ -1,6 +1,7 @@
 export * from './advance-phase';
 export * from './create-tournament';
 export * from './delete-tournament';
+export * from './finish-tournament';
 export * from './format-rules';
 export * from './get-match-detail';
 export * from './get-tournament';

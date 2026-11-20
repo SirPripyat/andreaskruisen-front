@@ -1,9 +1,8 @@
 import type { ReactNode } from 'react';
 import { PageHeader, Tabs, TabsList, TabsPanel, TabsTab } from '@/components';
 import { NegotiationWindowBanner } from '@/features/admin/negotiation-window';
-import { CreateNegotiationDrawer } from '@/features/season/negotiations';
 import {
-  CreateTransferDrawer,
+  NegotiateDrawer,
   NegotiationHistory,
   ReceivedNegotiationList,
   SentNegotationList,
@@ -38,16 +37,10 @@ export const TransfersScreen = () => {
         title={'Mercado'}
         description={`Trocas de mercado e negociações diretas na temporada "${selectedSeason?.name}".`}
         actions={
-          <div className={'flex items-center gap-2'}>
-            <CreateNegotiationDrawer
-              seasonId={selectedSeason?.id}
-              windowClosed={isWindowClosed}
-            />
-            <CreateTransferDrawer
-              seasonId={selectedSeason?.id}
-              windowClosed={isWindowClosed}
-            />
-          </div>
+          <NegotiateDrawer
+            seasonId={selectedSeason?.id}
+            windowClosed={isWindowClosed}
+          />
         }
       />
 

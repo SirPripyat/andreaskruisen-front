@@ -1,3 +1,5 @@
+import type { PlayerPosition } from '@/features/admin/players';
+
 export type FavoritePlayer = {
   id: string;
   eaId: number;
@@ -5,6 +7,7 @@ export type FavoritePlayer = {
   photoUrl: string;
   team: { id: string; name: string; crestUrl: string };
   nationality: { id: string; name: string; flagUrl: string };
+  positions: PlayerPosition[];
   latestOverallRating: number;
   favoritedAt: string;
 };

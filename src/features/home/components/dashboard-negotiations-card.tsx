@@ -56,6 +56,7 @@ export const DashboardNegotiationsCard = ({
             Propostas de outros times aguardando sua resposta
           </p>
         </div>
+
         {pending.length > 0 && (
           <span
             className={
@@ -126,7 +127,7 @@ export const DashboardNegotiationsCard = ({
       <Link
         to={'/transfers?tab=received'}
         className={
-          'flex items-center justify-between gap-2 border-t pt-3 font-semibold text-accent text-xs hover:underline'
+          'mt-auto flex items-center justify-between gap-2 border-t pt-3 font-semibold text-accent text-xs hover:underline'
         }
       >
         Ver todas as negociações
