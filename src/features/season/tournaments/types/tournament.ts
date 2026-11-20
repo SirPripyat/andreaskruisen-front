@@ -12,17 +12,6 @@ export const TOURNAMENT_FORMAT_LABELS: Record<TournamentFormat, string> = {
   GROUP_STAGE_KNOCKOUT: 'Fase de grupos + mata-mata',
 };
 
-export type Tournament = {
-  id: string;
-  seasonId: string;
-  name: string;
-  format: TournamentFormat;
-  maxTeams: number;
-  createdAt: string;
-  // null = em andamento; setado via POST /tournaments/:id/finish.
-  finishedAt: string | null;
-};
-
 export type PhaseType = 'GROUP' | 'KNOCKOUT';
 
 export type PhaseSummary = {
@@ -30,12 +19,6 @@ export type PhaseSummary = {
   type: PhaseType;
   order: number;
   name: string;
-};
-
-// Resumo do torneio: só a fase de maior order (a vigente) acompanha — fases
-// seguintes só existem depois que a atual termina.
-export type TournamentSummary = Tournament & {
-  currentPhase: PhaseSummary | null;
 };
 
 export type TeamSummary = {
@@ -47,6 +30,24 @@ export type TeamSummary = {
 export type TeamOwner = {
   id: string;
   name: string;
+};
+
+export type TournamentChampion = TeamSummary & { owner: TeamOwner | null };
+
+export type Tournament = {
+  id: string;
+  seasonId: string;
+  name: string;
+  format: TournamentFormat;
+  maxTeams: number;
+  createdAt: string;
+  // null = em andamento; setado via POST /tournaments/:id/finish.
+  finishedAt: string | null;
+  // Só a fase de maior order (a vigente) acompanha — fases seguintes só
+  // existem depois que a atual termina. null após o torneio ser encerrado.
+  currentPhase: PhaseSummary | null;
+  // null enquanto o torneio não foi encerrado.
+  champion: TournamentChampion | null;
 };
 
 export type GroupStanding = {
@@ -159,7 +160,7 @@ export type NextMatchSummary = {
   awayTeam: TeamSummary;
 };
 
-export type TournamentDashboard = TournamentSummary & {
+export type TournamentDashboard = Tournament & {
   totalMatches: number;
   playedMatches: number;
   topScorer: GoalLeader | null;
@@ -173,7 +174,7 @@ export type MyStanding = Pick<
 
 // GET /tournaments/mine — torneios da temporada que o time do usuário
 // disputa, com a classificação e o próximo jogo dele na fase vigente.
-export type MyTournament = TournamentSummary & {
+export type MyTournament = Tournament & {
   myStanding: MyStanding | null;
   nextMatch: NextMatchSummary | null;
 };

@@ -8,7 +8,11 @@ import { PageHeader } from '@/components';
 import { Badge, DataTable } from '@/components/ui';
 import { useSelectedSeason } from '@/features/admin/seasons';
 import { formatDate } from '@/lib';
-import { CreateTournamentDrawer, TournamentActionsMenu } from './components';
+import {
+  CreateTournamentDrawer,
+  TeamChip,
+  TournamentActionsMenu,
+} from './components';
 import { useTournaments } from './hooks';
 import { TOURNAMENT_FORMAT_LABELS, type Tournament } from './types';
 
@@ -37,6 +41,40 @@ const columns: ColumnDef<Tournament>[] = [
   {
     accessorKey: 'maxTeams',
     header: 'Times',
+  },
+  {
+    id: 'status',
+    header: 'Status',
+    cell: ({ row }) => {
+      const { finishedAt, currentPhase } = row.original;
+
+      if (finishedAt) return <Badge variant="secondary">Encerrado</Badge>;
+      if (currentPhase)
+        return (
+          <Badge className="border-transparent bg-accent-surface text-accent">
+            {currentPhase.name}
+          </Badge>
+        );
+      return <Badge variant="outline">Não iniciado</Badge>;
+    },
+  },
+  {
+    id: 'champion',
+    header: 'Campeão',
+    cell: ({ row }) => {
+      const { champion } = row.original;
+
+      if (!champion) return null;
+
+      return (
+        <TeamChip
+          teamId={champion.id}
+          name={champion.name}
+          crestUrl={champion.crestUrl}
+          owner={champion.owner}
+        />
+      );
+    },
   },
   {
     accessorKey: 'createdAt',
