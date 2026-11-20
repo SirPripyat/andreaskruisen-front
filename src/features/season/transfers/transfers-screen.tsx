@@ -1,11 +1,19 @@
+import { Cpu as CpuIcon, HandshakeIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { PageHeader, Tabs, TabsList, TabsPanel, TabsTab } from '@/components';
-import { NegotiationWindowBanner } from '@/features/admin/negotiation-window';
 import {
+  Button,
+  PageHeader,
+  Tabs,
+  TabsList,
+  TabsPanel,
+  TabsTab,
+} from '@/components';
+import {
+  MarketNegotiations,
+  MarketScoreboard,
+  MarketStats,
+  MarketTimeline,
   NegotiateDrawer,
-  NegotiationHistory,
-  ReceivedNegotiationList,
-  SentNegotationList,
 } from './components';
 import {
   MARKET_TABS,
@@ -15,7 +23,7 @@ import {
 } from './hooks';
 
 export const TransfersScreen = () => {
-  const { tab, setTab } = useMarketTabs('history');
+  const { tab, setTab } = useMarketTabs('timeline');
 
   const {
     selectedSeason,
@@ -23,12 +31,18 @@ export const TransfersScreen = () => {
     isWindowStatusPending,
     isWindowClosed,
     windowStatus,
+    timelineCount,
+    negotiationsCount,
   } = useTransfersScreen();
 
   const tabContent: Record<MarketTab, ReactNode> = {
-    history: <NegotiationHistory />,
-    received: <ReceivedNegotiationList myTeamId={myTeamId} />,
-    sent: <SentNegotationList myTeamId={myTeamId} />,
+    timeline: <MarketTimeline />,
+    negotiations: <MarketNegotiations myTeamId={myTeamId} />,
+  };
+
+  const tabCount: Record<MarketTab, number> = {
+    timeline: timelineCount,
+    negotiations: negotiationsCount,
   };
 
   return (
@@ -37,17 +51,39 @@ export const TransfersScreen = () => {
         title={'Mercado'}
         description={`Trocas de mercado e negociações diretas na temporada "${selectedSeason?.name}".`}
         actions={
-          <NegotiateDrawer
-            seasonId={selectedSeason?.id}
-            windowClosed={isWindowClosed}
-          />
+          <div className={'flex flex-wrap gap-2'}>
+            <NegotiateDrawer
+              seasonId={selectedSeason?.id}
+              windowClosed={isWindowClosed}
+              initialMode={'direct'}
+              trigger={
+                <Button
+                  variant={'outline'}
+                  disabled={!selectedSeason?.id || isWindowClosed}
+                >
+                  <HandshakeIcon />
+                  {'Nova negociação'}
+                </Button>
+              }
+            />
+            <NegotiateDrawer
+              seasonId={selectedSeason?.id}
+              windowClosed={isWindowClosed}
+              initialMode={'cpu'}
+              trigger={
+                <Button disabled={!selectedSeason?.id || isWindowClosed}>
+                  <CpuIcon />
+                  {'Transferência de mercado'}
+                </Button>
+              }
+            />
+          </div>
         }
       />
 
-      <NegotiationWindowBanner
-        data={windowStatus}
-        isPending={isWindowStatusPending}
-      />
+      <MarketScoreboard data={windowStatus} isPending={isWindowStatusPending} />
+
+      <MarketStats myTeamId={myTeamId} />
 
       <Tabs
         value={tab}
@@ -55,9 +91,26 @@ export const TransfersScreen = () => {
         className={'w-full items-center'}
       >
         <TabsList>
-          <TabsTab value={'history'}>{'Histórico de trocas'}</TabsTab>
-          <TabsTab value={'received'}>{'Negociações recebidas'}</TabsTab>
-          <TabsTab value={'sent'}>{'Negociações enviadas'}</TabsTab>
+          <TabsTab value={'timeline'}>
+            {'Linha do tempo'}
+            <span
+              className={
+                'rounded-full bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground'
+              }
+            >
+              {tabCount.timeline}
+            </span>
+          </TabsTab>
+          <TabsTab value={'negotiations'}>
+            {'Negociações'}
+            <span
+              className={
+                'rounded-full bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground'
+              }
+            >
+              {tabCount.negotiations}
+            </span>
+          </TabsTab>
         </TabsList>
 
         {MARKET_TABS.map((marketTab) => (

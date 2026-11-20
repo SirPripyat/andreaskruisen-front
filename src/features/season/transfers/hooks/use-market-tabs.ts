@@ -1,6 +1,6 @@
 import { parseAsStringEnum, useQueryStates } from 'nuqs';
 
-export const MARKET_TABS = ['history', 'received', 'sent'] as const;
+export const MARKET_TABS = ['timeline', 'negotiations'] as const;
 
 export type MarketTab = (typeof MARKET_TABS)[number];
 

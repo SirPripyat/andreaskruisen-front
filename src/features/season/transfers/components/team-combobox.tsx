@@ -19,19 +19,23 @@ const PAGE_SIZE = 20;
 
 const isSameTeam = (a: TeamWithRatings, b: TeamWithRatings) => a.id === b.id;
 
+type TeamComboboxProps = {
+  value: TeamWithRatings | null;
+  onValueChange: (team: TeamWithRatings | null) => void;
+  excludeTeamId?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  className?: string;
+};
+
 export const TeamCombobox = ({
   value,
   onValueChange,
   excludeTeamId,
   placeholder = 'Buscar time...',
   disabled,
-}: {
-  value: TeamWithRatings | null;
-  onValueChange: (team: TeamWithRatings | null) => void;
-  excludeTeamId?: string;
-  placeholder?: string;
-  disabled?: boolean;
-}) => {
+  className,
+}: TeamComboboxProps) => {
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebouncedValue(query, 300);
   const { data, isPending } = useTeamsPublic({
@@ -55,7 +59,7 @@ export const TeamCombobox = ({
       filter={null}
       disabled={disabled}
     >
-      <ComboboxInputGroup>
+      <ComboboxInputGroup className={className}>
         {value && (
           <img
             src={value.crestUrl}

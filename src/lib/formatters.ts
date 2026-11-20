@@ -11,6 +11,7 @@ const dateTimeFormatter = new Intl.DateTimeFormat('pt-BR', {
   dateStyle: 'medium',
   timeStyle: 'short',
 });
+const timeFormatter = new Intl.DateTimeFormat('pt-BR', { timeStyle: 'short' });
 
 export const formatNumber = (value: number) => numberFormatter.format(value);
 
@@ -24,3 +25,6 @@ export const formatShortDate = (value: string | number | Date) =>
 
 export const formatDateTime = (value: string | number | Date) =>
   dateTimeFormatter.format(new Date(value));
+
+export const formatTime = (value: string | number | Date) =>
+  timeFormatter.format(new Date(value));
