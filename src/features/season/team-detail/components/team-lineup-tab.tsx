@@ -176,7 +176,7 @@ export const TeamLineupTab = ({ managerId }: TeamLineupTabProps) => {
     ? allPlayers.get(activeId.replace('player:', ''))
     : null;
 
-  if (!isPending && starters.length === 0) {
+  if (!isPending && !data?.formation && starters.length === 0) {
     return (
       <p className={'text-center text-muted-foreground text-sm'}>
         Escalação titular ainda não foi importada para esse time.
