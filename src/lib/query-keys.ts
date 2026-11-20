@@ -109,6 +109,11 @@ export const queryKeys = {
 
   squads: ['squads'] as const,
 
+  coinTransactions: {
+    detail: (teamId: string | undefined) =>
+      ['coin-transactions', teamId] as const,
+  },
+
   tournaments: {
     all: ['tournaments'] as const,
     mine: ['tournaments', 'mine'] as const,

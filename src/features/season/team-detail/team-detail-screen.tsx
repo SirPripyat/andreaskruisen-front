@@ -1,10 +1,11 @@
 import { useParams } from 'react-router';
 import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui';
 import { TeamTitlesList, useTeam, useTeamTitles } from '@/features/admin/teams';
-import { useSeasonSquads } from '@/features/season/squads';
+import { useCoinTransactions, useSeasonSquads } from '@/features/season/squads';
 import { useTransfers } from '@/features/season/transfers';
 import { useBreadcrumbItems } from '../../../hooks';
 import {
+  TeamCoinTransactionsList,
   TeamInfoPanel,
   TeamLineupTab,
   TeamOverviewTab,
@@ -22,6 +23,7 @@ export const TeamDetailScreen = () => {
 
   const needsTitles = tab === 'overview' || tab === 'titles';
   const needsTransfers = tab === 'transfers';
+  const needsCoinTransactions = tab === 'coins';
 
   const { data: transfers, isPending: isTransfersPending } =
     useTransfers(needsTransfers);
@@ -29,6 +31,8 @@ export const TeamDetailScreen = () => {
     id,
     needsTitles,
   );
+  const { data: coinTransactions, isPending: isCoinTransactionsPending } =
+    useCoinTransactions(id, needsCoinTransactions);
 
   const manager =
     seasonSquads?.find((squad) => squad.team.id === id)?.user ?? null;
@@ -60,6 +64,7 @@ export const TeamDetailScreen = () => {
               <TabsTab value="lineup">Escalação</TabsTab>
               <TabsTab value="titles">Títulos</TabsTab>
               <TabsTab value="transfers">Transferências</TabsTab>
+              <TabsTab value="coins">Extrato</TabsTab>
             </TabsList>
 
             <TabsPanel value="overview">
@@ -86,6 +91,13 @@ export const TeamDetailScreen = () => {
                 teamId={team.id}
                 transfers={transfers ?? []}
                 isPending={isTransfersPending}
+              />
+            </TabsPanel>
+
+            <TabsPanel value="coins">
+              <TeamCoinTransactionsList
+                transactions={coinTransactions ?? []}
+                isPending={isCoinTransactionsPending}
               />
             </TabsPanel>
           </Tabs>

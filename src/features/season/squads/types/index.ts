@@ -1,3 +1,4 @@
+export * from './coin-transaction';
 export * from './lineup-overview';
 export * from './roster-by-sector';
 export * from './roster-player';

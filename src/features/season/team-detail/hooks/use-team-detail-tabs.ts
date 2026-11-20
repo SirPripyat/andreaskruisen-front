@@ -6,6 +6,7 @@ export const TEAM_DETAIL_TABS = [
   'lineup',
   'titles',
   'transfers',
+  'coins',
 ] as const;
 
 export type TeamDetailTab = (typeof TEAM_DETAIL_TABS)[number];

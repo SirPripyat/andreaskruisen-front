@@ -1,4 +1,5 @@
 export * from './rating-tile';
+export * from './team-coin-transactions-list';
 export * from './team-head-to-head';
 export * from './team-info-panel';
 export * from './team-leaders-list';

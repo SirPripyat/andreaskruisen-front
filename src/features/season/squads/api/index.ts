@@ -1,5 +1,6 @@
 export * from './assign-squad';
 export * from './formation';
+export * from './get-coin-transactions';
 export * from './get-lineup';
 export * from './get-roster';
 export * from './import-lineups';
