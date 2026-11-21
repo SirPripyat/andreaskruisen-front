@@ -31,12 +31,12 @@ export const TransferTicket = ({ transfer }: { transfer: Transfer }) => {
       >
         <span
           className={
-            'absolute top-0 left-0 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-b bg-card sm:left-1/2'
+            'absolute top-0 left-0 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-card sm:left-1/2'
           }
         />
         <span
           className={
-            'absolute top-0 right-0 size-3.5 translate-x-1/2 -translate-y-1/2 rounded-full bg-card border-t sm:top-auto sm:right-auto sm:bottom-0 sm:left-1/2 sm:-translate-x-1/2 sm:translate-y-1/2'
+            'absolute top-0 right-0 size-3.5 translate-x-1/2 -translate-y-1/2 rounded-full bg-card sm:top-auto sm:right-auto sm:bottom-0 sm:left-1/2 sm:-translate-x-1/2 sm:translate-y-1/2'
           }
         />
       </div>
