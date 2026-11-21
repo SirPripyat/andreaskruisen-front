@@ -1,3 +1,4 @@
+import { Checkbox } from '@/components/ui';
 import { cn } from '@/lib';
 import type { MatchListItem } from '../../types';
 import { TeamChip } from '../team-chip';
@@ -10,6 +11,8 @@ type MatchCardRowProps = {
   match: MatchListItem;
   status: MatchStatus;
   onRegisterGoals?: (matchId: string) => void;
+  selected?: boolean;
+  onToggleSelect?: (matchId: string) => void;
 };
 
 export const MatchCardRow = ({
@@ -18,6 +21,8 @@ export const MatchCardRow = ({
   match,
   status,
   onRegisterGoals,
+  selected,
+  onToggleSelect,
 }: MatchCardRowProps) => {
   return (
     <div
@@ -27,6 +32,17 @@ export const MatchCardRow = ({
         cardClassName,
       )}
     >
+      {onToggleSelect && !status.played && (
+        <Checkbox
+          checked={!!selected}
+          onCheckedChange={() => onToggleSelect(match.id)}
+          aria-label={'Selecionar partida pra simular em lote'}
+        />
+      )}
+      {onToggleSelect && status.played && (
+        <span className={'size-4 shrink-0'} />
+      )}
+
       <TeamChip
         className={cn('flex-1', status.awayWinner && 'opacity-40')}
         teamId={match.homeTeam.id}

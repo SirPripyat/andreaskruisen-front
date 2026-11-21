@@ -10,6 +10,8 @@ type MatchCardProps = {
   onRegisterGoals?: (matchId: string) => void;
   cardRef?: (el: HTMLDivElement | null) => void;
   cardClassName?: string;
+  selected?: boolean;
+  onToggleSelect?: (matchId: string) => void;
 };
 
 export const MatchCard = ({
@@ -19,6 +21,8 @@ export const MatchCard = ({
   onRegisterGoals,
   cardRef,
   cardClassName,
+  selected,
+  onToggleSelect,
 }: MatchCardProps) => {
   const status = getMatchStatus(match);
 
@@ -30,6 +34,8 @@ export const MatchCard = ({
         match={match}
         status={status}
         onRegisterGoals={onRegisterGoals}
+        selected={selected}
+        onToggleSelect={onToggleSelect}
       />
     );
   }

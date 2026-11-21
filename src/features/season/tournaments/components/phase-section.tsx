@@ -1,4 +1,4 @@
-import { ChevronsRightIcon, Loader2Icon } from 'lucide-react';
+import { ChevronsRightIcon, DicesIcon, Loader2Icon } from 'lucide-react';
 import { Button, Separator } from '@/components/ui';
 import type { MatchListItem, PhaseSummary } from '../types';
 import { FinishTournamentButton } from './finish-tournament-button';
@@ -19,6 +19,9 @@ type PhaseSectionProps = {
   onRegisterGoals?: (matchId: string) => void;
   onAdvancePhase: (phaseId: string) => void;
   isAdvancingPhase?: boolean;
+  selectedIds?: Set<string>;
+  onToggleSelect?: (matchId: string) => void;
+  onSimulateIds?: (matchIds: string[]) => void;
 };
 
 const groupByRound = (matches: MatchListItem[]) => {
@@ -48,6 +51,9 @@ export const PhaseSection = ({
   onRegisterGoals,
   onAdvancePhase,
   isAdvancingPhase,
+  selectedIds,
+  onToggleSelect,
+  onSimulateIds,
 }: PhaseSectionProps) => {
   const isFinalPhase = phase.type === 'KNOCKOUT' && phase.name === 'Final';
   // Liga só tem uma fase (sempre a "vigente") e mata-mata não avança além
@@ -61,6 +67,10 @@ export const PhaseSection = ({
     matches.every(
       (match) => match.homeScore !== null && match.awayScore !== null,
     );
+
+  const pendingInPhase = matches
+    .filter((match) => match.homeScore === null)
+    .map((match) => match.id);
 
   const rounds: Array<[number | null, MatchListItem[]]> =
     phase.type === 'GROUP' ? groupByRound(matches) : [];
@@ -78,29 +88,45 @@ export const PhaseSection = ({
 
         <Separator className={'shrink'} />
 
-        {isLatestPhase && !isDecisivePhase && (
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            disabled={!allPlayed || isAdvancingPhase}
-            onClick={() => onAdvancePhase(phase.id)}
-          >
-            {isAdvancingPhase ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              <ChevronsRightIcon />
-            )}
-            Avançar fase
-          </Button>
-        )}
+        <div className={'flex shrink-0 items-center gap-2'}>
+          {isLatestPhase && onSimulateIds && pendingInPhase.length > 0 && (
+            <Button
+              type={'button'}
+              variant={'outline'}
+              size={'sm'}
+              onClick={() => onSimulateIds(pendingInPhase)}
+            >
+              <DicesIcon />
+              {'Simular pendentes ('}
+              {pendingInPhase.length}
+              {')'}
+            </Button>
+          )}
 
-        {isLatestPhase && isDecisivePhase && !tournamentFinishedAt && (
-          <FinishTournamentButton
-            tournamentId={tournamentId}
-            disabled={!allPlayed}
-          />
-        )}
+          {isLatestPhase && !isDecisivePhase && (
+            <Button
+              type={'button'}
+              variant={'outline'}
+              size={'sm'}
+              disabled={!allPlayed || isAdvancingPhase}
+              onClick={() => onAdvancePhase(phase.id)}
+            >
+              {isAdvancingPhase ? (
+                <Loader2Icon className={'animate-spin'} />
+              ) : (
+                <ChevronsRightIcon />
+              )}
+              Avançar fase
+            </Button>
+          )}
+
+          {isLatestPhase && isDecisivePhase && !tournamentFinishedAt && (
+            <FinishTournamentButton
+              tournamentId={tournamentId}
+              disabled={!allPlayed}
+            />
+          )}
+        </div>
       </div>
 
       {phase.type === 'GROUP' ? (
@@ -111,6 +137,9 @@ export const PhaseSection = ({
             roundLabel={round !== null ? `Rodada ${round}` : undefined}
             isCurrentRound={round === lastRound}
             onRegisterGoals={onRegisterGoals}
+            selectedIds={selectedIds}
+            onToggleSelect={onToggleSelect}
+            onSimulateIds={onSimulateIds}
           />
         ))
       ) : (

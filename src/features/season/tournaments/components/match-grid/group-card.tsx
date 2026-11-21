@@ -14,6 +14,8 @@ type GroupCardProps = {
   groupLabel: string | null;
   groupMatches: MatchListItem[];
   onRegisterGoals?: (matchId: string) => void;
+  selectedIds?: Set<string>;
+  onToggleSelect?: (matchId: string) => void;
 };
 
 export const GroupCard = ({
@@ -21,6 +23,8 @@ export const GroupCard = ({
   groupLabel,
   groupMatches,
   onRegisterGoals,
+  selectedIds,
+  onToggleSelect,
 }: GroupCardProps) => {
   const { dot, text } = GROUP_COLORS[index % GROUP_COLORS.length];
 
@@ -42,8 +46,10 @@ export const GroupCard = ({
           <MatchCard
             key={match.id}
             match={match}
-            variant="row"
+            variant={'row'}
             onRegisterGoals={onRegisterGoals}
+            selected={selectedIds?.has(match.id)}
+            onToggleSelect={onToggleSelect}
           />
         ))}
       </div>

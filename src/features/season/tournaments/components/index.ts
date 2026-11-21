@@ -1,3 +1,4 @@
+export * from './bulk-simulate-bar';
 export * from './create-tournament-drawer';
 export * from './delete-tournament-dialog';
 export * from './edit-tournament-drawer';
@@ -9,6 +10,7 @@ export * from './podium-card';
 export * from './register-match-goals-drawer/player-combobox';
 export * from './register-match-goals-drawer/register-match-goals-drawer';
 export * from './select-tournament-teams';
+export * from './simulate-matches-dialog';
 export * from './team-chip';
 export * from './top-assists-tab';
 export * from './top-scorers-tab';

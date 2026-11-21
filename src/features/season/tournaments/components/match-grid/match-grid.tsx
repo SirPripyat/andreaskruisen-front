@@ -7,6 +7,9 @@ type MatchGridProps = {
   roundLabel?: string;
   isCurrentRound?: boolean;
   onRegisterGoals?: (matchId: string) => void;
+  selectedIds?: Set<string>;
+  onToggleSelect?: (matchId: string) => void;
+  onSimulateIds?: (matchIds: string[]) => void;
 };
 
 const groupByLabel = (matches: MatchListItem[]) => {
@@ -31,12 +34,23 @@ export const MatchGrid = ({
   roundLabel,
   isCurrentRound,
   onRegisterGoals,
+  selectedIds,
+  onToggleSelect,
+  onSimulateIds,
 }: MatchGridProps) => {
+  const pendingInRound = matches
+    .filter((match) => match.homeScore === null)
+    .map((match) => match.id);
+
   return (
     <div className={'flex flex-col gap-1.5'}>
       <MatchRoundTitle
         roundLabel={roundLabel}
         isCurrentRound={isCurrentRound}
+        pendingCount={pendingInRound.length}
+        onSimulateRound={
+          onSimulateIds ? () => onSimulateIds(pendingInRound) : undefined
+        }
       />
 
       <div
@@ -51,6 +65,8 @@ export const MatchGrid = ({
             groupMatches={groupMatches}
             onRegisterGoals={onRegisterGoals}
             groupLabel={groupLabel}
+            selectedIds={selectedIds}
+            onToggleSelect={onToggleSelect}
           />
         ))}
       </div>

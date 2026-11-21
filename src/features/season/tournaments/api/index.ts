@@ -15,4 +15,5 @@ export * from './list-my-tournaments';
 export * from './list-tournaments';
 export * from './replace-match-goals';
 export * from './simulate-match';
+export * from './simulate-matches-bulk';
 export * from './update-tournament';
