@@ -68,6 +68,12 @@ export const queryKeys = {
 
   clubs: (query: ListClubsQuery) => ['clubs', query] as const,
 
+  club: {
+    all: ['club'] as const,
+    detail: (id: string | undefined) => ['club', id] as const,
+    titles: (id: string | undefined) => ['club-titles', id] as const,
+  },
+
   favorites: ['favorites'] as const,
 
   notifications: {

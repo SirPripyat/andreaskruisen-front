@@ -10,7 +10,8 @@ import {
   ComboboxPopup,
   ComboboxTrigger,
 } from '@/components/ui';
-import { type TeamWithRatings, useTeamsPublic } from '@/features/admin/teams';
+import type { TeamWithRatings } from '@/features/admin/teams';
+import { useClubs } from '@/features/season/clubs';
 import { useDebouncedValue } from '@/hooks';
 import { cn } from '@/lib';
 import { TeamOption } from './team-option';
@@ -38,7 +39,7 @@ export const TeamCombobox = ({
 }: TeamComboboxProps) => {
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebouncedValue(query, 300);
-  const { data, isPending } = useTeamsPublic({
+  const { data, isPending } = useClubs({
     name: debouncedQuery || undefined,
     page: 1,
     pageSize: PAGE_SIZE,

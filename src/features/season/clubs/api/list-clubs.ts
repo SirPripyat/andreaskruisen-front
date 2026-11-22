@@ -3,5 +3,5 @@ import type { ClubWithRatings, ListClubsQuery } from '../types';
 
 export const listClubs = (query: ListClubsQuery) =>
   api
-    .get<PaginatedResult<ClubWithRatings>>('/teams', { params: query })
+    .get<PaginatedResult<ClubWithRatings>>('/clubs', { params: query })
     .then((resp) => resp.data);

@@ -1,6 +1,6 @@
 import { useParams } from 'react-router';
 import { Skeleton } from 'src/components/ui';
-import { useTeam } from 'src/features/admin/teams';
+import { useClub } from 'src/features/season/clubs';
 import { RatingTile } from '../rating-tile';
 import { TeamHeadToHead } from '../team-head-to-head';
 import { TeamLeadersList } from '../team-leaders-list';
@@ -10,7 +10,7 @@ import { Section } from './section';
 
 export const TeamOverviewTab = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: team, isPending } = useTeam(id);
+  const { data: team, isPending } = useClub(id);
 
   if (isPending || !team) {
     return (

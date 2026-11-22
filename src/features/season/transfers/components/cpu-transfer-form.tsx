@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Button, Field, FieldLabel, SheetFooter } from '@/components/ui';
-import { type TeamWithRatings, useTeam } from '@/features/admin/teams';
+import type { TeamWithRatings } from '@/features/admin/teams';
 import { useUsers } from '@/features/admin/users';
 import { useMe } from '@/features/auth';
+import { useClub } from '@/features/season/clubs';
 import type { RosterBySector } from '@/features/season/squads';
 import { useRoster } from '@/features/season/squads';
 import { useCreateTransfer, useTransferQuote } from '../hooks';
@@ -61,9 +62,9 @@ export const CpuTransferForm = ({
   const { mutateAsync, isPending: isCreating } = useCreateTransfer();
   const { data: me } = useMe();
   const isAdmin = me?.role === 'ADMIN';
-  const { data: myTeam } = useTeam(me?.teamId ?? undefined, open);
+  const { data: myTeam } = useClub(me?.teamId ?? undefined, open);
   const { data: users } = useUsers({ enabled: open && isAdmin });
-  const { data: preselectedIncomingTeam } = useTeam(incomingTeamId, open);
+  const { data: preselectedIncomingTeam } = useClub(incomingTeamId, open);
   const {
     control,
     handleSubmit,

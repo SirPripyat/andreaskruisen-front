@@ -4,7 +4,7 @@ import {
   useSelectedSeason,
   useSelectSeason,
 } from '@/features/admin/seasons';
-import { useTeam } from '@/features/admin/teams';
+import { useClub } from '@/features/season/clubs';
 import { useNegotiations } from '@/features/season/negotiations';
 import { useRoster } from '@/features/season/squads';
 import { useMyTournaments } from '@/features/season/tournaments';
@@ -25,7 +25,7 @@ export const useDashboard = () => {
   const { data: windowStatus, isPending: isWindowStatusPending } =
     useNegotiationWindowStatus(hasSeason);
 
-  const { data: team, isPending: isTeamPending } = useTeam(teamId, hasSeason);
+  const { data: team, isPending: isTeamPending } = useClub(teamId, hasSeason);
 
   const { data: roster, isPending: isRosterPending } = useRoster(
     teamId,

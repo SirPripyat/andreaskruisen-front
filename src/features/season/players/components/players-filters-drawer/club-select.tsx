@@ -1,4 +1,4 @@
-import { useTeam } from '@/features/admin/teams';
+import { useClub } from '@/features/season/clubs';
 import { TeamCombobox } from '@/features/season/transfers';
 
 type ClubSelectProps = {
@@ -7,7 +7,7 @@ type ClubSelectProps = {
 };
 
 export const ClubSelect = ({ value, onValueChange }: ClubSelectProps) => {
-  const { data: selectedClub } = useTeam(value || undefined);
+  const { data: selectedClub } = useClub(value || undefined);
 
   return (
     <TeamCombobox

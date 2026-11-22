@@ -1,6 +1,7 @@
 import { useParams } from 'react-router';
 import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui';
-import { TeamTitlesList, useTeam, useTeamTitles } from '@/features/admin/teams';
+import { TeamTitlesList } from '@/features/admin/teams';
+import { useClub, useClubTitles } from '@/features/season/clubs';
 import { useCoinTransactions, useSeasonSquads } from '@/features/season/squads';
 import { useTransfers } from '@/features/season/transfers';
 import { useBreadcrumbItems } from '../../../hooks';
@@ -17,7 +18,7 @@ import { type TeamDetailTab, useTeamDetailTabs } from './hooks';
 export const TeamDetailScreen = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data: team, isPending } = useTeam(id);
+  const { data: team, isPending } = useClub(id);
   const { data: seasonSquads } = useSeasonSquads();
   const { tab, setTab } = useTeamDetailTabs('overview');
 
@@ -27,7 +28,7 @@ export const TeamDetailScreen = () => {
 
   const { data: transfers, isPending: isTransfersPending } =
     useTransfers(needsTransfers);
-  const { data: titles, isPending: isTitlesPending } = useTeamTitles(
+  const { data: titles, isPending: isTitlesPending } = useClubTitles(
     id,
     needsTitles,
   );

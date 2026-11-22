@@ -1,4 +1,4 @@
-import { useTeam } from '@/features/admin';
+import { useClub } from '@/features/season/clubs';
 import { useNegotiations } from '@/features/season/negotiations';
 import { cn, formatNumber } from '@/lib';
 import { useTransfers } from '../hooks';
@@ -8,7 +8,7 @@ type MarketStatsProps = {
 };
 
 export const MarketStats = ({ myTeamId }: MarketStatsProps) => {
-  const { data: team } = useTeam(myTeamId);
+  const { data: team } = useClub(myTeamId);
   const { data: received } = useNegotiations({ direction: 'received' });
   const { data: sent } = useNegotiations({ direction: 'sent' });
   const { data: transfers } = useTransfers();

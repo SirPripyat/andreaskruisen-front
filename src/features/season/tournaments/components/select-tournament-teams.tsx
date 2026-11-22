@@ -13,12 +13,9 @@ import {
   Skeleton,
   toSelectOptions,
 } from '@/components/ui';
-import {
-  listTeamsPublic,
-  type TeamWithRatings,
-  useTeamsPublic,
-} from '@/features/admin/teams';
+import type { TeamWithRatings } from '@/features/admin/teams';
 import { useUsers } from '@/features/admin/users';
+import { listClubs, useClubs } from '@/features/season/clubs';
 import { useDebouncedValue } from '@/hooks';
 import { cn, getErrorMessage } from '@/lib';
 
@@ -55,7 +52,7 @@ export const SelectTournamentTeams = ({
   const [page, setPage] = useState(1);
   const debouncedName = useDebouncedValue(draftName, 400);
 
-  const { data, isPending } = useTeamsPublic({
+  const { data, isPending } = useClubs({
     name: debouncedName || undefined,
     page,
     pageSize: PAGE_SIZE,
@@ -82,7 +79,7 @@ export const SelectTournamentTeams = ({
 
     setIsFilling(true);
 
-    return listTeamsPublic({
+    return listClubs({
       page: 1,
       pageSize: maxTeams,
       sortBy: 'averageOverallRating',

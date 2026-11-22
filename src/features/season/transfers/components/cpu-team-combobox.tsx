@@ -10,7 +10,8 @@ import {
   ComboboxPopup,
   ComboboxTrigger,
 } from '@/components/ui';
-import { type TeamWithRatings, useTeamsPublic } from '@/features/admin/teams';
+import type { TeamWithRatings } from '@/features/admin/teams';
+import { useClubs } from '@/features/season/clubs';
 import { useSeasonSquads } from '@/features/season/squads';
 import { useDebouncedValue } from '@/hooks';
 import { cn } from '@/lib';
@@ -37,7 +38,7 @@ export const CpuTeamCombobox = ({
   const { data: squads } = useSeasonSquads();
   const ownedTeamIds = new Set((squads ?? []).map((squad) => squad.team.id));
 
-  const { data, isPending } = useTeamsPublic({
+  const { data, isPending } = useClubs({
     name: debouncedQuery || undefined,
     page: 1,
     pageSize: PAGE_SIZE,

@@ -1,4 +1,4 @@
-import type { League } from '@/features/admin/leagues';
+import type { TeamStats, TeamTitle } from '@/features/admin/teams';
 import type { SortOrder } from '@/lib';
 
 export type Club = {
@@ -8,13 +8,17 @@ export type Club = {
 };
 
 export type ClubWithRatings = Club & {
-  league: League;
+  league: { id: string; name: string; logoUrl: string };
   averageOverallRating: number | null;
   averageDefenseRating: number | null;
   averageMidfieldRating: number | null;
   averageAttackRating: number | null;
   formation: string | null;
 };
+
+export type ClubDetails = ClubWithRatings & TeamStats;
+
+export type ClubTitle = TeamTitle;
 
 export type ClubSortField =
   | 'name'

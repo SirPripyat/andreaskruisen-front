@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Button, Field, FieldLabel, Input, SheetFooter } from '@/components/ui';
-import { useTeam } from '@/features/admin/teams';
 import { useMe } from '@/features/auth';
+import { useClub } from '@/features/season/clubs';
 import type { RosterBySector, SeasonSquad } from '@/features/season/squads';
 import { useRoster, useSeasonSquads } from '@/features/season/squads';
 import { SwapAxis, useTransferQuote } from '@/features/season/transfers';
@@ -50,9 +50,9 @@ export const DirectNegotiationForm = ({
   const [targetSquad, setTargetSquad] = useState<SeasonSquad | null>(null);
 
   const { data: me } = useMe();
-  const { data: myTeam } = useTeam(me?.teamId ?? undefined, open);
+  const { data: myTeam } = useClub(me?.teamId ?? undefined, open);
   const { data: squads } = useSeasonSquads(open);
-  const { data: targetTeam } = useTeam(targetSquad?.team.id, open);
+  const { data: targetTeam } = useClub(targetSquad?.team.id, open);
 
   const { mutateAsync, isPending: isProposing } = useProposeNegotiation();
 
