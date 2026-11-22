@@ -14,7 +14,9 @@ const RESULT_CLASS: Record<'W' | 'D' | 'L', string> = {
 
 export const LastResultsCell = ({ standing }: LastResultsCellProps) => {
   if (standing.last5.length === 0) {
-    return <span className="block text-right text-muted-foreground">-</span>;
+    return (
+      <TableCell className="text-right text-muted-foreground">-</TableCell>
+    );
   }
 
   return (

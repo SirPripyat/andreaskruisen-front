@@ -32,6 +32,7 @@ const columns: ColumnDef<Tournament>[] = [
   {
     accessorKey: 'format',
     header: 'Formato',
+    meta: { className: 'hidden sm:table-cell' },
     cell: ({ row }) => (
       <Badge variant="outline">
         {TOURNAMENT_FORMAT_LABELS[row.original.format]}
@@ -41,6 +42,7 @@ const columns: ColumnDef<Tournament>[] = [
   {
     accessorKey: 'maxTeams',
     header: 'Times',
+    meta: { className: 'hidden sm:table-cell' },
   },
   {
     id: 'status',
@@ -61,6 +63,7 @@ const columns: ColumnDef<Tournament>[] = [
   {
     id: 'champion',
     header: 'Campeão',
+    meta: { className: 'hidden md:table-cell' },
     cell: ({ row }) => {
       const { champion } = row.original;
 
@@ -79,6 +82,7 @@ const columns: ColumnDef<Tournament>[] = [
   {
     accessorKey: 'createdAt',
     header: 'Criado em',
+    meta: { className: 'hidden md:table-cell' },
     cell: ({ row }) => formatDate(row.original.createdAt),
   },
   {

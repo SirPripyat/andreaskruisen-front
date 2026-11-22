@@ -29,8 +29,9 @@ export const AppLayout = () => {
           <Header user={user} isCompact={isScrolled} />
         </div>
         <div
+          data-scroll-container
           onScroll={handleScroll}
-          className="min-h-0 flex-1 overflow-y-auto px-4 pb-12 sm:px-8"
+          className="min-h-0 flex-1 overflow-y-auto px-4 pb-12 sm:px-8 [overflow-anchor:none]"
         >
           <div className="flex flex-1 flex-col gap-6">
             <Outlet />

@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import { toast } from 'sonner';
 import { Skeleton, Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui';
 import { useBreadcrumbItems } from '@/hooks';
 import { getErrorMessage } from '@/lib';
@@ -16,7 +15,6 @@ import {
 } from './components';
 import {
   type TournamentDetailTab,
-  useAdvancePhase,
   useTournament,
   useTournamentDetailTabs,
 } from './hooks';
@@ -37,21 +35,11 @@ export const TournamentDetailScreen = () => {
 
   const { data, isPending, isError, error } = useTournament(id);
 
-  const { mutate: advancePhase, isPending: isAdvancingPhase } =
-    useAdvancePhase(id);
-
   const { tab, setTab } = useTournamentDetailTabs(
     data?.format === 'GROUP_STAGE_KNOCKOUT' || data?.format === 'LEAGUE'
       ? 'groups'
       : 'knockout',
   );
-
-  const handleAdvancePhase = (phaseId: string) =>
-    advancePhase(phaseId, {
-      onSuccess: () => {
-        toast.success('Fase avançada — a próxima rodada já foi gerada.');
-      },
-    });
 
   useBreadcrumbItems([
     { label: 'Torneios', href: '/tournaments' },
@@ -73,18 +61,12 @@ export const TournamentDetailScreen = () => {
       label: 'Mata-mata',
       // Liga não tem fase eliminatória — não há o que mostrar aqui.
       visible: !isLeague,
-      content: <TournamentBracket />,
+      content: <TournamentBracket onRegisterGoals={setRegisterGoalsMatchId} />,
     },
     {
       value: 'matches',
       label: 'Jogos',
-      content: (
-        <TournamentFixtures
-          onRegisterGoals={setRegisterGoalsMatchId}
-          onAdvancePhase={handleAdvancePhase}
-          isAdvancingPhase={isAdvancingPhase}
-        />
-      ),
+      content: <TournamentFixtures onRegisterGoals={setRegisterGoalsMatchId} />,
     },
     {
       value: 'scorers',
@@ -117,20 +99,22 @@ export const TournamentDetailScreen = () => {
 
       {!isPending && data && (
         <>
-          <TournamentDetailDashboard />
-
           <Tabs
             value={tab}
             onValueChange={(value) => setTab(value as TournamentDetailTab)}
             className={'w-full items-center'}
           >
-            <TabsList>
-              {visibleTabItems.map((item) => (
-                <TabsTab key={item.value} value={item.value}>
-                  {item.label}
-                </TabsTab>
-              ))}
-            </TabsList>
+            <div className={'flex w-full flex-col gap-3 pb-3'}>
+              <TournamentDetailDashboard />
+
+              <TabsList className="self-center">
+                {visibleTabItems.map((item) => (
+                  <TabsTab key={item.value} value={item.value}>
+                    {item.label}
+                  </TabsTab>
+                ))}
+              </TabsList>
+            </div>
 
             {visibleTabItems.map((item) => (
               <TabsPanel key={item.value} value={item.value}>

@@ -1,10 +1,11 @@
-import { api, type PaginatedResult } from '@/lib';
+import { api, type PaginatedResult, serializeQueryParams } from '@/lib';
 import type { MatchListItem, PhaseSummary } from '../types';
 
 export type ListTournamentMatchesQuery = {
   round?: number;
   page: number;
   pageSize: number;
+  onlyOwnedTeams?: boolean;
 };
 
 export type TournamentMatchesPage = PaginatedResult<MatchListItem> & {
@@ -17,6 +18,6 @@ export const getTournamentMatches = (
 ) =>
   api
     .get<TournamentMatchesPage>('/matches', {
-      params: { ...query, tournamentId },
+      params: serializeQueryParams({ ...query, tournamentId }),
     })
     .then((res) => res.data);

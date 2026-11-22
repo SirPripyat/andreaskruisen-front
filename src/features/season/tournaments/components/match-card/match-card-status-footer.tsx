@@ -1,4 +1,4 @@
-import { cn } from '@/lib';
+import { CheckCircle2Icon, ClockIcon } from 'lucide-react';
 import { MatchCardAction } from './match-card-action';
 import type { MatchStatus } from './match-status';
 
@@ -16,10 +16,15 @@ export const MatchCardStatusFooter = ({
   return (
     <div
       className={
-        'flex items-center justify-between border-t pt-1.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wide'
+        'flex items-center justify-between gap-2 border-t pt-1.5 text-[11px] text-muted-foreground'
       }
     >
-      <span className={cn('rounded-full px-2 py-0.5 bg-background')}>
+      <span className={'flex items-center gap-1.5'}>
+        {status.played ? (
+          <CheckCircle2Icon className={'size-3.5'} />
+        ) : (
+          <ClockIcon className={'size-3.5'} />
+        )}
         {status.played ? 'Encerrado' : 'A definir'}
       </span>
 

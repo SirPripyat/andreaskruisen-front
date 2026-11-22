@@ -1,27 +1,36 @@
-import { ChevronsRightIcon, DicesIcon, Loader2Icon } from 'lucide-react';
-import { Button, Separator } from '@/components/ui';
+import { ChevronDownIcon, DicesIcon } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { useState } from 'react';
+import {
+  Badge,
+  Button,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+  Separator,
+} from '@/components/ui';
+import { cn } from '@/lib';
 import type { MatchListItem, PhaseSummary } from '../types';
-import { FinishTournamentButton } from './finish-tournament-button';
 import { MatchCard } from './match-card';
 import { MatchGrid } from './match-grid';
 
+const ROUND_NAV_THRESHOLD = 3;
+
 type PhaseSectionProps = {
-  tournamentId: string;
   phase: PhaseSummary;
   matches: MatchListItem[];
   isLatestPhase: boolean;
-  // Liga não tem fase seguinte pra avançar — o endpoint de avanço nem
-  // existe pra esse formato, então o botão não aparece.
-  isLeague?: boolean;
-  // null = torneio em andamento. Com isso setado, a fase decisiva já
-  // trocou "Finalizar torneio" por nada — ela foi finalizada.
-  tournamentFinishedAt?: string | null;
   onRegisterGoals?: (matchId: string) => void;
-  onAdvancePhase: (phaseId: string) => void;
-  isAdvancingPhase?: boolean;
   selectedIds?: Set<string>;
   onToggleSelect?: (matchId: string) => void;
   onSimulateIds?: (matchIds: string[]) => void;
+  // Ação extra renderizada na mesma linha dos chips de rodada (ex.: filtro
+  // "Meus times") — só faz sentido quando a fase usa navegação por rodada.
+  roundNavExtra?: ReactNode;
+  // No carrossel de fases do mobile, quem decide qual fase aparece é o
+  // carrossel — o próprio cabeçalho (nome da fase, "Encerrada", chevron de
+  // colapsar) fica redundante e some.
+  hideHeader?: boolean;
 };
 
 const groupByRound = (matches: MatchListItem[]) => {
@@ -42,32 +51,16 @@ const groupByRound = (matches: MatchListItem[]) => {
 };
 
 export const PhaseSection = ({
-  tournamentId,
   phase,
   matches,
   isLatestPhase,
-  isLeague,
-  tournamentFinishedAt,
   onRegisterGoals,
-  onAdvancePhase,
-  isAdvancingPhase,
   selectedIds,
   onToggleSelect,
   onSimulateIds,
+  roundNavExtra,
+  hideHeader,
 }: PhaseSectionProps) => {
-  const isFinalPhase = phase.type === 'KNOCKOUT' && phase.name === 'Final';
-  // Liga só tem uma fase (sempre a "vigente") e mata-mata não avança além
-  // da Final — em ambos os casos não existe próxima fase, essa é a
-  // decisiva, e é nela que "Finalizar torneio" aparece em vez de "Avançar
-  // fase".
-  const isDecisivePhase = isLeague || isFinalPhase;
-
-  const allPlayed =
-    matches.length > 0 &&
-    matches.every(
-      (match) => match.homeScore !== null && match.awayScore !== null,
-    );
-
   const pendingInPhase = matches
     .filter((match) => match.homeScore === null)
     .map((match) => match.id);
@@ -75,67 +68,137 @@ export const PhaseSection = ({
   const rounds: Array<[number | null, MatchListItem[]]> =
     phase.type === 'GROUP' ? groupByRound(matches) : [];
 
-  const lastRound = rounds[rounds.length - 1]?.[0];
+  // A vigente é a primeira rodada com jogo pendente — não a última rodada
+  // do calendário, que já existe de antemão pra todo o campeonato.
+  const currentRound =
+    rounds.find(([, roundMatches]) =>
+      roundMatches.some((match) => match.homeScore === null),
+    )?.[0] ?? rounds[rounds.length - 1]?.[0];
 
-  return (
-    <div id={`phase-${phase.id}`} className={'flex flex-col gap-4'}>
-      <div className={'flex items-center justify-between gap-4'}>
-        <Separator className={'shrink'} />
+  const isFullyPlayed = matches.length > 0 && pendingInPhase.length === 0;
+  // Fase já concluída e que não é mais a vigente — recolhe por padrão pra
+  // não empilhar o histórico inteiro do torneio na tela de jogos.
+  const collapsible = !isLatestPhase && isFullyPlayed;
+  const [open, setOpen] = useState(false);
 
-        <h2 className={'shrink-0 font-display font-bold text-lg uppercase'}>
-          {phase.name}
-        </h2>
+  // Liga tem muitas rodadas — em vez de empilhar todas (como faz o grupo
+  // pequeno do híbrido), mostra uma rodada por vez e troca pelo clique nos
+  // botões, com a vigente selecionada por padrão.
+  const showRoundNav =
+    phase.type === 'GROUP' && rounds.length > ROUND_NAV_THRESHOLD;
+  const [selectedRound, setSelectedRound] = useState<number | null>(null);
+  const activeRound = selectedRound ?? currentRound;
+  const visibleRounds = showRoundNav
+    ? rounds.filter(([round]) => round === activeRound)
+    : rounds;
 
-        <Separator className={'shrink'} />
+  const simulateButton = isLatestPhase &&
+    onSimulateIds &&
+    pendingInPhase.length > 0 && (
+      <Button
+        type={'button'}
+        variant={'outline'}
+        size={'sm'}
+        onClick={() => onSimulateIds(pendingInPhase)}
+      >
+        <DicesIcon />
+        {'Simular pendentes ('}
+        {pendingInPhase.length}
+        {')'}
+      </Button>
+    );
 
-        <div className={'flex shrink-0 items-center gap-2'}>
-          {isLatestPhase && onSimulateIds && pendingInPhase.length > 0 && (
-            <Button
+  // Liga: "Liga" como nome de fase não agrega nada (só existe essa fase) e
+  // o rótulo "Rodada N" repetiria o que o próprio botão já ativo já diz —
+  // os chips substituem o cabeçalho por completo.
+  const header = showRoundNav ? (
+    <div
+      className={
+        'flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4'
+      }
+    >
+      <div className={'flex gap-1.5 overflow-x-auto pb-1'}>
+        {rounds.map(([round, roundMatches]) => {
+          const isFutureRound = roundMatches.every(
+            (match) => match.homeScore === null,
+          );
+
+          return (
+            <button
+              key={round ?? 'single'}
               type={'button'}
-              variant={'outline'}
-              size={'sm'}
-              onClick={() => onSimulateIds(pendingInPhase)}
-            >
-              <DicesIcon />
-              {'Simular pendentes ('}
-              {pendingInPhase.length}
-              {')'}
-            </Button>
-          )}
-
-          {isLatestPhase && !isDecisivePhase && (
-            <Button
-              type={'button'}
-              variant={'outline'}
-              size={'sm'}
-              disabled={!allPlayed || isAdvancingPhase}
-              onClick={() => onAdvancePhase(phase.id)}
-            >
-              {isAdvancingPhase ? (
-                <Loader2Icon className={'animate-spin'} />
-              ) : (
-                <ChevronsRightIcon />
+              onClick={() => setSelectedRound(round)}
+              className={cn(
+                'shrink-0 rounded-md border px-2.5 py-1 font-mono text-xs font-semibold transition-colors',
+                round === activeRound
+                  ? 'border-accent bg-accent text-accent-foreground'
+                  : cn(
+                      'text-muted-foreground hover:bg-background',
+                      isFutureRound
+                        ? 'border-dashed border-border-strong'
+                        : 'border-border-strong',
+                    ),
               )}
-              Avançar fase
-            </Button>
-          )}
-
-          {isLatestPhase && isDecisivePhase && !tournamentFinishedAt && (
-            <FinishTournamentButton
-              tournamentId={tournamentId}
-              disabled={!allPlayed}
-            />
-          )}
-        </div>
+            >
+              {'R'}
+              {round}
+            </button>
+          );
+        })}
       </div>
 
+      <div className={'flex shrink-0 items-center gap-2'}>
+        {simulateButton}
+        {roundNavExtra}
+      </div>
+    </div>
+  ) : collapsible ? (
+    <CollapsibleTrigger
+      className={'flex w-full items-center justify-between gap-2'}
+    >
+      <span className={'flex items-center gap-2'}>
+        <span className={'font-display font-bold text-lg uppercase'}>
+          {phase.name}
+        </span>
+        <Badge variant={'secondary'}>Encerrada</Badge>
+      </span>
+
+      <ChevronDownIcon
+        className={cn(
+          'size-4 shrink-0 text-muted-foreground transition-transform',
+          open && 'rotate-180',
+        )}
+      />
+    </CollapsibleTrigger>
+  ) : (
+    <div className={'flex items-center justify-between gap-4'}>
+      <Separator className={'shrink'} />
+
+      <h2 className={'shrink-0 font-display font-bold text-lg uppercase'}>
+        {phase.name}
+      </h2>
+
+      <Separator className={'shrink'} />
+
+      <div className={'flex shrink-0 items-center gap-2'}>{simulateButton}</div>
+    </div>
+  );
+
+  const body = (
+    <div className={'flex flex-col gap-4'}>
       {phase.type === 'GROUP' ? (
-        rounds.map(([round, roundMatches]) => (
+        visibleRounds.map(([round, roundMatches]) => (
           <MatchGrid
             key={round ?? 'single'}
             matches={roundMatches}
-            roundLabel={round !== null ? `Rodada ${round}` : undefined}
-            isCurrentRound={round === lastRound}
+            roundLabel={
+              showRoundNav
+                ? undefined
+                : round !== null
+                  ? `Rodada ${round}`
+                  : undefined
+            }
+            isCurrentRound={round === currentRound}
             onRegisterGoals={onRegisterGoals}
             selectedIds={selectedIds}
             onToggleSelect={onToggleSelect}
@@ -143,18 +206,51 @@ export const PhaseSection = ({
           />
         ))
       ) : (
-        <div className="flex flex-wrap justify-center gap-3">
+        <div
+          className={cn(
+            'grid grid-cols-1 gap-2',
+            // Fase com um único jogo (ex.: a Final) ocupa a linha toda em
+            // vez de ficar espremida numa coluna de 2, com a outra vazia.
+            matches.length > 1 && 'md:grid-cols-2',
+          )}
+        >
           {matches.map((match) => (
             <MatchCard
               key={match.id}
               match={match}
-              isFinal={isFinalPhase}
+              variant={'row'}
               onRegisterGoals={onRegisterGoals}
-              cardClassName="w-full sm:w-[22rem]"
+              cardClassName={'border bg-card'}
             />
           ))}
         </div>
       )}
     </div>
+  );
+
+  if (hideHeader) {
+    return (
+      <div id={`phase-${phase.id}`} className={'flex flex-col gap-4'}>
+        {body}
+      </div>
+    );
+  }
+
+  if (!collapsible) {
+    return (
+      <div id={`phase-${phase.id}`} className={'flex flex-col gap-4'}>
+        {header}
+        {body}
+      </div>
+    );
+  }
+
+  return (
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <div id={`phase-${phase.id}`} className={'flex flex-col gap-4'}>
+        {header}
+        <CollapsibleContent>{body}</CollapsibleContent>
+      </div>
+    </Collapsible>
   );
 };

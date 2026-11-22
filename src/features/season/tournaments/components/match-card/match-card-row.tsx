@@ -1,4 +1,5 @@
 import { Checkbox } from '@/components/ui';
+import { useMe } from '@/features/auth';
 import { cn } from '@/lib';
 import type { MatchListItem } from '../../types';
 import { TeamChip } from '../team-chip';
@@ -24,11 +25,17 @@ export const MatchCardRow = ({
   selected,
   onToggleSelect,
 }: MatchCardRowProps) => {
+  const { data: me } = useMe();
+  const isMine =
+    !!me?.teamId &&
+    (match.homeTeam.id === me.teamId || match.awayTeam.id === me.teamId);
+
   return (
     <div
       ref={cardRef}
       className={cn(
         'flex items-center gap-2 rounded-xl p-2 text-sm transition-colors hover:bg-background',
+        isMine && 'bg-accent-surface',
         cardClassName,
       )}
     >
@@ -44,7 +51,20 @@ export const MatchCardRow = ({
       )}
 
       <TeamChip
-        className={cn('flex-1', status.awayWinner && 'opacity-40')}
+        className={cn(
+          'hidden flex-1 md:flex',
+          status.awayWinner && 'opacity-40',
+        )}
+        teamId={match.homeTeam.id}
+        name={match.homeTeam.name}
+        crestUrl={match.homeTeam.crestUrl}
+        owner={match.homeTeam.owner}
+      />
+      <TeamChip
+        className={cn(
+          'flex flex-1 md:hidden',
+          status.awayWinner && 'opacity-40',
+        )}
         teamId={match.homeTeam.id}
         name={match.homeTeam.name}
         crestUrl={match.homeTeam.crestUrl}
@@ -52,16 +72,38 @@ export const MatchCardRow = ({
         compact
       />
 
-      <span
-        className={cn(
-          'shrink-0 font-mono font-bold tabular-nums rounded-sm flex items-center justify-center px-2 text-sm bg-background',
+      <div className={'flex shrink-0 flex-col items-center gap-0.5'}>
+        <span
+          className={cn(
+            'font-mono font-bold tabular-nums rounded-sm flex items-center justify-center px-2 text-sm bg-background',
+          )}
+        >
+          {status.played ? `${match.homeScore} - ${match.awayScore}` : '—'}
+        </span>
+
+        {match.penalties && (
+          <span className={'text-[10px] text-muted-foreground'}>
+            pên. {match.penalties.homeScore}-{match.penalties.awayScore}
+          </span>
         )}
-      >
-        {status.played ? `${match.homeScore} - ${match.awayScore}` : '—'}
-      </span>
+      </div>
 
       <TeamChip
-        className={cn('flex-1', status.homeWinner && 'opacity-40')}
+        className={cn(
+          'hidden flex-1 md:flex',
+          status.homeWinner && 'opacity-40',
+        )}
+        teamId={match.awayTeam.id}
+        name={match.awayTeam.name}
+        crestUrl={match.awayTeam.crestUrl}
+        owner={match.awayTeam.owner}
+        align="right"
+      />
+      <TeamChip
+        className={cn(
+          'flex flex-1 md:hidden',
+          status.homeWinner && 'opacity-40',
+        )}
         teamId={match.awayTeam.id}
         name={match.awayTeam.name}
         crestUrl={match.awayTeam.crestUrl}

@@ -1,4 +1,5 @@
 import type { MatchListItem } from '../../types';
+import { MatchCard } from '../match-card/match-card';
 import { GroupCard } from './group-card';
 import { MatchRoundTitle } from './match-round-title';
 
@@ -42,6 +43,13 @@ export const MatchGrid = ({
     .filter((match) => match.homeScore === null)
     .map((match) => match.id);
 
+  const groups = groupByLabel(matches);
+  // Liga não tem grupos de verdade — o back ainda assim marca um único
+  // `groupLabel` em todo mundo. Com um grupo só, não faz sentido empacotar
+  // tudo num card "Grupo X" (não há outro grupo pra diferenciar); cada
+  // partida vira seu próprio card numa grade, igual mata-mata e híbrido.
+  const hasMultipleGroups = groups.length > 1;
+
   return (
     <div className={'flex flex-col gap-1.5'}>
       <MatchRoundTitle
@@ -53,23 +61,43 @@ export const MatchGrid = ({
         }
       />
 
-      <div
-        className={
-          'grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-4'
-        }
-      >
-        {groupByLabel(matches).map(([groupLabel, groupMatches], index) => (
-          <GroupCard
-            key={groupLabel ?? 'single'}
-            index={index}
-            groupMatches={groupMatches}
-            onRegisterGoals={onRegisterGoals}
-            groupLabel={groupLabel}
-            selectedIds={selectedIds}
-            onToggleSelect={onToggleSelect}
-          />
-        ))}
-      </div>
+      {hasMultipleGroups ? (
+        <div
+          className={
+            'grid items-start gap-4 [grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]'
+          }
+        >
+          {groups.map(([groupLabel, groupMatches], index) => (
+            <GroupCard
+              key={groupLabel ?? 'single'}
+              index={index}
+              groupMatches={groupMatches}
+              onRegisterGoals={onRegisterGoals}
+              groupLabel={groupLabel}
+              selectedIds={selectedIds}
+              onToggleSelect={onToggleSelect}
+            />
+          ))}
+        </div>
+      ) : (
+        <div
+          className={
+            'grid grid-cols-1 items-start gap-3 sm:grid-cols-2 lg:grid-cols-4'
+          }
+        >
+          {matches.map((match) => (
+            <MatchCard
+              key={match.id}
+              match={match}
+              variant={'row'}
+              onRegisterGoals={onRegisterGoals}
+              selected={selectedIds?.has(match.id)}
+              onToggleSelect={onToggleSelect}
+              cardClassName={'border bg-card'}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
