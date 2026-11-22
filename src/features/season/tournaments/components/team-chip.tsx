@@ -1,7 +1,13 @@
 import { UserIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui';
+import {
+  Badge,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui';
+import { useMe } from '@/features/auth';
 import { cn } from '@/lib';
 
 const getInitials = (team: string) =>
@@ -36,6 +42,7 @@ type TeamChipProps = {
   owner?: { name: string } | null;
   align?: 'right';
   compact?: boolean;
+  bold?: boolean;
   className?: string;
 };
 
@@ -46,8 +53,12 @@ export const TeamChip = ({
   owner,
   align,
   compact,
+  bold,
   className,
 }: TeamChipProps) => {
+  const { data: me } = useMe();
+  const isMine = !!teamId && teamId === me?.teamId;
+
   return (
     <div
       className={cn(
@@ -84,6 +95,7 @@ export const TeamChip = ({
                   className={cn(
                     'truncate font-semibold',
                     owner && 'text-success',
+                    isMine && 'text-accent',
                   )}
                 >
                   {getInitials(name)}
@@ -93,10 +105,21 @@ export const TeamChip = ({
             <TooltipContent>{name}</TooltipContent>
           </Tooltip>
         ) : (
-          <span className="truncate font-medium">{name}</span>
+          <span className={cn('truncate', bold ? 'font-bold' : 'font-medium')}>
+            {name}
+          </span>
         )}
       </TeamLink>
-      {owner && !compact && (
+      {isMine && !compact && (
+        <Badge
+          className={
+            'h-4 border-transparent bg-accent-surface px-1.5 text-[10px] text-accent'
+          }
+        >
+          {'Você'}
+        </Badge>
+      )}
+      {owner && !isMine && !compact && (
         <Tooltip>
           <TooltipTrigger
             render={<UserIcon className={'size-4 shrink-0 text-success'} />}

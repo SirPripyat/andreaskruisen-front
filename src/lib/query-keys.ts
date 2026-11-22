@@ -5,7 +5,10 @@ import type { ListTeamsQuery } from '@/features/admin/teams/types';
 import type { ListNotificationsQuery } from '@/features/notifications/types';
 import type { ListClubsQuery } from '@/features/season/clubs/types';
 import type { ListNegotiationsQuery } from '@/features/season/negotiations/types';
-import type { ListTournamentMatchesQuery } from '@/features/season/tournaments/api';
+import type {
+  GetTournamentFixturesQuery,
+  ListTournamentMatchesQuery,
+} from '@/features/season/tournaments/api';
 
 export const queryKeys = {
   me: {
@@ -121,8 +124,10 @@ export const queryKeys = {
       ['tournament', tournamentId] as const,
     dashboard: (tournamentId: string | undefined) =>
       ['tournament', tournamentId, 'dashboard'] as const,
-    fixtures: (tournamentId: string | undefined) =>
-      ['tournament', tournamentId, 'fixtures'] as const,
+    fixtures: (
+      tournamentId: string | undefined,
+      query?: GetTournamentFixturesQuery,
+    ) => ['tournament', tournamentId, 'fixtures', query] as const,
     matches: (
       tournamentId: string | undefined,
       query: ListTournamentMatchesQuery,

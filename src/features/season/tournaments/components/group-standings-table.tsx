@@ -6,8 +6,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui';
+import { useMe } from '@/features/auth';
+import { useIsMobile } from '@/hooks';
+import { cn } from '@/lib';
 import type { StandingWithOwner } from '../types';
 import { GoalDiffCell } from './goal-diff-cell';
+import { GroupStandingsMobileList } from './group-standings-mobile-list';
 import { LastResultsCell } from './last-results-cell';
 import { TeamChip } from './team-chip';
 
@@ -22,11 +26,22 @@ export const GroupStandingsTable = ({
   standings,
   showQualifyZone,
 }: GroupStandingsTableProps) => {
+  const { data: me } = useMe();
+  const isMobile = useIsMobile();
+
   if (standings.length === 0)
     return (
       <p className="p-4 text-muted-foreground text-sm">
         Nenhum time de usuário neste grupo.
       </p>
+    );
+
+  if (isMobile)
+    return (
+      <GroupStandingsMobileList
+        standings={standings}
+        showQualifyZone={showQualifyZone}
+      />
     );
 
   return (
@@ -44,13 +59,18 @@ export const GroupStandingsTable = ({
           <TableHead className="text-right">GC</TableHead>
           <TableHead className="text-right">SG</TableHead>
           <TableHead className="text-right">%</TableHead>
-          <TableHead className="text-right"></TableHead>
+          <TableHead className="text-right" />
         </TableRow>
       </TableHeader>
 
       <TableBody>
         {standings.map((standing, index) => (
-          <TableRow key={standing.teamId}>
+          <TableRow
+            key={standing.teamId}
+            className={cn(
+              standing.teamId === me?.teamId && 'bg-accent-surface',
+            )}
+          >
             <TableCell className="relative pl-3 text-muted-foreground font-medium">
               {showQualifyZone && index < QUALIFY_COUNT && (
                 <span className="absolute inset-y-1 left-0 w-1 rounded-full bg-success" />

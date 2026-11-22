@@ -26,18 +26,14 @@ export const MatchCardTeam = ({
   winner,
 }: MatchCardTeamProps) => {
   return (
-    <div
-      className={cn(
-        'flex items-center gap-2 rounded-lg border-l-4 border-l-transparent px-2 py-1',
-        winner && 'bg-success-surface',
-      )}
-    >
+    <div className={'flex items-center justify-between gap-2'}>
       <TeamChip
         className={cn('flex-1', muted && 'opacity-40')}
         teamId={teamId}
         name={name}
         crestUrl={crestUrl}
         owner={owner}
+        bold={winner}
       />
 
       {penaltyScore != null && (
@@ -51,13 +47,14 @@ export const MatchCardTeam = ({
         </span>
       )}
 
-      <div
+      <span
         className={cn(
-          'bg-background size-8 flex items-center justify-center rounded-lg',
+          'shrink-0 min-w-4 text-right font-mono text-sm tabular-nums',
+          winner ? 'font-bold' : 'font-medium',
         )}
       >
-        {score ?? '-'}
-      </div>
+        {score ?? ''}
+      </span>
     </div>
   );
 };

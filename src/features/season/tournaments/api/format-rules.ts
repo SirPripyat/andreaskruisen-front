@@ -18,3 +18,12 @@ export const isValidMaxTeams = (
 ): boolean => {
   return TEAM_COUNT_RULES[format].allowed.includes(maxTeams);
 };
+
+// Liga não tem fase seguinte pra avançar (uma única fase cobre toda a
+// competição) e mata-mata/híbrido nunca avançam além da Final — em ambos os
+// casos não existe próxima fase: essa é a decisiva, onde "Finalizar torneio"
+// substitui "Avançar fase".
+export const isDecisivePhase = (
+  format: TournamentFormat,
+  phaseName: string | null | undefined,
+): boolean => format === 'LEAGUE' || phaseName === 'Final';

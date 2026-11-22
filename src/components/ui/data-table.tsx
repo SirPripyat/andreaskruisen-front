@@ -91,7 +91,10 @@ export const DataTable = <TData,>({
             ).map((rowKey) => (
               <TableRow key={rowKey}>
                 {table.getAllLeafColumns().map((column) => (
-                  <TableCell key={column.id}>
+                  <TableCell
+                    key={column.id}
+                    className={column.columnDef.meta?.className}
+                  >
                     <Skeleton className="h-5 w-full max-w-32" />
                   </TableCell>
                 ))}
