@@ -193,12 +193,20 @@ const Sidebar = ({
             } as CSSProperties
           }
           side={side}
+          mobileBottomSheet={false}
         >
           <SheetHeader className="sr-only">
             <SheetTitle>Sidebar</SheetTitle>
             <SheetDescription>Displays the mobile sidebar.</SheetDescription>
           </SheetHeader>
-          <div className="flex h-full w-full flex-col">{children}</div>
+          {/* biome-ignore lint/a11y/useKeyWithClickEvents: catches click bubbling from the nav links/items inside to close the mobile drawer; it isn't itself an interactive element */}
+          {/* biome-ignore lint/a11y/noStaticElementInteractions: same as above */}
+          <div
+            className="flex h-full w-full flex-col"
+            onClick={() => setOpenMobile(false)}
+          >
+            {children}
+          </div>
         </SheetContent>
       </Sheet>
     );

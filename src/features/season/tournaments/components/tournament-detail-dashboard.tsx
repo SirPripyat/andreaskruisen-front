@@ -10,6 +10,7 @@ import {
 import { TOURNAMENT_FORMAT_LABELS } from '../types';
 import { PhaseActionBar } from './phase-action-bar';
 import { PhaseStepper } from './phase-stepper';
+import { TournamentFormatIcon } from './tournament-format-icon';
 
 export const TournamentDetailDashboard = () => {
   const { id } = useParams<{ id: string }>();
@@ -55,7 +56,10 @@ export const TournamentDetailDashboard = () => {
 
         <div className={'flex flex-wrap items-center gap-2'}>
           {format && (
-            <Badge variant="outline">{TOURNAMENT_FORMAT_LABELS[format]}</Badge>
+            <Badge variant="outline" className={'gap-1.5'}>
+              <TournamentFormatIcon format={format} className={'size-3.5'} />
+              {TOURNAMENT_FORMAT_LABELS[format]}
+            </Badge>
           )}
 
           {currentPhase && (

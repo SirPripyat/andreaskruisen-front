@@ -6,6 +6,7 @@ export * from './use-delete-tournament';
 export * from './use-edit-tournament-drawer';
 export * from './use-finish-tournament';
 export * from './use-goal-leaders-list';
+export * from './use-hall-of-fame';
 export * from './use-league-progress';
 export * from './use-match-bulk-selection';
 export * from './use-match-detail';

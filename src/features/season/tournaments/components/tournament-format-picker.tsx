@@ -1,10 +1,4 @@
-import {
-  CircleAlertIcon,
-  LayersIcon,
-  SwordsIcon,
-  TableIcon,
-} from 'lucide-react';
-import type { ComponentType } from 'react';
+import { CircleAlertIcon } from 'lucide-react';
 import { cn } from '@/lib';
 import { TEAM_COUNT_RULES } from '../api';
 import {
@@ -12,20 +6,12 @@ import {
   TOURNAMENT_FORMATS,
   type TournamentFormat,
 } from '../types';
+import { TOURNAMENT_FORMAT_ICONS } from './tournament-format-icon';
 
 const FORMAT_DESCRIPTIONS: Record<TournamentFormat, string> = {
   LEAGUE: 'Todos jogam entre si num turno único — o líder da tabela vence.',
   KNOCKOUT: 'Eliminação direta a cada rodada, sem segunda chance.',
   GROUP_STAGE_KNOCKOUT: 'Classificação em grupos seguida de eliminatórias.',
-};
-
-const FORMAT_ICONS: Record<
-  TournamentFormat,
-  ComponentType<{ className?: string }>
-> = {
-  LEAGUE: TableIcon,
-  KNOCKOUT: SwordsIcon,
-  GROUP_STAGE_KNOCKOUT: LayersIcon,
 };
 
 const formatRange = (rule: { allowed: number[] }) =>
@@ -50,7 +36,7 @@ export const TournamentFormatPicker = ({
     <div className={'flex flex-col gap-3'}>
       <div className={'grid grid-cols-1 gap-2.5 sm:grid-cols-3'}>
         {TOURNAMENT_FORMATS.map((item) => {
-          const Icon = FORMAT_ICONS[item];
+          const Icon = TOURNAMENT_FORMAT_ICONS[item];
           const selected = item === format;
 
           return (

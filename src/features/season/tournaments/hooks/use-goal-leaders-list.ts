@@ -36,8 +36,6 @@ export const useGoalLeadersList = (leaders: GoalLeader[]) => {
 
   const podium = leaders.slice(0, 3);
 
-  const leaderCount = leaders[0]?.count || 1;
-
   return {
     search,
     setSearch,
@@ -46,6 +44,5 @@ export const useGoalLeadersList = (leaders: GoalLeader[]) => {
     teams,
     filteredLeaders,
     podium,
-    leaderCount,
   };
 };

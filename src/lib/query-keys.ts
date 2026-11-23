@@ -9,6 +9,7 @@ import type {
   GetTournamentFixturesQuery,
   ListTournamentMatchesQuery,
 } from '@/features/season/tournaments/api';
+import type { TournamentFormat } from '@/features/season/tournaments/types';
 
 export const queryKeys = {
   me: {
@@ -148,5 +149,7 @@ export const queryKeys = {
       ['tournament', tournamentId, 'top-assists'] as const,
     topScorers: (tournamentId: string | undefined) =>
       ['tournament', tournamentId, 'top-scorers'] as const,
+    hallOfFame: (format: TournamentFormat) =>
+      ['tournaments', 'hall-of-fame', format] as const,
   },
 } as const;

@@ -38,15 +38,36 @@ const SheetOverlay = ({
   );
 };
 
+type SheetSide = 'top' | 'right' | 'bottom' | 'left';
+
+const SHEET_SIDE_CLASSES: Record<SheetSide, string> = {
+  bottom:
+    'inset-x-0 top-auto bottom-0 h-auto border-t data-ending-style:translate-y-[2.5rem] data-starting-style:translate-y-[2.5rem]',
+  top: 'inset-x-0 bottom-auto top-0 h-auto border-t-0 border-b data-ending-style:translate-y-[-2.5rem] data-starting-style:translate-y-[-2.5rem]',
+  left: 'inset-y-0 right-auto left-0 h-full w-3/4 max-w-sm border-t-0 border-r data-ending-style:translate-x-[-2.5rem] data-starting-style:translate-x-[-2.5rem]',
+  right:
+    'inset-y-0 left-auto right-0 h-full w-3/4 max-w-sm border-t-0 border-l data-ending-style:translate-x-[2.5rem] data-starting-style:translate-x-[2.5rem]',
+};
+
+const SHEET_SIDE_DESKTOP_CLASSES: Record<SheetSide, string> = {
+  bottom: 'sm:h-auto',
+  top: 'sm:bottom-auto sm:top-0 sm:h-auto sm:border-t-0 sm:border-b sm:data-ending-style:translate-y-[-2.5rem] sm:data-starting-style:translate-y-[-2.5rem]',
+  left: 'sm:inset-y-0 sm:right-auto sm:left-0 sm:h-full sm:w-3/4 sm:max-w-sm sm:border-t-0 sm:border-r sm:data-ending-style:translate-x-[-2.5rem] sm:data-ending-style:translate-y-0 sm:data-starting-style:translate-x-[-2.5rem] sm:data-starting-style:translate-y-0',
+  right:
+    'sm:inset-y-0 sm:left-auto sm:right-0 sm:h-full sm:w-3/4 sm:max-w-sm sm:border-t-0 sm:border-l sm:data-ending-style:translate-x-[2.5rem] sm:data-ending-style:translate-y-0 sm:data-starting-style:translate-x-[2.5rem] sm:data-starting-style:translate-y-0',
+};
+
 const SheetContent = ({
   className,
   children,
   side = 'right',
   showCloseButton = true,
+  mobileBottomSheet = true,
   ...props
 }: SheetPrimitive.Popup.Props & {
-  side?: 'top' | 'right' | 'bottom' | 'left';
+  side?: SheetSide;
   showCloseButton?: boolean;
+  mobileBottomSheet?: boolean;
 }) => {
   return (
     <SheetPortal>
@@ -55,7 +76,14 @@ const SheetContent = ({
         data-slot="sheet-content"
         data-side={side}
         className={cn(
-          'fixed z-50 flex flex-col gap-4 bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg transition duration-200 ease-in-out data-ending-style:opacity-0 data-starting-style:opacity-0 data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:border-t data-[side=bottom]:data-ending-style:translate-y-[2.5rem] data-[side=bottom]:data-starting-style:translate-y-[2.5rem] data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:border-r data-[side=left]:data-ending-style:translate-x-[-2.5rem] data-[side=left]:data-starting-style:translate-x-[-2.5rem] data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:border-l data-[side=right]:data-ending-style:translate-x-[2.5rem] data-[side=right]:data-starting-style:translate-x-[2.5rem] data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=top]:data-ending-style:translate-y-[-2.5rem] data-[side=top]:data-starting-style:translate-y-[-2.5rem] data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-sm',
+          'fixed z-50 flex flex-col gap-4 bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg transition duration-200 ease-in-out data-ending-style:opacity-0 data-starting-style:opacity-0',
+          mobileBottomSheet
+            ? cn(
+                'inset-x-0 bottom-0 h-[90%] w-full border-t',
+                'data-ending-style:translate-y-[2.5rem] data-starting-style:translate-y-[2.5rem]',
+                SHEET_SIDE_DESKTOP_CLASSES[side],
+              )
+            : SHEET_SIDE_CLASSES[side],
           className,
         )}
         {...props}

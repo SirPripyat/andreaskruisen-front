@@ -149,6 +149,25 @@ export type GoalLeader = {
   player: MatchPlayerOption;
   team: TeamSummary;
   count: number;
+  // Só vêm preenchidos no Hall da Fama (GET /tournaments/hall-of-fame) —
+  // o ranking por torneio (GET /tournaments/:id/top-scorers|top-assists)
+  // não manda esses campos.
+  matchesPlayed?: number;
+  average?: number;
+  titles?: number;
+};
+
+export type HallOfFameLeader = GoalLeader & {
+  matchesPlayed: number;
+  average: number;
+  titles: number;
+};
+
+// GET /tournaments/hall-of-fame?format=... — ranking agregado por tipo de
+// campeonato (não de um torneio específico), escopado pela temporada.
+export type HallOfFame = {
+  topScorers: HallOfFameLeader[];
+  topAssists: HallOfFameLeader[];
 };
 
 export type NextMatchSummary = {

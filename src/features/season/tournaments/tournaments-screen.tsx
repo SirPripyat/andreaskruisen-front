@@ -12,6 +12,7 @@ import {
   CreateTournamentDrawer,
   TeamChip,
   TournamentActionsMenu,
+  TournamentFormatIcon,
 } from './components';
 import { useTournaments } from './hooks';
 import { TOURNAMENT_FORMAT_LABELS, type Tournament } from './types';
@@ -34,7 +35,11 @@ const columns: ColumnDef<Tournament>[] = [
     header: 'Formato',
     meta: { className: 'hidden sm:table-cell' },
     cell: ({ row }) => (
-      <Badge variant="outline">
+      <Badge variant="outline" className={'gap-1.5'}>
+        <TournamentFormatIcon
+          format={row.original.format}
+          className={'size-3.5'}
+        />
         {TOURNAMENT_FORMAT_LABELS[row.original.format]}
       </Badge>
     ),

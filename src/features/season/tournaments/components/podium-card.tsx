@@ -1,3 +1,4 @@
+import { TrophyIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
 import { cn } from '@/lib';
 import type { GoalLeader } from '../types';
@@ -84,6 +85,25 @@ export const PodiumCard = ({ index, leader, countLabel }: PodiumCardProps) => {
           {countLabel}
         </span>
       </span>
+
+      {leader.matchesPlayed !== undefined && (
+        <span
+          className={'font-mono text-[11px] text-muted-foreground tabular-nums'}
+        >
+          {leader.matchesPlayed} jogos · {leader.average?.toFixed(2)}/jogo
+        </span>
+      )}
+
+      {!!leader.titles && (
+        <span
+          className={
+            'inline-flex items-center gap-1 font-mono text-[11px] text-value tabular-nums'
+          }
+        >
+          <TrophyIcon className={'size-3'} />
+          {leader.titles} {leader.titles === 1 ? 'título' : 'títulos'}
+        </span>
+      )}
     </div>
   );
 };

@@ -21,7 +21,6 @@ export const GoalLeadersList = ({
     teams,
     filteredLeaders,
     podium,
-    leaderCount,
   } = useGoalLeadersList(leaders);
 
   return (
@@ -40,7 +39,6 @@ export const GoalLeadersList = ({
         <LeadersTable
           countLabel={countLabel}
           filtered={filteredLeaders}
-          leaderCount={leaderCount}
           leaders={leaders}
         />
       </div>

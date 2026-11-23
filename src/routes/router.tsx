@@ -1,121 +1,26 @@
-import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router';
+import { ImportScreen } from '@/features/admin/import/import-screen';
+import { LeaguesScreen } from '@/features/admin/leagues/leagues-screen';
+import { NationalitiesScreen } from '@/features/admin/nationalities/nationalities-screen';
+import { NegotiationWindowScreen } from '@/features/admin/negotiation-window/negotiation-window-screen';
+import { PlayersScreen } from '@/features/admin/players/players-screen';
+import { SeasonsScreen } from '@/features/admin/seasons/seasons-screen';
+import { TeamsScreen } from '@/features/admin/teams/teams-screen';
+import { UsersScreen } from '@/features/admin/users/users-screen';
+import { LoginScreen } from '@/features/auth/login-screen';
+import { ProfileScreen } from '@/features/auth/profile-screen';
+import { HomeScreen } from '@/features/home/home-screen';
+import { ClubsScreen } from '@/features/season/clubs/clubs-screen';
+import { FavoritesScreen } from '@/features/season/favorites/favorites-screen';
+import { PlayerDetailScreen } from '@/features/season/players/player-detail-screen';
+import { SeasonPlayersScreen } from '@/features/season/players/players-screen';
+import { TeamDetailScreen } from '@/features/season/team-detail/team-detail-screen';
+import { HallOfFameScreen } from '@/features/season/tournaments/hall-of-fame-screen';
+import { TournamentDetailScreen } from '@/features/season/tournaments/tournament-detail-screen';
+import { TournamentsScreen } from '@/features/season/tournaments/tournaments-screen';
+import { TransfersScreen } from '@/features/season/transfers/transfers-screen';
 import { ProtectedRoute, RequireRole, RequireSeason } from './guards';
 import { AppLayout, RootLayout, RouteErrorBoundary } from './layouts';
-
-const LoginScreen = lazy(() =>
-  import('@/features/auth/login-screen').then((m) => ({
-    default: m.LoginScreen,
-  })),
-);
-
-const HomeScreen = lazy(() =>
-  import('@/features/home/home-screen').then((m) => ({
-    default: m.HomeScreen,
-  })),
-);
-
-const UsersScreen = lazy(() =>
-  import('@/features/admin/users/users-screen').then((m) => ({
-    default: m.UsersScreen,
-  })),
-);
-
-const PlayersScreen = lazy(() =>
-  import('@/features/admin/players/players-screen').then((m) => ({
-    default: m.PlayersScreen,
-  })),
-);
-
-const ImportScreen = lazy(() =>
-  import('@/features/admin/import/import-screen').then((m) => ({
-    default: m.ImportScreen,
-  })),
-);
-
-const TeamsScreen = lazy(() =>
-  import('@/features/admin/teams/teams-screen').then((m) => ({
-    default: m.TeamsScreen,
-  })),
-);
-
-const NationalitiesScreen = lazy(() =>
-  import('@/features/admin/nationalities/nationalities-screen').then((m) => ({
-    default: m.NationalitiesScreen,
-  })),
-);
-
-const LeaguesScreen = lazy(() =>
-  import('@/features/admin/leagues/leagues-screen').then((m) => ({
-    default: m.LeaguesScreen,
-  })),
-);
-
-const NegotiationWindowScreen = lazy(() =>
-  import('@/features/admin/negotiation-window/negotiation-window-screen').then(
-    (m) => ({ default: m.NegotiationWindowScreen }),
-  ),
-);
-
-const SeasonsScreen = lazy(() =>
-  import('@/features/admin/seasons/seasons-screen').then((m) => ({
-    default: m.SeasonsScreen,
-  })),
-);
-
-const TeamDetailScreen = lazy(() =>
-  import('@/features/season/team-detail/team-detail-screen').then((m) => ({
-    default: m.TeamDetailScreen,
-  })),
-);
-
-const ClubsScreen = lazy(() =>
-  import('@/features/season/clubs/clubs-screen').then((m) => ({
-    default: m.ClubsScreen,
-  })),
-);
-
-const TournamentsScreen = lazy(() =>
-  import('@/features/season/tournaments/tournaments-screen').then((m) => ({
-    default: m.TournamentsScreen,
-  })),
-);
-
-const TournamentDetailScreen = lazy(() =>
-  import('@/features/season/tournaments/tournament-detail-screen').then(
-    (m) => ({ default: m.TournamentDetailScreen }),
-  ),
-);
-
-const TransfersScreen = lazy(() =>
-  import('@/features/season/transfers/transfers-screen').then((m) => ({
-    default: m.TransfersScreen,
-  })),
-);
-
-const SeasonPlayersScreen = lazy(() =>
-  import('@/features/season/players/players-screen').then((m) => ({
-    default: m.SeasonPlayersScreen,
-  })),
-);
-
-const PlayerDetailScreen = lazy(() =>
-  import('@/features/season/players/player-detail-screen').then((m) => ({
-    default: m.PlayerDetailScreen,
-  })),
-);
-
-const ProfileScreen = lazy(() =>
-  import('@/features/auth/profile-screen').then((m) => ({
-    default: m.ProfileScreen,
-  })),
-);
-
-const FavoritesScreen = lazy(() =>
-  import('@/features/season/favorites/favorites-screen').then((m) => ({
-    default: m.FavoritesScreen,
-  })),
-);
 
 export const router = createBrowserRouter([
   {
@@ -211,6 +116,11 @@ export const router = createBrowserRouter([
                     path: 'tournaments/:id',
                     element: <TournamentDetailScreen />,
                     handle: { breadcrumb: 'Torneio' },
+                  },
+                  {
+                    path: 'hall-of-fame',
+                    element: <HallOfFameScreen />,
+                    handle: { breadcrumb: 'Hall da Fama' },
                   },
                   {
                     path: 'transfers',

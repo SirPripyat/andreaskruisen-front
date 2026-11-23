@@ -3,6 +3,7 @@ export * from './create-tournament';
 export * from './delete-tournament';
 export * from './finish-tournament';
 export * from './format-rules';
+export * from './get-hall-of-fame';
 export * from './get-match-detail';
 export * from './get-tournament';
 export * from './get-tournament-dashboard';

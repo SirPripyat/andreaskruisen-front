@@ -1,3 +1,4 @@
+import { TrophyIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
 import { cn } from '@/lib';
 import type { GoalLeader } from '../types';
@@ -7,14 +8,12 @@ type LeadersTableProps = {
   leaders: GoalLeader[];
   filtered: GoalLeader[];
   countLabel: string;
-  leaderCount: number;
 };
 
 export const LeadersTable = ({
   leaders,
   filtered,
   countLabel,
-  leaderCount,
 }: LeadersTableProps) => {
   return (
     <div className={'overflow-hidden rounded-2xl border bg-card shadow-sm'}>
@@ -80,7 +79,7 @@ export const LeadersTable = ({
                   />
                 </div>
 
-                <div className={'flex w-28 shrink-0 flex-col items-end gap-1'}>
+                <div className={'flex w-fit shrink-0 flex-col items-end gap-1'}>
                   <span className={'font-mono font-semibold tabular-nums'}>
                     {leader.count}
                     <span
@@ -91,18 +90,30 @@ export const LeadersTable = ({
                       {countLabel}
                     </span>
                   </span>
-                  <div
-                    className={
-                      'h-1 w-full overflow-hidden rounded-full bg-muted'
-                    }
-                  >
-                    <div
-                      className={'h-full rounded-full bg-accent'}
-                      style={{
-                        width: `${Math.round((leader.count / leaderCount) * 100)}%`,
-                      }}
-                    />
-                  </div>
+
+                  {leader.matchesPlayed !== undefined && (
+                    <span
+                      className={
+                        'whitespace-nowrap font-mono text-[11px] text-muted-foreground tabular-nums'
+                      }
+                    >
+                      {leader.matchesPlayed} jogos ·{' '}
+                      {leader.average?.toFixed(2)}
+                      /jogo
+                    </span>
+                  )}
+
+                  {!!leader.titles && (
+                    <span
+                      className={
+                        'inline-flex items-center gap-1 font-mono text-[11px] text-value tabular-nums'
+                      }
+                    >
+                      <TrophyIcon className={'size-3'} />
+                      {leader.titles}{' '}
+                      {leader.titles === 1 ? 'título' : 'títulos'}
+                    </span>
+                  )}
                 </div>
               </div>
             );
