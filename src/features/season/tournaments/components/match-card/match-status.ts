@@ -14,7 +14,7 @@ export const getMatchStatus = (match: MatchListItem): MatchStatus => {
   if (match.awayTeam === null) {
     return {
       played: true,
-      homeWinner: false,
+      homeWinner: true,
       awayWinner: false,
       locked: match.locked,
       isBye: true,

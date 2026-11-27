@@ -104,6 +104,15 @@ export type TournamentSituation = {
   | { matches: Confronto[]; groups?: undefined }
 );
 
+// Classificação de um único grupo (GET /tournaments/:id/groups/:groupLabel)
+// — usado onde só o grupo de uma partida específica importa, sem buscar os
+// demais grupos do torneio.
+export type TournamentGroupSituation = {
+  phase: PhaseSummary;
+  groupLabel: string;
+  standings: StandingWithOwner[];
+};
+
 // Só existe quando a partida é KNOCKOUT e termina empatada no tempo normal.
 export type MatchPenalties = {
   homeScore: number;

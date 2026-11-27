@@ -8,6 +8,10 @@ type GroupStandingsMobileListProps = {
   // Quantos primeiros colocados são marcados como classificados — null =
   // sem zona de classificação (ver TournamentGroupStandings).
   qualifyCount: number | null;
+  // Times classificados que já têm bye garantido na 1ª rodada do mata-mata
+  // (ver TournamentGroupStandings) — marcados com uma cor diferente do resto
+  // da zona de classificação.
+  byeTeamIds: Set<string>;
 };
 
 const RESULT_CLASS: Record<'W' | 'D' | 'L', string> = {
@@ -19,6 +23,7 @@ const RESULT_CLASS: Record<'W' | 'D' | 'L', string> = {
 export const GroupStandingsMobileList = ({
   standings,
   qualifyCount,
+  byeTeamIds,
 }: GroupStandingsMobileListProps) => {
   const { data: me } = useMe();
 
@@ -45,9 +50,12 @@ export const GroupStandingsMobileList = ({
               >
                 {qualified && (
                   <span
-                    className={
-                      'absolute inset-y-0.5 left-0 w-0.5 rounded-full bg-success'
-                    }
+                    className={cn(
+                      'absolute inset-y-0.5 left-0 w-0.5 rounded-full',
+                      byeTeamIds.has(standing.teamId)
+                        ? 'bg-info'
+                        : 'bg-success',
+                    )}
                   />
                 )}
                 {standing.position}

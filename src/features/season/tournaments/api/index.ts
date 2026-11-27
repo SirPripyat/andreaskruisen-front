@@ -8,6 +8,7 @@ export * from './get-match-detail';
 export * from './get-tournament';
 export * from './get-tournament-dashboard';
 export * from './get-tournament-fixtures';
+export * from './get-tournament-group';
 export * from './get-tournament-matches';
 export * from './get-tournament-situation';
 export * from './get-tournament-top-assists';

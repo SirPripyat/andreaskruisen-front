@@ -60,6 +60,7 @@ export const MatchCardRow = ({
         name={match.homeTeam.name}
         crestUrl={match.homeTeam.crestUrl}
         owner={match.homeTeam.owner}
+        bold={status.isBye}
       />
       <TeamChip
         className={cn(

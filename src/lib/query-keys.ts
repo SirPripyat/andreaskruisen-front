@@ -150,6 +150,11 @@ export const queryKeys = {
       tournamentId: string | undefined,
       query?: { onlyOwnedTeams?: boolean; round?: number },
     ) => ['tournament', tournamentId, 'situation', query] as const,
+    group: (
+      tournamentId: string | undefined,
+      groupLabel: string | undefined,
+      query?: { round?: number },
+    ) => ['tournament', tournamentId, 'group', groupLabel, query] as const,
     topAssists: (tournamentId: string | undefined) =>
       ['tournament', tournamentId, 'top-assists'] as const,
     topScorers: (tournamentId: string | undefined) =>

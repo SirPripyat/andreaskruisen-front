@@ -76,10 +76,11 @@ export const PhaseSection = ({
     )?.[0] ?? rounds[rounds.length - 1]?.[0];
 
   const isFullyPlayed = matches.length > 0 && pendingInPhase.length === 0;
-  // Fase já concluída e que não é mais a vigente — recolhe por padrão pra
-  // não empilhar o histórico inteiro do torneio na tela de jogos.
+  // Fase já concluída e que não é mais a vigente — pode ser recolhida pelo
+  // usuário pra desafogar a tela, mas começa aberta: os jogos já disputados
+  // continuam visíveis (só não editáveis — ver `match.locked`).
   const collapsible = !isLatestPhase && isFullyPlayed;
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   // Liga tem muitas rodadas — em vez de empilhar todas (como faz o grupo
   // pequeno do híbrido), mostra uma rodada por vez e troca pelo clique nos

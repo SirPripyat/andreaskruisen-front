@@ -1,6 +1,10 @@
 import { useParams } from 'react-router';
 import { cn } from '@/lib';
-import { useTournament, useTournamentSituation } from '../hooks';
+import {
+  useTournament,
+  useTournamentAllMatches,
+  useTournamentSituation,
+} from '../hooks';
 import { GroupStandingsTable } from './group-standings-table';
 
 const GROUP_PHASE_ORDER = 1;
@@ -15,6 +19,20 @@ export const TournamentGroupStandings = () => {
   const { data: groupSituation } = useTournamentSituation(id, {
     round: GROUP_PHASE_ORDER,
   });
+
+  // Mesma query usada pelo stepper de fases (cache compartilhado) — usamos
+  // só pra achar o primeiro mata-mata já gerado e descobrir quem pegou bye
+  // (awayTeam null, ver MatchListItem). Enquanto o mata-mata não existe
+  // ainda, byeTeamIds fica vazio e a zona de classificação é só verde.
+  const { phases } = useTournamentAllMatches(id);
+  const firstKnockoutPhase = phases.find(
+    ({ phase }) => phase.type === 'KNOCKOUT',
+  );
+  const byeTeamIds = new Set(
+    firstKnockoutPhase?.matches
+      .filter((match) => match.awayTeam === null)
+      .map((match) => match.homeTeam.id) ?? [],
+  );
 
   const entries = Object.entries(groupSituation?.groups ?? {}).sort(
     ([a], [b]) => a.localeCompare(b),
@@ -38,9 +56,28 @@ export const TournamentGroupStandings = () => {
 
   return (
     <div className={'flex flex-col gap-4'}>
-      <span className={'font-medium text-muted-foreground text-xs uppercase'}>
-        {isLeague ? 'Classificação' : 'Classificação final · fase de grupos'}
-      </span>
+      <div className={'flex flex-wrap items-center justify-between gap-2'}>
+        <span className={'font-medium text-muted-foreground text-xs uppercase'}>
+          {isLeague ? 'Classificação' : 'Classificação final · fase de grupos'}
+        </span>
+
+        {!isLeague && qualifyCount !== null && (
+          <div
+            className={
+              'flex items-center gap-3 text-[11px] text-muted-foreground'
+            }
+          >
+            <span className={'flex items-center gap-1.5'}>
+              <span className={'size-1.5 shrink-0 rounded-full bg-success'} />
+              {'Classificado'}
+            </span>
+            <span className={'flex items-center gap-1.5'}>
+              <span className={'size-1.5 shrink-0 rounded-full bg-info'} />
+              {'Bye — avança direto'}
+            </span>
+          </div>
+        )}
+      </div>
 
       <div className={'grid gap-4 md:grid-cols-2'}>
         {entries.map(([groupLabel, standings]) => (
@@ -66,6 +103,7 @@ export const TournamentGroupStandings = () => {
               <GroupStandingsTable
                 standings={standings}
                 qualifyCount={qualifyCount}
+                byeTeamIds={byeTeamIds}
               />
             </div>
           </div>

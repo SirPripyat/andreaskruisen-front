@@ -21,6 +21,7 @@ import {
   type FormValues,
   toFormValues,
 } from './goals-form-schema';
+import { MatchGroupStandings } from './match-group-standings';
 import { MatchScoreStrip } from './match-score-strip';
 import { MatchStatusBar } from './match-status-bar';
 import { PenaltiesField } from './penalties-field';
@@ -187,6 +188,8 @@ export const RegisterMatchGoalsDrawer = ({
                 />
               )}
             </div>
+
+            <MatchGroupStandings tournamentId={tournamentId} match={match} />
           </form>
         )}
 

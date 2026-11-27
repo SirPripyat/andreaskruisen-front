@@ -20,6 +20,7 @@ export * from './use-tournament-bracket';
 export * from './use-tournament-dashboard';
 export * from './use-tournament-detail-dashboard';
 export * from './use-tournament-detail-tabs';
+export * from './use-tournament-group';
 export * from './use-tournament-matches';
 export * from './use-tournament-phase-stepper';
 export * from './use-tournament-roster';
