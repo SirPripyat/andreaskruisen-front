@@ -174,16 +174,18 @@ export const RegisterMatchGoalsDrawer = ({
                 errors={errors}
                 readOnly={readOnly}
               />
-              <TeamGoalGroup
-                side="away"
-                team={match.awayTeam}
-                fieldName="awayGoals"
-                control={control}
-                fieldArray={awayArray}
-                liveRows={awayGoalsWatch}
-                errors={errors}
-                readOnly={readOnly}
-              />
+              {match.awayTeam && (
+                <TeamGoalGroup
+                  side="away"
+                  team={match.awayTeam}
+                  fieldName="awayGoals"
+                  control={control}
+                  fieldArray={awayArray}
+                  liveRows={awayGoalsWatch}
+                  errors={errors}
+                  readOnly={readOnly}
+                />
+              )}
             </div>
           </form>
         )}

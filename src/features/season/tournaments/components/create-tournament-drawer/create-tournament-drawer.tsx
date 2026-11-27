@@ -65,6 +65,7 @@ export const CreateTournamentDrawer = ({
         errors={errors}
         maxTeamsValue={maxTeamsValue}
         onMaxTeamsChange={(value) => setValue('maxTeams', value)}
+        setValue={setValue}
       />
     ),
     roster: (

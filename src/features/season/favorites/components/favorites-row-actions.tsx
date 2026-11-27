@@ -1,7 +1,7 @@
 import { EyeIcon, XIcon } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Button } from '@/components/ui';
-import { NegotiateButton } from '@/features/season/players';
+import { NegotiateButton } from '@/shared/features/players';
 import { useRemoveFavorite } from '../hooks';
 
 type FavoritesRowActionsProps = {

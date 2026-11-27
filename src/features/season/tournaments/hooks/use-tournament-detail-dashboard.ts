@@ -29,7 +29,7 @@ const getTopScorer = (topScorer?: GoalLeader | null) => {
 
 const getNextMatch = (nextMatch?: NextMatchSummary | null) => {
   const value = nextMatch
-    ? `${nextMatch.homeTeam.name} x ${nextMatch.awayTeam.name}`
+    ? `${nextMatch.homeTeam.name} x ${nextMatch.awayTeam?.name ?? 'Bye'}`
     : '-';
 
   const nextMatchContext = nextMatch

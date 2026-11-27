@@ -13,25 +13,20 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui';
-import { ActionCell } from '@/features/season/players';
-import { type RosterPlayer, useRoster } from '@/features/season/squads';
+import {
+  type RosterBySector,
+  type RosterPlayer,
+  useRoster,
+} from '@/features/season/squads';
+import { useIsMobile } from '@/hooks';
 import {
   calculateAge,
   getOverallRatingClassName,
   getPositionGroupClassName,
 } from '@/lib';
-
-const SECTOR_GROUPS: Record<string, string> = {
-  attackers: 'Atacantes',
-  midfielders: 'Meio-campistas',
-  defenders: 'Defensores',
-  goalkeepers: 'Goleiros',
-};
-
-const FOOT_LABELS: Record<RosterPlayer['preferredFoot'], string> = {
-  LEFT: 'Esquerdo',
-  RIGHT: 'Destro',
-};
+import { ActionCell } from '@/shared/features/players';
+import { FOOT_LABELS, SECTOR_GROUPS } from './team-roster-constants';
+import { TeamRosterMobileList } from './team-roster-mobile-list';
 
 const SKELETON_ROW_KEYS = Array.from(
   { length: 6 },
@@ -41,6 +36,7 @@ const SKELETON_ROW_KEYS = Array.from(
 export const TeamRosterTable = () => {
   const { id } = useParams<{ id: string }>();
   const { data: roster, isPending } = useRoster(id);
+  const isMobile = useIsMobile();
 
   if (!roster) return null;
 
@@ -54,7 +50,10 @@ export const TeamRosterTable = () => {
     );
   }
 
-  const playersRoster = Object.entries(roster);
+  const playersRoster = Object.entries(roster) as [
+    keyof RosterBySector,
+    RosterPlayer[],
+  ][];
 
   if (playersRoster.length === 0) {
     return (
@@ -63,6 +62,8 @@ export const TeamRosterTable = () => {
       </p>
     );
   }
+
+  if (isMobile) return <TeamRosterMobileList playersRoster={playersRoster} />;
 
   return (
     <div className="rounded-xl border">

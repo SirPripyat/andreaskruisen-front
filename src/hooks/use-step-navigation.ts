@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 type Step<TStepId extends string> = { id: TStepId };
 
@@ -9,19 +9,24 @@ export const useStepNavigation = <TStepId extends string>(
   const [currentStep, setCurrentStep] = useState<TStepId>(steps[0].id);
   const [furthestStepIndex, setFurthestStepIndex] = useState(0);
 
-  const stepIndex = (step: TStepId) =>
-    steps.findIndex((candidate) => candidate.id === step);
+  const stepIndex = useCallback(
+    (step: TStepId) => steps.findIndex((candidate) => candidate.id === step),
+    [steps],
+  );
 
-  const goToStep = (step: TStepId) => {
-    if (stepIndex(step) <= furthestStepIndex) setCurrentStep(step);
-  };
+  const goToStep = useCallback(
+    (step: TStepId) => {
+      if (stepIndex(step) <= furthestStepIndex) setCurrentStep(step);
+    },
+    [stepIndex, furthestStepIndex],
+  );
 
-  const goBack = () => {
+  const goBack = useCallback(() => {
     const previous = steps[stepIndex(currentStep) - 1];
     if (previous) setCurrentStep(previous.id);
-  };
+  }, [steps, stepIndex, currentStep]);
 
-  const goNext = () => {
+  const goNext = useCallback(() => {
     const index = stepIndex(currentStep);
     validateStep(currentStep).then((valid) => {
       if (!valid) return;
@@ -30,12 +35,12 @@ export const useStepNavigation = <TStepId extends string>(
       setCurrentStep(next.id);
       setFurthestStepIndex((furthest) => Math.max(furthest, index + 1));
     });
-  };
+  }, [steps, stepIndex, currentStep, validateStep]);
 
-  const resetSteps = () => {
+  const resetSteps = useCallback(() => {
     setCurrentStep(steps[0].id);
     setFurthestStepIndex(0);
-  };
+  }, [steps]);
 
   return {
     currentStep,

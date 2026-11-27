@@ -18,7 +18,7 @@
 
 ## Outros Tópicos
 
-- [ ] Corrigir a tela de edição de escalação, hoje está muito distante do que foi desenhado no artefato - precisa dos endpoints do backend também
+- [x] Corrigir a tela de edição de escalação, hoje está muito distante do que foi desenhado no artefato - precisa dos endpoints do backend também
 - [x] Add em todas as telas que tem filtro mais avançado (barra de pesquisa + input - seja button ou select) um button de limpar filtros
 - [ ] Verificar tela por tela, quantas requests são disparadas
 - [x] Na tela de Ligas, toda vez que o drawer é aberto, a requisição de países é feita, deveria ser algo cacheado (talvez até no backend, pois não é um informação que deva mudar com frequência, assim como a liga)
@@ -32,7 +32,6 @@
   - [ ] Configurar critério de desempate
 - [x] Quando criar torneio, já deveria abrir a tela de detalhes
 - [ ] Add avatar do usuário, quando disponível
-    CreateUserUseCase,
 - [x] Melhorar a tela de detalhes do jogador (box de gols, assistências e g+a está desproporcional, além dos atributos estarem feitos de uma maneira ruim)
 - [x] Dentro da tela de detalhes de jogador e da listagem, precisa ter um button para negociar jogador
 - [ ] Pensar na lógica que envolve a negociação entre os clubes, a negociação precisa ser isolada por temporada
@@ -41,10 +40,10 @@
 
 ## Transferências
 
-- [ ] Add regra de valor entre transferências
-- [ ] Fluxo de proposta de troca com aceite do outro dono (hoje é unilateral — ver acima) - talvez com notificação
-- [ ] Histórico de recusas/contrapropostas
-- [ ] Janela de transferências com prazo, em vez de "sempre liberado enquanto não há torneio ativo"
+- [x] Add regra de valor entre transferências
+- [x] Fluxo de proposta de troca com aceite do outro dono (hoje é unilateral — ver acima) - talvez com notificação
+- [x] Histórico de recusas/contrapropostas
+- [x] Janela de transferências com prazo, em vez de "sempre liberado enquanto não há torneio ativo"
 
 ## Dashboard
 
@@ -52,11 +51,11 @@
 
 ## Temporada/ histórico
 
-- [ ] Hall da Fama: Cruzando temporadas: campeões, artilheiros históricos
+- [x] Hall da Fama: Cruzando temporadas: campeões, artilheiros históricos
 
 ## Social
 
-- [ ] Add notificações
+- [x] Add notificações
 - [ ] Add conquista e insignias por usuário
 - [ ] Exportar resumo de rodada como imagem para compartilhar
 

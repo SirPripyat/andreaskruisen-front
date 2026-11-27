@@ -2,7 +2,6 @@ import type { ListLeaguesQuery } from '@/features/admin/leagues/types';
 import type { ListNationalitiesQuery } from '@/features/admin/nationalities/types';
 import type { ListPlayersQuery } from '@/features/admin/players/types';
 import type { ListTeamsQuery } from '@/features/admin/teams/types';
-import type { ListNotificationsQuery } from '@/features/notifications/types';
 import type { ListClubsQuery } from '@/features/season/clubs/types';
 import type { ListNegotiationsQuery } from '@/features/season/negotiations/types';
 import type {
@@ -10,6 +9,7 @@ import type {
   ListTournamentMatchesQuery,
 } from '@/features/season/tournaments/api';
 import type { TournamentFormat } from '@/features/season/tournaments/types';
+import type { ListNotificationsQuery } from '@/shared/features/notifications';
 
 export const queryKeys = {
   me: {
@@ -29,6 +29,8 @@ export const queryKeys = {
   seasonPlayers: {
     all: ['season-players'] as const,
     list: (query: ListPlayersQuery) => ['season-players', query] as const,
+    infiniteList: (query: Omit<ListPlayersQuery, 'page'>) =>
+      ['season-players', 'infinite', query] as const,
     detail: (id: string | undefined) => ['season-player', id] as const,
     similar: (id: string | undefined, limit?: number) =>
       ['season-player', id, 'similar', limit] as const,
@@ -69,6 +71,9 @@ export const queryKeys = {
 
   clubs: (query: ListClubsQuery) => ['clubs', query] as const,
 
+  clubsInfinite: (query: Omit<ListClubsQuery, 'page'>) =>
+    ['clubs', 'infinite', query] as const,
+
   club: {
     all: ['club'] as const,
     detail: (id: string | undefined) => ['club', id] as const,
@@ -94,15 +99,15 @@ export const queryKeys = {
   transfers: {
     all: ['transfers'] as const,
     quote: (
-      outgoingPlayerId: string,
-      incomingPlayerId: string,
+      outgoingPlayerIds: string[],
+      incomingPlayerIds: string[],
       useCoupon: boolean,
     ) =>
       [
         'transfers',
         'quote',
-        outgoingPlayerId,
-        incomingPlayerId,
+        outgoingPlayerIds,
+        incomingPlayerIds,
         useCoupon,
       ] as const,
   },

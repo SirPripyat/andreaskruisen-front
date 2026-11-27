@@ -25,6 +25,8 @@ export const MatchCard = ({
   onToggleSelect,
 }: MatchCardProps) => {
   const status = getMatchStatus(match);
+  // Bye não tem placar pra registrar nem detalhe pra ver.
+  const registerGoalsHandler = status.isBye ? undefined : onRegisterGoals;
 
   if (variant === 'row') {
     return (
@@ -33,7 +35,7 @@ export const MatchCard = ({
         cardClassName={cardClassName}
         match={match}
         status={status}
-        onRegisterGoals={onRegisterGoals}
+        onRegisterGoals={registerGoalsHandler}
         selected={selected}
         onToggleSelect={onToggleSelect}
       />
@@ -46,7 +48,7 @@ export const MatchCard = ({
       cardClassName={cardClassName}
       match={match}
       status={status}
-      onRegisterGoals={onRegisterGoals}
+      onRegisterGoals={registerGoalsHandler}
       isFinal={isFinal}
     />
   );

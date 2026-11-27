@@ -62,7 +62,9 @@ export const TournamentBracket = ({
 
   const defaultStageIndex = useMemo(() => {
     const pendingRoundIndex = rounds.findIndex((round) =>
-      round.matches.some((match) => match.homeScore === null),
+      round.matches.some(
+        (match) => match.awayTeam !== null && match.homeScore === null,
+      ),
     );
     return pendingRoundIndex === -1
       ? Math.max(0, rounds.length - 1)
@@ -73,7 +75,7 @@ export const TournamentBracket = ({
   const activeRound = rounds[stageIndex];
   const pendingInActiveRound =
     activeRound?.matches
-      .filter((match) => match.homeScore === null)
+      .filter((match) => match.awayTeam !== null && match.homeScore === null)
       .map((match) => match.id) ?? [];
 
   if (rounds.length === 0)
@@ -213,7 +215,9 @@ export const TournamentBracket = ({
 
           {rounds.map((round, roundIndex) => {
             const pendingInRound = round.matches
-              .filter((match) => match.homeScore === null)
+              .filter(
+                (match) => match.awayTeam !== null && match.homeScore === null,
+              )
               .map((match) => match.id);
 
             return (

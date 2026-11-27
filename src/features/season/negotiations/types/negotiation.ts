@@ -46,8 +46,8 @@ export type Negotiation = {
   resolvedAt: string | null;
   proposingSquad: NegotiationSquadSummary;
   targetSquad: NegotiationSquadSummary;
-  outgoingPlayer: NegotiationPlayerSummary | null;
-  incomingPlayer: NegotiationPlayerSummary | null;
+  outgoingPlayers: NegotiationPlayerSummary[];
+  incomingPlayers: NegotiationPlayerSummary[];
   clauses: NegotiationClause[];
 };
 
@@ -67,8 +67,8 @@ export type NegotiationClausePayload = {
 
 export type ProposeNegotiationPayload = {
   targetTeamId: string;
-  outgoingPlayerId?: string;
-  incomingPlayerId?: string;
+  outgoingPlayerIds?: string[];
+  incomingPlayerIds?: string[];
   coinAmount?: number;
   clauses?: NegotiationClausePayload[];
 };

@@ -8,31 +8,24 @@ import { NegotiationClauseRow } from './negotiation-clause-row';
 
 type NegotiationClauseBuilderProps = {
   control: Control<CreateNegotiationFormValues>;
-  outgoingPlayer: RosterPlayer | null;
-  incomingPlayer: RosterPlayer | null;
+  outgoingPlayers: RosterPlayer[];
+  incomingPlayers: RosterPlayer[];
 };
 
 export const NegotiationClauseBuilder = ({
   control,
-  outgoingPlayer,
-  incomingPlayer,
+  outgoingPlayers,
+  incomingPlayers,
 }: NegotiationClauseBuilderProps) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'clauses',
   });
 
-  const playerOptions: SelectOption[] = [];
-  if (outgoingPlayer)
-    playerOptions.push({
-      value: outgoingPlayer.id,
-      label: outgoingPlayer.name,
-    });
-  if (incomingPlayer)
-    playerOptions.push({
-      value: incomingPlayer.id,
-      label: incomingPlayer.name,
-    });
+  const playerOptions: SelectOption[] = [
+    ...outgoingPlayers,
+    ...incomingPlayers,
+  ].map((player) => ({ value: player.id, label: player.name }));
 
   const canAddClause = playerOptions.length > 0;
 

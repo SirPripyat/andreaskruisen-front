@@ -1,13 +1,27 @@
 import type { ReactNode } from 'react';
-import type { Control, FieldError } from 'react-hook-form';
+import type { Control } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
+import { toast } from 'sonner';
 import { OverallRatingBadge } from '@/components';
 import { Badge, FieldError as FieldErrorText } from '@/components/ui';
 import type { TeamWithRatings } from '@/features/admin/teams';
 import type { RosterBySector } from '@/features/season/squads';
-import { PlayerOption } from '@/features/season/transfers';
 import { cn } from '@/lib';
+import { PlayerOption } from '@/shared/features/transfers';
 import type { CreateNegotiationFormValues } from '../types';
+
+const MAX_PLAYERS_PER_SIDE = 2;
+
+const togglePlayerId = (selectedIds: string[], playerId: string) => {
+  if (selectedIds.includes(playerId)) {
+    return selectedIds.filter((id) => id !== playerId);
+  }
+  if (selectedIds.length >= MAX_PLAYERS_PER_SIDE) {
+    toast.error(`Máximo de ${MAX_PLAYERS_PER_SIDE} jogadores por lado.`);
+    return selectedIds;
+  }
+  return [...selectedIds, playerId];
+};
 
 const SECTOR_LABELS: Record<keyof RosterBySector, string> = {
   goalkeepers: 'Goleiros',
@@ -36,8 +50,8 @@ type NegotiationSidePanelProps = {
   roster: RosterBySector | undefined;
   isRosterPending: boolean;
   control: Control<CreateNegotiationFormValues>;
-  name: 'outgoingPlayerId' | 'incomingPlayerId';
-  error: FieldError | undefined;
+  name: 'outgoingPlayerIds' | 'incomingPlayerIds';
+  error: { message?: string } | undefined;
 };
 
 export const NegotiationSidePanel = ({
@@ -149,11 +163,9 @@ export const NegotiationSidePanel = ({
                     <PlayerOption
                       key={player.id}
                       player={player}
-                      selected={field.value === player.id}
+                      selected={field.value.includes(player.id)}
                       onSelect={() =>
-                        field.onChange(
-                          field.value === player.id ? '' : player.id,
-                        )
+                        field.onChange(togglePlayerId(field.value, player.id))
                       }
                     />
                   ))}

@@ -62,7 +62,7 @@ export const PhaseSection = ({
   hideHeader,
 }: PhaseSectionProps) => {
   const pendingInPhase = matches
-    .filter((match) => match.homeScore === null)
+    .filter((match) => match.awayTeam !== null && match.homeScore === null)
     .map((match) => match.id);
 
   const rounds: Array<[number | null, MatchListItem[]]> =

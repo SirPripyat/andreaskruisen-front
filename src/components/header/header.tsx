@@ -1,5 +1,7 @@
 import { Fragment } from 'react';
 import { useMatches } from 'react-router';
+import { NotificationsBell } from '@/apps/desktop/features/notifications';
+import { UserMenu } from '@/apps/desktop/features/user-menu';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,11 +10,11 @@ import {
   Separator,
   SidebarTrigger,
 } from '@/components/ui';
+import { NegotiationWindowIndicator } from '@/features/admin/negotiation-window';
 import type { Me } from '@/features/auth';
 import { cn } from '@/lib';
-import { NotificationsBell, SeasonSwitcher } from '../../features';
+import { SeasonSwitcher } from '../../features';
 import { useBreadcrumbStore } from '../../stores';
-import { UserMenu } from '../user-menu';
 import { BreadcrumbEntry } from './breadcrumb-entry';
 
 type RouteHandle = { breadcrumb: string };
@@ -71,6 +73,7 @@ export const Header = ({ user, isCompact }: HeaderProps) => {
       </Breadcrumb>
 
       <div className="ml-auto flex shrink-0 items-center gap-2">
+        <NegotiationWindowIndicator />
         <SeasonSwitcher />
         <NotificationsBell />
         <UserMenu user={user} />

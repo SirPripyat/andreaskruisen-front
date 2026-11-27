@@ -47,7 +47,7 @@ export const PenaltiesField = ({
           htmlFor="penalties-away-score"
           className="justify-center truncate text-center text-muted-foreground text-xs"
         >
-          {match.awayTeam.name}
+          {match.awayTeam?.name}
         </FieldLabel>
         <Input
           id="penalties-away-score"

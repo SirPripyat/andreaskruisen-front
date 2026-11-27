@@ -58,7 +58,7 @@ export const SimulateMatchesDialog = ({
               <span className={'truncate'}>
                 {match.homeTeam.name}
                 {' vs '}
-                {match.awayTeam.name}
+                {match.awayTeam?.name ?? 'Bye'}
               </span>
               {match.round !== null && (
                 <span

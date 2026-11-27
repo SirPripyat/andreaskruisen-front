@@ -14,8 +14,14 @@ const FORMAT_DESCRIPTIONS: Record<TournamentFormat, string> = {
   GROUP_STAGE_KNOCKOUT: 'Classificação em grupos seguida de eliminatórias.',
 };
 
-const formatRange = (rule: { allowed: number[] }) =>
-  `${rule.allowed[0]}–${rule.allowed[rule.allowed.length - 1]} times`;
+// GROUP_STAGE_KNOCKOUT não tem lista fixa de maxTeams — a quantidade de
+// times é calculada a partir de "times por grupo" × "quantidade de grupos"
+// (ver GroupStageConfigFields), por isso o card mostra um texto fixo aqui.
+const formatFooter = (format: TournamentFormat) => {
+  if (format === 'GROUP_STAGE_KNOCKOUT') return 'Vagas configuráveis';
+  const rule = TEAM_COUNT_RULES[format];
+  return `${rule.allowed[0]}–${rule.allowed[rule.allowed.length - 1]} times`;
+};
 
 export const TournamentFormatPicker = ({
   format,
@@ -30,7 +36,7 @@ export const TournamentFormatPicker = ({
   onMaxTeamsChange: (value: string) => void;
   error?: string;
 }) => {
-  const rule = TEAM_COUNT_RULES[format];
+  const isGroupStage = format === 'GROUP_STAGE_KNOCKOUT';
 
   return (
     <div className={'flex flex-col gap-3'}>
@@ -72,34 +78,36 @@ export const TournamentFormatPicker = ({
                   selected && 'border-accent/30 text-accent-hover',
                 )}
               >
-                {formatRange(TEAM_COUNT_RULES[item])}
+                {formatFooter(item)}
               </span>
             </button>
           );
         })}
       </div>
 
-      <div className={'flex flex-wrap items-center gap-2'}>
-        {rule.allowed.map((count) => {
-          const selected = maxTeams === String(count);
-          return (
-            <button
-              key={count}
-              type={'button'}
-              aria-pressed={selected}
-              onClick={() => onMaxTeamsChange(String(count))}
-              className={cn(
-                'flex h-8 min-w-10 items-center justify-center rounded-md border px-2.5 font-mono font-semibold text-sm transition-colors',
-                selected
-                  ? 'border-accent bg-accent text-accent-foreground'
-                  : 'border-border-strong hover:border-accent',
-              )}
-            >
-              {count}
-            </button>
-          );
-        })}
-      </div>
+      {!isGroupStage && (
+        <div className={'flex flex-wrap items-center gap-2'}>
+          {TEAM_COUNT_RULES[format].allowed.map((count) => {
+            const selected = maxTeams === String(count);
+            return (
+              <button
+                key={count}
+                type={'button'}
+                aria-pressed={selected}
+                onClick={() => onMaxTeamsChange(String(count))}
+                className={cn(
+                  'flex h-8 min-w-10 items-center justify-center rounded-md border px-2.5 font-mono font-semibold text-sm transition-colors',
+                  selected
+                    ? 'border-accent bg-accent text-accent-foreground'
+                    : 'border-border-strong hover:border-accent',
+                )}
+              >
+                {count}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {error && (
         <div className={'flex items-center gap-1.5 text-destructive text-sm'}>

@@ -1,3 +1,5 @@
+import type { PlayerPosition } from '@/features/admin/players';
+
 export type RosterPlayerPositionRating = {
   position: string;
   overall: number;
@@ -13,6 +15,10 @@ export type RosterPlayer = {
   preferredFoot: 'LEFT' | 'RIGHT';
   nationality: { id: string; name: string; flagUrl: string };
   isStarter: boolean;
+  // Posições cadastradas pro jogador (igual admin/players) — a principal e
+  // as secundárias reais, com `isPrimary`. É isso que diz se ele joga numa
+  // posição de verdade, não o grid de ratings abaixo.
+  positions: PlayerPosition[];
   // Overall em cada uma das 27 posições do grid SoFIFA (ver PlayerRating no
   // back) — usado pra mostrar o overall NA posição do slot que o jogador
   // ocupa na escalação, em vez do overallRating genérico (posição

@@ -1,10 +1,10 @@
 import { ArrowLeftRightIcon, CoinsIcon } from 'lucide-react';
 import { Badge, Skeleton } from '@/components/ui';
+import { formatDate, formatNumber } from '@/lib';
 import {
   type Transfer,
   TransferOriginBadge,
-} from '@/features/season/transfers';
-import { formatDate, formatNumber } from '@/lib';
+} from '@/shared/features/transfers';
 
 type TeamTransferView = {
   transfer: Transfer;

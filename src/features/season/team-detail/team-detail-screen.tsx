@@ -3,7 +3,7 @@ import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui';
 import { TeamTitlesList } from '@/features/admin/teams';
 import { useClub, useClubTitles } from '@/features/season/clubs';
 import { useCoinTransactions, useSeasonSquads } from '@/features/season/squads';
-import { useTransfers } from '@/features/season/transfers';
+import { useTransfers } from '@/shared/features/transfers';
 import { useBreadcrumbItems } from '../../../hooks';
 import {
   TeamCoinTransactionsList,

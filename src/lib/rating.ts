@@ -37,6 +37,16 @@ const RATING_TIER_BORDER_CLASS: Record<OverallRatingTier, string> = {
 export const getOverallRatingBorderClassName = (rating: number): string =>
   RATING_TIER_BORDER_CLASS[getOverallRatingTier(rating)];
 
+const RATING_TIER_TEXT_CLASS: Record<OverallRatingTier, string> = {
+  info: 'text-info',
+  success: 'text-success',
+  warning: 'text-warning',
+  critical: 'text-critical',
+};
+
+export const getOverallRatingTextClassName = (rating: number): string =>
+  RATING_TIER_TEXT_CLASS[getOverallRatingTier(rating)];
+
 export const RATING_TIER_ZONES: {
   from: number;
   to: number;

@@ -7,14 +7,18 @@ import { useAddFavorite, useRemoveFavorite } from '../hooks';
 type FavoriteButtonProps = {
   playerId: string;
   isFavorite: boolean;
+  fullWidth?: boolean;
 };
 
 export const FavoriteButton = ({
   playerId,
   isFavorite,
+  fullWidth = false,
 }: FavoriteButtonProps) => {
   const { mutate: addFavorite, isPending: isAdding } = useAddFavorite();
   const { mutate: removeFavorite, isPending: isRemoving } = useRemoveFavorite();
+
+  const label = isFavorite ? 'Desfavoritar' : 'Favoritar';
 
   const toggle = (event: MouseEvent) => {
     event.preventDefault();
@@ -27,13 +31,27 @@ export const FavoriteButton = ({
     }
   };
 
+  if (fullWidth) {
+    return (
+      <Button
+        variant={'outline'}
+        className={'w-full'}
+        disabled={isAdding || isRemoving}
+        onClick={toggle}
+      >
+        <StarIcon
+          className={cn(isFavorite && 'fill-yellow-400 text-yellow-400')}
+        />
+        {label}
+      </Button>
+    );
+  }
+
   return (
     <Button
       variant={'ghost'}
       size={'icon-sm'}
-      aria-label={
-        isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'
-      }
+      aria-label={label}
       disabled={isAdding || isRemoving}
       onClick={toggle}
     >

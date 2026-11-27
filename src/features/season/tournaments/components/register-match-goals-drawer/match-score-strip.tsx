@@ -30,12 +30,18 @@ export const MatchScoreStrip = ({
           <span className="text-muted-foreground text-xl">–</span>
           <span>{awayGoals}</span>
         </div>
-        <TeamChip
-          className="flex-1"
-          name={match.awayTeam.name}
-          crestUrl={match.awayTeam.crestUrl}
-          align="right"
-        />
+        {match.awayTeam ? (
+          <TeamChip
+            className="flex-1"
+            name={match.awayTeam.name}
+            crestUrl={match.awayTeam.crestUrl}
+            align="right"
+          />
+        ) : (
+          <span className="flex-1 text-right text-muted-foreground text-sm italic">
+            Bye
+          </span>
+        )}
       </div>
 
       {readOnly && penalties && (
@@ -56,7 +62,7 @@ export const MatchScoreStrip = ({
           <span
             className={cn(
               'font-mono font-semibold tabular-nums',
-              penalties.winnerTeamId === match.awayTeam.id && 'text-success',
+              penalties.winnerTeamId === match.awayTeam?.id && 'text-success',
             )}
           >
             {penalties.awayScore}

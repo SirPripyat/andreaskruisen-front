@@ -12,12 +12,12 @@ import {
 
 const GROUP_ORDER: PositionGroup[] = ['GOL', 'DEF', 'MID', 'ATT'];
 
-type StrengthTile = {
+export type StrengthTile = {
   group: PositionGroup;
   average: number;
 };
 
-const getTiles = (starters: RosterPlayer[]) => {
+export const getLineupStrengthTiles = (starters: RosterPlayer[]) => {
   return GROUP_ORDER.map((group) => {
     const players = starters.filter(
       (player) => getPositionGroup(player.position) === group,
@@ -40,7 +40,7 @@ type TeamLineupStrengthProps = {
 };
 
 export const TeamLineupStrength = ({ starters }: TeamLineupStrengthProps) => {
-  const tiles = getTiles(starters);
+  const tiles = getLineupStrengthTiles(starters);
 
   if (tiles.length === 0) return null;
 

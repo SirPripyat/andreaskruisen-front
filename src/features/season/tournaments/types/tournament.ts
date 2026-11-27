@@ -12,6 +12,20 @@ export const TOURNAMENT_FORMAT_LABELS: Record<TournamentFormat, string> = {
   GROUP_STAGE_KNOCKOUT: 'Fase de grupos + mata-mata',
 };
 
+// Obrigatório só pra format = GROUP_STAGE_KNOCKOUT (ver isValidGroupStageSetup
+// em api/format-rules.ts). Espelha GroupStageConfigSchema no backend.
+export type GroupStageConfig = {
+  // Quantos times por grupo.
+  groupSize: number;
+  // Quantos times de cada grupo avançam pro mata-mata.
+  qualifiersPerGroup: number;
+  // Ida e volta dentro do grupo em vez de turno único.
+  doubleRound: boolean;
+  // true = o sorteio concentra os times de participantes nos mesmos grupos;
+  // false = distribui um por grupo, misturando com CPU.
+  keepOwnedTeamsInSameGroup: boolean;
+};
+
 export type PhaseType = 'GROUP' | 'KNOCKOUT';
 
 export type PhaseSummary = {
@@ -48,6 +62,9 @@ export type Tournament = {
   currentPhase: PhaseSummary | null;
   // null enquanto o torneio não foi encerrado.
   champion: TournamentChampion | null;
+  // Quantos times de cada grupo avançam pro mata-mata — null pra formatos
+  // que não são GROUP_STAGE_KNOCKOUT.
+  qualifiersPerGroup: number | null;
 };
 
 export type GroupStanding = {
@@ -74,7 +91,8 @@ export type ConfrontoTeam = TeamSummary & { owner: TeamOwner | null };
 export type Confronto = {
   id: string;
   homeTeam: ConfrontoTeam;
-  awayTeam: ConfrontoTeam;
+  // null = bye (ver GroupStageConfig) — o time da casa avança sem jogar.
+  awayTeam: ConfrontoTeam | null;
 };
 
 // Situação da fase vigente: classificação por grupo (GROUP) ou os confrontos
@@ -103,7 +121,8 @@ export type MatchListItem = {
   awayScore: number | null;
   penalties: MatchPenalties | null;
   homeTeam: ConfrontoTeam;
-  awayTeam: ConfrontoTeam;
+  // null = bye (ver GroupStageConfig) — sem adversário, sem placar.
+  awayTeam: ConfrontoTeam | null;
   // true = a fase seguinte já foi gerada a partir desta (ver POST
   // /tournaments/:id/phases/:phaseId/advance) ou o torneio já foi
   // encerrado (POST /tournaments/:id/finish) — resultado não pode mais
@@ -136,7 +155,8 @@ export type MatchDetail = {
   playedAt: string | null;
   penalties: MatchPenalties | null;
   homeTeam: MatchTeamWithPlayers;
-  awayTeam: MatchTeamWithPlayers;
+  // null = bye (ver GroupStageConfig).
+  awayTeam: MatchTeamWithPlayers | null;
   goals: MatchGoal[];
   // true = a fase seguinte já foi gerada a partir desta (ver POST
   // /tournaments/:id/phases/:phaseId/advance) ou o torneio já foi
@@ -176,7 +196,8 @@ export type NextMatchSummary = {
   groupLabel: string | null;
   round: number | null;
   homeTeam: TeamSummary;
-  awayTeam: TeamSummary;
+  // null = bye (ver GroupStageConfig).
+  awayTeam: TeamSummary | null;
 };
 
 export type TournamentDashboard = Tournament & {

@@ -1,5 +1,6 @@
 import { cn } from '@/lib';
 import type { MatchListItem } from '../../types';
+import { MatchCardByeSlot } from './match-card-bye-slot';
 import { MatchCardStatusFooter } from './match-card-status-footer';
 import { MatchCardTeam } from './match-card-team';
 import type { MatchStatus } from './match-status';
@@ -41,16 +42,20 @@ export const MatchCardColumn = ({
         winner={status.homeWinner}
       />
 
-      <MatchCardTeam
-        teamId={match.awayTeam.id}
-        name={match.awayTeam.name}
-        crestUrl={match.awayTeam.crestUrl}
-        owner={match.awayTeam.owner}
-        score={match.awayScore}
-        penaltyScore={match.penalties?.awayScore}
-        muted={status.homeWinner}
-        winner={status.awayWinner}
-      />
+      {match.awayTeam ? (
+        <MatchCardTeam
+          teamId={match.awayTeam.id}
+          name={match.awayTeam.name}
+          crestUrl={match.awayTeam.crestUrl}
+          owner={match.awayTeam.owner}
+          score={match.awayScore}
+          penaltyScore={match.penalties?.awayScore}
+          muted={status.homeWinner}
+          winner={status.awayWinner}
+        />
+      ) : (
+        <MatchCardByeSlot />
+      )}
 
       <MatchCardStatusFooter
         matchId={match.id}

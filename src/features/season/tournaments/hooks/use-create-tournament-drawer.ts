@@ -26,7 +26,7 @@ const STEP_FIELDS: Record<
   Path<CreateTournamentFormValues>[]
 > = {
   info: ['name'],
-  format: ['format', 'maxTeams'],
+  format: ['format', 'maxTeams', 'groupStageConfig'],
   roster: [],
 };
 
@@ -85,7 +85,9 @@ export const useCreateTournamentDrawer = () => {
     defaultValues: { name: '', format: 'LEAGUE', maxTeams: '' },
   });
   const name = useWatch({ control, name: 'name' });
+  const format = useWatch({ control, name: 'format' });
   const maxTeamsValue = useWatch({ control, name: 'maxTeams' });
+  const groupStageConfig = useWatch({ control, name: 'groupStageConfig' });
 
   const {
     currentStep,
@@ -119,9 +121,13 @@ export const useCreateTournamentDrawer = () => {
   const rosterComplete =
     maxTeamsNumber !== undefined && selectedTeams.size === maxTeamsNumber;
 
+  const groupStageConfigFilled =
+    format !== 'GROUP_STAGE_KNOCKOUT' ||
+    (!!groupStageConfig?.groupSize && !!groupStageConfig?.qualifiersPerGroup);
+
   const stepCompletion: Record<CreateTournamentStepId, boolean> = {
     info: hasName,
-    format: maxTeamsNumber !== undefined,
+    format: maxTeamsNumber !== undefined && groupStageConfigFilled,
     roster: rosterComplete,
   };
 
@@ -140,6 +146,17 @@ export const useCreateTournamentDrawer = () => {
       format: values.format,
       maxTeams: Number(values.maxTeams),
       teamIds: entries.map(({ team }) => team.id),
+      groupStageConfig: values.groupStageConfig
+        ? {
+            groupSize: Number(values.groupStageConfig.groupSize),
+            qualifiersPerGroup: Number(
+              values.groupStageConfig.qualifiersPerGroup,
+            ),
+            doubleRound: values.groupStageConfig.doubleRound,
+            keepOwnedTeamsInSameGroup:
+              values.groupStageConfig.keepOwnedTeamsInSameGroup,
+          }
+        : undefined,
     })
       .then((created) =>
         linkOwners(created.seasonId, entries).then(() => created),

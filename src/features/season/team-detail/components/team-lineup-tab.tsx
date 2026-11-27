@@ -32,11 +32,13 @@ import {
   useSwapLineupStarter,
   useUpdateLineupFormation,
 } from 'src/features/season/squads';
+import { useIsMobile } from 'src/hooks';
 import { cn, getInitials, getOverallRatingClassName } from 'src/lib';
 import { TeamLineupBench } from './team-lineup-bench';
 import { TeamLineupPitch } from './team-lineup-pitch';
 import { TeamLineupPlayerDetail } from './team-lineup-player-detail';
 import { TeamLineupStrength } from './team-lineup-strength';
+import { TeamLineupTabMobile } from './team-lineup-tab-mobile';
 
 type TeamLineupTabProps = {
   managerId: string | null;
@@ -51,6 +53,7 @@ export const TeamLineupTab = ({ managerId }: TeamLineupTabProps) => {
   const { id } = useParams<{ id: string }>();
   const { data, isPending } = useLineup(id);
   const { data: me } = useMe();
+  const isMobile = useIsMobile();
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
@@ -181,6 +184,29 @@ export const TeamLineupTab = ({ managerId }: TeamLineupTabProps) => {
       <p className={'text-center text-muted-foreground text-sm'}>
         Escalação titular ainda não foi importada para esse time.
       </p>
+    );
+  }
+
+  if (isMobile) {
+    return (
+      <TeamLineupTabMobile
+        starters={starters}
+        bench={bench}
+        isPending={isPending}
+        isBenchPending={isBenchPending}
+        formation={data?.formation ?? null}
+        formationOptions={formationOptions}
+        xiAverage={xiAverage}
+        canEditLineup={canEditLineup}
+        editMode={editMode}
+        onToggleEditMode={toggleEditMode}
+        selectedId={selectedId}
+        onSelect={handleSelect}
+        allPlayers={allPlayers}
+        setStarter={setStarter}
+        swapStarter={swapStarter}
+        updateFormation={updateFormation}
+      />
     );
   }
 

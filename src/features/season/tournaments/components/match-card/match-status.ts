@@ -5,10 +5,24 @@ export type MatchStatus = {
   homeWinner: boolean;
   awayWinner: boolean;
   locked: boolean;
+  // true = bye (ver GroupStageConfig) — o time da casa avança automaticamente,
+  // sem adversário nem placar.
+  isBye: boolean;
 };
 
 export const getMatchStatus = (match: MatchListItem): MatchStatus => {
+  if (match.awayTeam === null) {
+    return {
+      played: true,
+      homeWinner: false,
+      awayWinner: false,
+      locked: match.locked,
+      isBye: true,
+    };
+  }
+
   const played = match.homeScore !== null && match.awayScore !== null;
+
   const tied = played && match.homeScore === match.awayScore;
 
   // Empate no tempo normal de uma eliminatória é decidido nos pênaltis — o
@@ -19,6 +33,7 @@ export const getMatchStatus = (match: MatchListItem): MatchStatus => {
       homeWinner: match.penalties.winnerTeamId === match.homeTeam.id,
       awayWinner: match.penalties.winnerTeamId === match.awayTeam.id,
       locked: match.locked,
+      isBye: false,
     };
   }
 
@@ -29,5 +44,6 @@ export const getMatchStatus = (match: MatchListItem): MatchStatus => {
     awayWinner:
       played && (match.awayScore as number) > (match.homeScore as number),
     locked: match.locked,
+    isBye: false,
   };
 };

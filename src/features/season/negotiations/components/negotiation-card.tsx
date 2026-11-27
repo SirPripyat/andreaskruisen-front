@@ -40,12 +40,12 @@ export const NegotiationCard = ({
     : negotiation.targetSquad;
   const directionLabel = isTarget ? 'Proposta de' : 'Proposta para';
 
-  const myIncomingPlayer = isTarget
-    ? negotiation.outgoingPlayer
-    : negotiation.incomingPlayer;
-  const myOutgoingPlayer = isTarget
-    ? negotiation.incomingPlayer
-    : negotiation.outgoingPlayer;
+  const myIncomingPlayers = isTarget
+    ? negotiation.outgoingPlayers
+    : negotiation.incomingPlayers;
+  const myOutgoingPlayers = isTarget
+    ? negotiation.incomingPlayers
+    : negotiation.outgoingPlayers;
 
   const signedCoinAmount =
     negotiation.coinAmount === null
@@ -76,7 +76,7 @@ export const NegotiationCard = ({
           </div>
         </div>
 
-        {(myOutgoingPlayer || myIncomingPlayer) && (
+        {(myOutgoingPlayers.length > 0 || myIncomingPlayers.length > 0) && (
           <div
             className={
               'grid grid-cols-[1fr_auto_1fr] items-center gap-2 rounded-lg border bg-muted/40 p-3'
@@ -85,7 +85,7 @@ export const NegotiationCard = ({
             <TradeSlot
               label={'Você recebe'}
               labelClassName={'text-success'}
-              player={myIncomingPlayer}
+              players={myIncomingPlayers}
               align={'start'}
             />
             <span
@@ -98,7 +98,7 @@ export const NegotiationCard = ({
             <TradeSlot
               label={'Você envia'}
               labelClassName={'text-critical'}
-              player={myOutgoingPlayer}
+              players={myOutgoingPlayers}
               align={'end'}
             />
           </div>
@@ -245,12 +245,12 @@ const CounterpartyHeader = ({
 const TradeSlot = ({
   label,
   labelClassName,
-  player,
+  players,
   align,
 }: {
   label: string;
   labelClassName: string;
-  player: NegotiationPlayerSummary | null;
+  players: NegotiationPlayerSummary[];
   align: 'start' | 'end';
 }) => {
   return (
@@ -269,20 +269,27 @@ const TradeSlot = ({
         {label}
       </span>
 
-      {player ? (
-        <Link
-          to={`/players/${player.id}`}
-          className={cn(
-            'flex min-w-0 items-center gap-2 hover:underline',
-            align === 'end' && 'flex-row-reverse',
-          )}
-        >
-          <Avatar>
-            <AvatarImage src={player.photoUrl} alt={''} />
-            <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <span className={'truncate font-medium text-sm'}>{player.name}</span>
-        </Link>
+      {players.length > 0 ? (
+        <div className={'flex flex-col gap-1.5'}>
+          {players.map((player) => (
+            <Link
+              key={player.id}
+              to={`/players/${player.id}`}
+              className={cn(
+                'flex min-w-0 items-center gap-2 hover:underline',
+                align === 'end' && 'flex-row-reverse',
+              )}
+            >
+              <Avatar>
+                <AvatarImage src={player.photoUrl} alt={''} />
+                <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <span className={'truncate font-medium text-sm'}>
+                {player.name}
+              </span>
+            </Link>
+          ))}
+        </div>
       ) : (
         <span className={'text-muted-foreground text-xs italic'}>
           {'Somente dinheiro'}

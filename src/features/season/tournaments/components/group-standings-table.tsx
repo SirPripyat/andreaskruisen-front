@@ -17,14 +17,14 @@ import { TeamChip } from './team-chip';
 
 type GroupStandingsTableProps = {
   standings: StandingWithOwner[];
-  showQualifyZone: boolean;
+  // Quantos primeiros colocados são marcados como classificados — null =
+  // sem zona de classificação (ver TournamentGroupStandings).
+  qualifyCount: number | null;
 };
-
-const QUALIFY_COUNT = 2;
 
 export const GroupStandingsTable = ({
   standings,
-  showQualifyZone,
+  qualifyCount,
 }: GroupStandingsTableProps) => {
   const { data: me } = useMe();
   const isMobile = useIsMobile();
@@ -40,7 +40,7 @@ export const GroupStandingsTable = ({
     return (
       <GroupStandingsMobileList
         standings={standings}
-        showQualifyZone={showQualifyZone}
+        qualifyCount={qualifyCount}
       />
     );
 
@@ -72,7 +72,7 @@ export const GroupStandingsTable = ({
             )}
           >
             <TableCell className="relative pl-3 text-muted-foreground font-medium">
-              {showQualifyZone && index < QUALIFY_COUNT && (
+              {qualifyCount !== null && index < qualifyCount && (
                 <span className="absolute inset-y-1 left-0 w-1 rounded-full bg-success" />
               )}
               {standing.position}

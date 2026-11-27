@@ -4,6 +4,7 @@ import { cn } from '@/lib';
 import type { MatchListItem } from '../../types';
 import { TeamChip } from '../team-chip';
 import { MatchCardAction } from './match-card-action';
+import { MatchCardByeSlot } from './match-card-bye-slot';
 import type { MatchStatus } from './match-status';
 
 type MatchCardRowProps = {
@@ -28,7 +29,7 @@ export const MatchCardRow = ({
   const { data: me } = useMe();
   const isMine =
     !!me?.teamId &&
-    (match.homeTeam.id === me.teamId || match.awayTeam.id === me.teamId);
+    (match.homeTeam.id === me.teamId || match.awayTeam?.id === me.teamId);
 
   return (
     <div
@@ -78,7 +79,11 @@ export const MatchCardRow = ({
             'font-mono font-bold tabular-nums rounded-sm flex items-center justify-center px-2 text-sm bg-background',
           )}
         >
-          {status.played ? `${match.homeScore} - ${match.awayScore}` : '—'}
+          {status.isBye
+            ? 'Bye'
+            : status.played
+              ? `${match.homeScore} - ${match.awayScore}`
+              : '—'}
         </span>
 
         {match.penalties && (
@@ -88,29 +93,35 @@ export const MatchCardRow = ({
         )}
       </div>
 
-      <TeamChip
-        className={cn(
-          'hidden flex-1 md:flex',
-          status.homeWinner && 'opacity-40',
-        )}
-        teamId={match.awayTeam.id}
-        name={match.awayTeam.name}
-        crestUrl={match.awayTeam.crestUrl}
-        owner={match.awayTeam.owner}
-        align="right"
-      />
-      <TeamChip
-        className={cn(
-          'flex flex-1 md:hidden',
-          status.homeWinner && 'opacity-40',
-        )}
-        teamId={match.awayTeam.id}
-        name={match.awayTeam.name}
-        crestUrl={match.awayTeam.crestUrl}
-        owner={match.awayTeam.owner}
-        align="right"
-        compact
-      />
+      {match.awayTeam ? (
+        <>
+          <TeamChip
+            className={cn(
+              'hidden flex-1 md:flex',
+              status.homeWinner && 'opacity-40',
+            )}
+            teamId={match.awayTeam.id}
+            name={match.awayTeam.name}
+            crestUrl={match.awayTeam.crestUrl}
+            owner={match.awayTeam.owner}
+            align="right"
+          />
+          <TeamChip
+            className={cn(
+              'flex flex-1 md:hidden',
+              status.homeWinner && 'opacity-40',
+            )}
+            teamId={match.awayTeam.id}
+            name={match.awayTeam.name}
+            crestUrl={match.awayTeam.crestUrl}
+            owner={match.awayTeam.owner}
+            align="right"
+            compact
+          />
+        </>
+      ) : (
+        <MatchCardByeSlot />
+      )}
 
       <MatchCardAction
         matchId={match.id}

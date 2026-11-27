@@ -7,7 +7,7 @@ import { useMe } from '@/features/auth';
 import { useClub } from '@/features/season/clubs';
 import type { RosterBySector, SeasonSquad } from '@/features/season/squads';
 import { useRoster, useSeasonSquads } from '@/features/season/squads';
-import { SwapAxis, useTransferQuote } from '@/features/season/transfers';
+import { SwapAxis, useTransferQuote } from '@/shared/features/transfers';
 import { useProposeNegotiation } from '../hooks';
 import {
   type CreateNegotiationFormValues,
@@ -17,16 +17,15 @@ import { NegotiationClauseBuilder } from './negotiation-clause-builder';
 import { NegotiationSidePanel } from './negotiation-side-panel';
 import { SquadCombobox } from './squad-combobox';
 
-const findRosterPlayer = (
+const findRosterPlayers = (
   roster: RosterBySector | undefined,
-  playerId: string,
+  playerIds: string[],
 ) => {
-  if (!roster || !playerId) return null;
-  return (
-    Object.values(roster)
-      .flat()
-      .find((player) => player.id === playerId) ?? null
-  );
+  if (!roster) return [];
+  const allPlayers = Object.values(roster).flat();
+  return playerIds
+    .map((playerId) => allPlayers.find((player) => player.id === playerId))
+    .filter((player): player is NonNullable<typeof player> => Boolean(player));
 };
 
 type DirectNegotiationFormProps = {
@@ -66,8 +65,8 @@ export const DirectNegotiationForm = ({
     resolver: zodResolver(createNegotiationSchema),
     defaultValues: {
       targetTeamId: '',
-      outgoingPlayerId: '',
-      incomingPlayerId: '',
+      outgoingPlayerIds: [],
+      incomingPlayerIds: [],
       clauses: [],
     },
   });
@@ -80,16 +79,22 @@ export const DirectNegotiationForm = ({
     if (!squad) return;
     setTargetSquad(squad);
     setValue('targetTeamId', squad.team.id);
-    setValue('incomingPlayerId', initialIncomingPlayerId ?? '');
+    setValue(
+      'incomingPlayerIds',
+      initialIncomingPlayerId ? [initialIncomingPlayerId] : [],
+    );
   }, [open, squads, initialTargetTeamId, initialIncomingPlayerId, setValue]);
 
   useEffect(() => {
     if (!open) return;
-    setValue('outgoingPlayerId', initialOutgoingPlayerId ?? '');
+    setValue(
+      'outgoingPlayerIds',
+      initialOutgoingPlayerId ? [initialOutgoingPlayerId] : [],
+    );
   }, [open, initialOutgoingPlayerId, setValue]);
 
-  const outgoingPlayerId = useWatch({ control, name: 'outgoingPlayerId' });
-  const incomingPlayerId = useWatch({ control, name: 'incomingPlayerId' });
+  const outgoingPlayerIds = useWatch({ control, name: 'outgoingPlayerIds' });
+  const incomingPlayerIds = useWatch({ control, name: 'incomingPlayerIds' });
 
   const { data: myRoster, isPending: isMyRosterPending } = useRoster(
     myTeam?.id,
@@ -100,8 +105,8 @@ export const DirectNegotiationForm = ({
     open,
   );
 
-  const outgoingPlayer = findRosterPlayer(myRoster, outgoingPlayerId ?? '');
-  const incomingPlayer = findRosterPlayer(targetRoster, incomingPlayerId ?? '');
+  const outgoingPlayers = findRosterPlayers(myRoster, outgoingPlayerIds);
+  const incomingPlayers = findRosterPlayers(targetRoster, incomingPlayerIds);
 
   // Quando os dois lados têm jogador escolhido, essa troca também poderia
   // ser feita como transferência de mercado — usamos a mesma fórmula
@@ -109,10 +114,12 @@ export const DirectNegotiationForm = ({
   // a referência natural de "quanto isso vale" (ver QuoteTransferUseCase).
   // useCoupon sempre false aqui: é só uma sugestão, não gasta cupom de
   // ninguém.
-  const canEstimateBaseCost = Boolean(outgoingPlayerId && incomingPlayerId);
+  const canEstimateBaseCost = Boolean(
+    outgoingPlayerIds.length && incomingPlayerIds.length,
+  );
   const { data: baseCostQuote } = useTransferQuote(
-    outgoingPlayerId ?? '',
-    incomingPlayerId ?? '',
+    outgoingPlayerIds,
+    incomingPlayerIds,
     false,
     open && canEstimateBaseCost,
   );
@@ -131,8 +138,8 @@ export const DirectNegotiationForm = ({
   const onSubmit = (values: CreateNegotiationFormValues) =>
     mutateAsync({
       targetTeamId: values.targetTeamId,
-      outgoingPlayerId: values.outgoingPlayerId || undefined,
-      incomingPlayerId: values.incomingPlayerId || undefined,
+      outgoingPlayerIds: values.outgoingPlayerIds,
+      incomingPlayerIds: values.incomingPlayerIds,
       coinAmount: values.coinAmount,
       clauses: values.clauses.map((clause) => ({
         type: clause.type,
@@ -171,13 +178,13 @@ export const DirectNegotiationForm = ({
             title={'Seu time'}
             tagLabel={'Entrega (opcional)'}
             tagClassName={'bg-warning-surface text-warning'}
-            hint={'Escolha um jogador se for entregar alguém na troca.'}
+            hint={'Escolha até 2 jogadores se for entregar alguém na troca.'}
             team={myTeam ?? null}
             roster={myRoster}
             isRosterPending={isMyRosterPending}
             control={control}
-            name={'outgoingPlayerId'}
-            error={errors.outgoingPlayerId}
+            name={'outgoingPlayerIds'}
+            error={errors.outgoingPlayerIds}
           />
 
           <SwapAxis />
@@ -186,7 +193,7 @@ export const DirectNegotiationForm = ({
             title={'Time de destino'}
             tagLabel={'Recebe (opcional)'}
             tagClassName={'bg-success-surface text-success'}
-            hint={'Escolha um jogador se for receber alguém na troca.'}
+            hint={'Escolha até 2 jogadores se for receber alguém na troca.'}
             team={targetTeam ?? null}
             picker={
               <Field>
@@ -196,7 +203,7 @@ export const DirectNegotiationForm = ({
                   onValueChange={(squad) => {
                     setTargetSquad(squad);
                     setValue('targetTeamId', squad?.team.id ?? '');
-                    setValue('incomingPlayerId', '');
+                    setValue('incomingPlayerIds', []);
                   }}
                   excludeTeamId={myTeam?.id}
                 />
@@ -205,8 +212,8 @@ export const DirectNegotiationForm = ({
             roster={targetRoster}
             isRosterPending={isTargetRosterPending}
             control={control}
-            name={'incomingPlayerId'}
-            error={errors.incomingPlayerId}
+            name={'incomingPlayerIds'}
+            error={errors.incomingPlayerIds}
           />
         </div>
 
@@ -239,8 +246,8 @@ export const DirectNegotiationForm = ({
 
         <NegotiationClauseBuilder
           control={control}
-          outgoingPlayer={outgoingPlayer}
-          incomingPlayer={incomingPlayer}
+          outgoingPlayers={outgoingPlayers}
+          incomingPlayers={incomingPlayers}
         />
       </form>
 

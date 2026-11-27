@@ -33,32 +33,33 @@ export type NegotiationClauseFormValues = z.infer<
 export const createNegotiationSchema = z
   .object({
     targetTeamId: z.string().min(1, 'Selecione o time de destino'),
-    outgoingPlayerId: z.string().optional(),
-    incomingPlayerId: z.string().optional(),
+    outgoingPlayerIds: z.array(z.string()).max(2),
+    incomingPlayerIds: z.array(z.string()).max(2),
     coinAmount: z.number().int().optional(),
     clauses: z.array(negotiationClauseFormSchema),
   })
   .refine(
-    (data) => Boolean(data.outgoingPlayerId) || Boolean(data.incomingPlayerId),
+    (data) =>
+      data.outgoingPlayerIds.length > 0 || data.incomingPlayerIds.length > 0,
     {
       message: 'A negociação precisa envolver ao menos um jogador',
-      path: ['incomingPlayerId'],
+      path: ['incomingPlayerIds'],
     },
   )
   .refine(
     (data) =>
-      !data.outgoingPlayerId ||
-      !data.incomingPlayerId ||
-      data.outgoingPlayerId !== data.incomingPlayerId,
+      data.outgoingPlayerIds.every(
+        (id) => !data.incomingPlayerIds.includes(id),
+      ),
     {
       message: 'Os jogadores precisam ser diferentes',
-      path: ['incomingPlayerId'],
+      path: ['incomingPlayerIds'],
     },
   )
   .refine(
     (data) =>
       data.clauses.every((clause) =>
-        [data.outgoingPlayerId, data.incomingPlayerId].includes(
+        [...data.outgoingPlayerIds, ...data.incomingPlayerIds].includes(
           clause.playerId,
         ),
       ),

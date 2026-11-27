@@ -9,4 +9,3 @@ export * from './stepper';
 export * from './team-cell';
 export * from './tooltip-wrapper';
 export * from './ui';
-export * from './user-menu';

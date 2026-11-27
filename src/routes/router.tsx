@@ -9,18 +9,19 @@ import { TeamsScreen } from '@/features/admin/teams/teams-screen';
 import { UsersScreen } from '@/features/admin/users/users-screen';
 import { LoginScreen } from '@/features/auth/login-screen';
 import { ProfileScreen } from '@/features/auth/profile-screen';
-import { HomeScreen } from '@/features/home/home-screen';
-import { ClubsScreen } from '@/features/season/clubs/clubs-screen';
 import { FavoritesScreen } from '@/features/season/favorites/favorites-screen';
-import { PlayerDetailScreen } from '@/features/season/players/player-detail-screen';
-import { SeasonPlayersScreen } from '@/features/season/players/players-screen';
 import { TeamDetailScreen } from '@/features/season/team-detail/team-detail-screen';
 import { HallOfFameScreen } from '@/features/season/tournaments/hall-of-fame-screen';
 import { TournamentDetailScreen } from '@/features/season/tournaments/tournament-detail-screen';
 import { TournamentsScreen } from '@/features/season/tournaments/tournaments-screen';
-import { TransfersScreen } from '@/features/season/transfers/transfers-screen';
+import { AppLayoutRoute } from './app-layout-route';
+import { ClubsRoute } from './clubs-route';
 import { ProtectedRoute, RequireRole, RequireSeason } from './guards';
-import { AppLayout, RootLayout, RouteErrorBoundary } from './layouts';
+import { HomeRoute } from './home-route';
+import { RootLayout, RouteErrorBoundary } from './layouts';
+import { PlayerDetailRoute } from './player-detail-route';
+import { PlayersRoute } from './players-route';
+import { TransfersRoute } from './transfers-route';
 
 export const router = createBrowserRouter([
   {
@@ -32,11 +33,11 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
-            element: <AppLayout />,
+            element: <AppLayoutRoute />,
             children: [
               {
                 index: true,
-                element: <HomeScreen />,
+                element: <HomeRoute />,
                 handle: { breadcrumb: 'Dashboard' },
               },
               {
@@ -89,17 +90,17 @@ export const router = createBrowserRouter([
                 children: [
                   {
                     path: 'clubs',
-                    element: <ClubsScreen />,
+                    element: <ClubsRoute />,
                     handle: { breadcrumb: 'Times' },
                   },
                   {
                     path: 'players/season',
-                    element: <SeasonPlayersScreen />,
+                    element: <PlayersRoute />,
                     handle: { breadcrumb: 'Jogadores' },
                   },
                   {
                     path: 'players/:id',
-                    element: <PlayerDetailScreen />,
+                    element: <PlayerDetailRoute />,
                     handle: { breadcrumb: 'Jogador' },
                   },
                   {
@@ -124,7 +125,7 @@ export const router = createBrowserRouter([
                   },
                   {
                     path: 'transfers',
-                    element: <TransfersScreen />,
+                    element: <TransfersRoute />,
                     handle: { breadcrumb: 'Mercado' },
                   },
                   {

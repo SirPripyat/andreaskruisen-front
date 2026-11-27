@@ -20,6 +20,12 @@ export const TournamentGroupStandings = () => {
     ([a], [b]) => a.localeCompare(b),
   );
 
+  // null = sem zona de classificação (liga, ou torneio sem groupStageConfig
+  // carregado ainda).
+  const qualifyCount = isLeague
+    ? null
+    : (tournament?.qualifiersPerGroup ?? null);
+
   if (entries.length === 0) {
     return (
       <p className="text-center text-muted-foreground text-sm">
@@ -59,7 +65,7 @@ export const TournamentGroupStandings = () => {
             <div className={'overflow-x-auto px-4 py-2'}>
               <GroupStandingsTable
                 standings={standings}
-                showQualifyZone={!isLeague}
+                qualifyCount={qualifyCount}
               />
             </div>
           </div>

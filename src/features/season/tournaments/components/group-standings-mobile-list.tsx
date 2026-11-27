@@ -5,10 +5,10 @@ import { TeamChip } from './team-chip';
 
 type GroupStandingsMobileListProps = {
   standings: StandingWithOwner[];
-  showQualifyZone: boolean;
+  // Quantos primeiros colocados são marcados como classificados — null =
+  // sem zona de classificação (ver TournamentGroupStandings).
+  qualifyCount: number | null;
 };
-
-const QUALIFY_COUNT = 2;
 
 const RESULT_CLASS: Record<'W' | 'D' | 'L', string> = {
   W: 'bg-success',
@@ -18,14 +18,14 @@ const RESULT_CLASS: Record<'W' | 'D' | 'L', string> = {
 
 export const GroupStandingsMobileList = ({
   standings,
-  showQualifyZone,
+  qualifyCount,
 }: GroupStandingsMobileListProps) => {
   const { data: me } = useMe();
 
   return (
     <div className={'flex flex-col'}>
       {standings.map((standing, index) => {
-        const qualified = showQualifyZone && index < QUALIFY_COUNT;
+        const qualified = qualifyCount !== null && index < qualifyCount;
         const isMine = standing.teamId === me?.teamId;
 
         return (
